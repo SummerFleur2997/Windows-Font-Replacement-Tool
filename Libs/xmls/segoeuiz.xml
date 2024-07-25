@@ -1,0 +1,108 @@
+﻿<?xml version="1.0"?>
+<Fonts>
+<Font>
+  <!-- ****************** Font(0) ****************** -->
+
+  <Name>
+
+    <!-- Copyright -->
+    <T n="0,3,0000,0">© 2022 Microsoft Corporation. All Rights Reserved.</T>
+    <T n="3,1,0409,0">© 2022 Microsoft Corporation. All Rights Reserved.</T>
+
+    <!-- Family -->
+    <T n="0,3,0000,1">Segoe UI</T>
+    <T n="3,1,0409,1">Segoe UI</T>
+
+    <!-- Subfamily -->
+    <T n="0,3,0000,2">Bold Italic</T>
+    <T n="3,1,0403,2">Negreta Cursiva</T>
+    <T n="3,1,0405,2">Tučné Kurzíva</T>
+    <T n="3,1,0406,2">Fed Kursiv</T>
+    <T n="3,1,0407,2">Fett Kursiv</T>
+    <T n="3,1,0408,2">Έντονα Πλάγια</T>
+    <T n="3,1,0409,2">Bold Italic</T>
+    <T n="3,1,040a,2">Negrita Cursiva</T>
+    <T n="3,1,040b,2">Lihavoitu Kursivoi</T>
+    <T n="3,1,040c,2">Gras Italique</T>
+    <T n="3,1,040e,2">Félkövér Dőlt</T>
+    <T n="3,1,0410,2">Grassetto Corsivo</T>
+    <T n="3,1,0413,2">Vet Cursief</T>
+    <T n="3,1,0414,2">Halvfet Kursiv</T>
+    <T n="3,1,0415,2">Pogrubiona Kursywa</T>
+    <T n="3,1,0416,2">Negrito Itálico</T>
+    <T n="3,1,0419,2">Полужирный Курсив</T>
+    <T n="3,1,041b,2">Tučná Kurzíva</T>
+    <T n="3,1,041d,2">Fet Kursiv</T>
+    <T n="3,1,041f,2">Kalın İtalik</T>
+    <T n="3,1,0424,2">Krepko Poševno</T>
+    <T n="3,1,042a,2">Nghiêng Đậm</T>
+    <T n="3,1,042d,2">Lodi Etzana</T>
+    <T n="3,1,080a,2">Negrita Cursiva</T>
+    <T n="3,1,0816,2">Negrito Itálico</T>
+    <T n="3,1,0c0a,2">Negrita Cursiva</T>
+    <T n="3,1,0c0c,2">Gras Italique</T>
+
+    <!-- UniqueIdentifier -->
+    <T n="0,3,0000,3">Segoe UI Bold Italic</T>
+    <T n="3,1,0409,3">Segoe UI Bold Italic</T>
+
+    <!-- FullName -->
+    <T n="0,3,0000,4">Segoe UI Bold Italic</T>
+    <T n="3,1,0403,4">Segoe UI Negreta Cursiva</T>
+    <T n="3,1,0405,4">Segoe UI Tučné Kurzíva</T>
+    <T n="3,1,0406,4">Segoe UI Fed Kursiv</T>
+    <T n="3,1,0407,4">Segoe UI Fett Kursiv</T>
+    <T n="3,1,0408,4">Segoe UI Έντονα Πλάγια</T>
+    <T n="3,1,0409,4">Segoe UI Bold Italic</T>
+    <T n="3,1,040a,4">Segoe UI Negrita Cursiva</T>
+    <T n="3,1,040b,4">Segoe UI Lihavoitu Kursivoi</T>
+    <T n="3,1,040c,4">Segoe UI Gras Italique</T>
+    <T n="3,1,040e,4">Segoe UI Félkövér Dőlt</T>
+    <T n="3,1,0410,4">Segoe UI Grassetto Corsivo</T>
+    <T n="3,1,0413,4">Segoe UI Vet Cursief</T>
+    <T n="3,1,0414,4">Segoe UI Halvfet Kursiv</T>
+    <T n="3,1,0415,4">Segoe UI Pogrubiona Kursywa</T>
+    <T n="3,1,0416,4">Segoe UI Negrito Itálico</T>
+    <T n="3,1,0419,4">Segoe UI Полужирный Курсив</T>
+    <T n="3,1,041b,4">Segoe UI Tučná Kurzíva</T>
+    <T n="3,1,041d,4">Segoe UI Fet Kursiv</T>
+    <T n="3,1,041f,4">Segoe UI Kalın İtalik</T>
+    <T n="3,1,0424,4">Segoe UI Krepko Poševno</T>
+    <T n="3,1,042a,4">Segoe UI Nghiêng Đậm</T>
+    <T n="3,1,042d,4">Segoe UI Lodi Etzana</T>
+    <T n="3,1,080a,4">Segoe UI Negrita Cursiva</T>
+    <T n="3,1,0816,4">Segoe UI Negrito Itálico</T>
+    <T n="3,1,0c0a,4">Segoe UI Negrita Cursiva</T>
+    <T n="3,1,0c0c,4">Segoe UI Gras Italique</T>
+
+    <!-- Version -->
+    <T n="0,3,0000,5">Version 5.65</T>
+    <T n="3,1,0409,5">Version 5.65</T>
+
+    <!-- PostscriptName -->
+    <T n="0,3,0000,6">SegoeUI-BoldItalic</T>
+    <T n="3,1,0409,6">SegoeUI-BoldItalic</T>
+
+    <!-- Trademark -->
+    <T n="0,3,0000,7">Segoe is a trademark of the Microsoft group of companies.</T>
+    <T n="3,1,0409,7">Segoe is a trademark of the Microsoft group of companies.</T>
+
+    <!-- Manufacturer -->
+    <T n="0,3,0000,8">Microsoft Corporation</T>
+    <T n="3,1,0409,8">Microsoft Corporation</T>
+
+    <!-- VendorURL -->
+    <T n="0,3,0000,11">https://docs.microsoft.com/typography/about</T>
+    <T n="3,1,0409,11">https://docs.microsoft.com/typography/about</T>
+
+    <!-- LicenseDescription -->
+    <T n="0,3,0000,13">Microsoft supplied font. You may use this font to create, display, and print content as permitted by the license terms or terms of use, of the Microsoft product, service, or content in which this font was included. You may only (i) embed this font in content as permitted by the embedding restrictions included in this font; and (ii) temporarily download this font to a printer or other output device to help print content. Any other use is prohibited.</T>
+    <T n="3,1,0409,13">Microsoft supplied font. You may use this font to create, display, and print content as permitted by the license terms or terms of use, of the Microsoft product, service, or content in which this font was included. You may only (i) embed this font in content as permitted by the embedding restrictions included in this font; and (ii) temporarily download this font to a printer or other output device to help print content. Any other use is prohibited.</T>
+
+    <!-- LicenseInfo -->
+    <T n="0,3,0000,14">https://docs.microsoft.com/typography/about</T>
+    <T n="3,1,0409,14">https://docs.microsoft.com/typography</T>
+
+  </Name>
+</Font>
+</Fonts>
