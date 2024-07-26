@@ -573,4 +573,4 @@ label_m = [label_zhr, label_zhb,  label_zhl,  label_enVar,
 # root.protocol("WM_DELETE_WINDOW", os._exit(0))
 root.mainloop()
 
-# pyinstaller -F -w main.py
+# pyinstaller -F -w --distpath ../Program --workpath ./build Windows-Font-Replacement-Tool/main.py
