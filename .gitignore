@@ -1,2 +1,5 @@
 __pycache__/
+PythonProject/
 output/
+.idea/
+test.*
