@@ -5,6 +5,7 @@ from functions import *
 from tkinter import filedialog
 from tkinter import messagebox
 from win32api import GetSystemMetrics
+from fontTools.ttLib import TTFont
 
 
 # region # 功能函数
@@ -12,13 +13,13 @@ def SingleFileModify():
     if selected_font[0] is None:
         return
 
-    fontpath = selected_font[0]
+    targeted_font = TTFont(selected_font[0])
     os.makedirs(f"{path}\\output\\cache", exist_ok=True)
 
     for i in os.listdir(xmls_path):
-        j = i[0:-3] + 'ttf'
-        command = f'ttfname3.exe "{fontpath}" "{xmls_path}\\{i}" -o "{path}\\output\\cache\\{j}"'
-        subprocess.run(command, shell=True, cwd=tool_path)
+        temp_font = TTFont(f"{xmls_path}\\{i}")
+        targeted_font["name"] = temp_font["name"]
+        targeted_font.save(f"{path}\\output\\cache\\{i}")
 
     outputDir = InitOutput()
 
@@ -30,26 +31,27 @@ def SingleFileModify():
 
 
 def MultiFileModify():
-    xmlListEN = ["segoeui.xml", "segoeuii.xml", "seguisb.xml",   "seguisbi.xml", "segoeuib.xml", "segoeuiz.xml",
-                 "segoeuil.xml", "seguili.xml", "segoeuisl.xml", "seguisli.xml", "seguibl.xml",  "seguibli.xml"]
-    xmlListZh = [["msyhr01.xml", "msyhr02.xml"], ["msyhb01.xml", "msyhb02.xml"], ["msyhl01.xml", "msyhl02.xml"]]
+    xmlListEN = ["segoeui.ttf", "segoeuii.ttf", "seguisb.ttf", "seguisbi.ttf", "segoeuib.ttf",
+                 "segoeuiz.ttf", "segoeuil.ttf", "seguili.ttf", "segoeuisl.ttf", "seguisli.ttf",
+                 "seguibl.ttf",  "seguibli.ttf", "SegUIVar.ttf"]
+    xmlListZh = [["msyhr01.ttf", "msyhr02.ttf"], ["msyhb01.ttf", "msyhb02.ttf"], ["msyhl01.ttf", "msyhl02.ttf"]]
 
     os.makedirs(f"{path}\\output\\cache", exist_ok=True)
 
     for i in range(3):
-        for k in range(2):
-            m = xmlListZh[i][k]
-            j = m[0:-3] + 'ttf'
-            command = f'ttfname3.exe "{selected_font[i]}" "{xmls_path}\\{m}" -o "{path}\\output\\cache\\{j}"'
-            subprocess.run(command, shell=True, cwd=tool_path)
+        for j in range(2):
+            name = xmlListZh[i][j]
+            temp_font = TTFont(f"{xmls_path}\\{name}")
+            targeted_font = TTFont(selected_font[i])
+            targeted_font["name"] = temp_font["name"]
+            targeted_font.save(f"{path}\\output\\cache\\{name}")
 
-    for i in range(12):
-        j = xmlListEN[i][0:-3] + 'ttf'
-        command = f'ttfname3.exe "{selected_font[i+4]}" "{xmls_path}\\{xmlListEN[i]}" -o "{path}\\output\\cache\\{j}"'
-        subprocess.run(command, shell=True, cwd=tool_path)
-
-    command = f'ttfname3.exe "{selected_font[3]}" "{xmls_path}\\SegUIVar.xml" -o "{path}\\output\\cache\\SegUIVar.ttf"'
-    subprocess.run(command, shell=True, cwd=tool_path)
+    for i in range(13):
+        name = xmlListEN[i]
+        temp_font = TTFont(f"{xmls_path}\\{name}")
+        targeted_font = TTFont(selected_font[i+3])
+        targeted_font["name"] = temp_font["name"]
+        targeted_font.save(f"{path}\\output\\cache\\{name}")
 
     outputDir = InitOutput()
 
@@ -157,14 +159,14 @@ helpdocument = tk.Button(Group0, text='打开帮助文档', border=2, font=('Mic
 helpdocument.place(relx=0.87, rely=0.69, relwidth=0.15, relheight=0.34, anchor='center')
 
 
-def CopyGitHubLink(event):
+def CopyGitHubLink():
     os.system("echo https://github.com/SummerFleur2997/Windows-Font-Replacement-Tool/issues | clip")
     messagebox.showinfo(title="提示", message=" 链接已复制至剪贴板，\n 请前往浏览器粘贴访问")
 
 
 GitHub = tk.Label(Group0, text='前往 GitHub 反馈', font=('Microsoft YaHei', 16), fg='blue')
 GitHub.place(relx=0.456, rely=0.34, relwidth=0.15, relheight=0.20, anchor='center')
-GitHub.bind("<Button-1>", CopyGitHubLink)
+GitHub.bind("<Button-1>", lambda event: CopyGitHubLink())
 
 
 # 单字重编辑区组件及函数
@@ -226,67 +228,67 @@ def ZhLtSelect():
 
 
 def EnVaSelect():
-    selected_font[3] = FileOpen()
+    selected_font[15] = FileOpen()
     FontCheck()
 
 
 def EnReSelect():
-    selected_font[4] = FileOpen()
+    selected_font[3] = FileOpen()
     FontCheck()
 
 
 def EnRISelect():
-    selected_font[5] = FileOpen()
+    selected_font[4] = FileOpen()
     FontCheck()
 
 
 def EnSBSelect():
-    selected_font[6] = FileOpen()
+    selected_font[5] = FileOpen()
     FontCheck()
 
 
 def EnSBISelect():
-    selected_font[7] = FileOpen()
+    selected_font[6] = FileOpen()
     FontCheck()
 
 
 def EnBdSelect():
-    selected_font[8] = FileOpen()
+    selected_font[7] = FileOpen()
     FontCheck()
 
 
 def EnBISelect():
-    selected_font[9] = FileOpen()
+    selected_font[8] = FileOpen()
     FontCheck()
 
 
 def EnLtSelect():
-    selected_font[10] = FileOpen()
+    selected_font[9] = FileOpen()
     FontCheck()
 
 
 def EnLISelect():
-    selected_font[11] = FileOpen()
+    selected_font[10] = FileOpen()
     FontCheck()
 
 
 def EnSLSelect():
-    selected_font[12] = FileOpen()
+    selected_font[11] = FileOpen()
     FontCheck()
 
 
 def EnSLISelect():
-    selected_font[13] = FileOpen()
+    selected_font[12] = FileOpen()
     FontCheck()
 
 
 def EnBlSelect():
-    selected_font[14] = FileOpen()
+    selected_font[13] = FileOpen()
     FontCheck()
 
 
 def EnBlISelect():
-    selected_font[15] = FileOpen()
+    selected_font[14] = FileOpen()
     FontCheck()
 # endregion
 
@@ -428,147 +430,149 @@ label = tk.Label(Group1, text="abcd.efgh", bg='#ffffff', justify='left', font=('
 label.config(relief='groove', borderwidth=2)
 
 
-def HideTips(event):
+def HideTips():
     label.place(relx=2, rely=2)
     label['text'] = ""
 
 
-def ZhReSelectedHint(event):
+def ZhReSelectedHint():
     if selected_font[0] is not None:
         label.place(relx=0.69, rely=0.14, anchor='nw')
         label['text'] = os.path.basename(selected_font[0])
 
 
-def ZhBdSelectedHint(event):
+def ZhBdSelectedHint():
     if selected_font[1] is not None:
         label.place(relx=0.69, rely=0.29, anchor='nw')
         label['text'] = os.path.basename(selected_font[1])
 
 
-def ZhLtSelectedHint(event):
+def ZhLtSelectedHint():
     if selected_font[2] is not None:
         label.place(relx=0.69, rely=0.44, anchor='nw')
         label['text'] = os.path.basename(selected_font[2])
 
 
-def EnVaSelectedHint(event):
-    if selected_font[3] is not None:
-        label.place(relx=0.69, rely=0.59, anchor='nw')
-        label['text'] = os.path.basename(selected_font[3])
-
-
-def EnReSelectedHint(event):
-    if selected_font[4] is not None:
-        label.place(relx=0.03, rely=0.44, anchor='nw')
-        label['text'] = os.path.basename(selected_font[4])
-
-
-def EnRISelectedHint(event):
-    if selected_font[5] is not None:
-        label.place(relx=0.36, rely=0.44, anchor='nw')
-        label['text'] = os.path.basename(selected_font[5])
-
-
-def EnSBSelectedHint(event):
-    if selected_font[6] is not None:
-        label.place(relx=0.03, rely=0.59, anchor='nw')
-        label['text'] = os.path.basename(selected_font[6])
-
-
-def EnSBISelectedHint(event):
-    if selected_font[7] is not None:
-        label.place(relx=0.36, rely=0.59, anchor='nw')
-        label['text'] = os.path.basename(selected_font[7])
-
-
-def EnBdSelectedHint(event):
-    if selected_font[8] is not None:
-        label.place(relx=0.03, rely=0.74, anchor='nw')
-        label['text'] = os.path.basename(selected_font[8])
-
-
-def EnBISelectedHint(event):
-    if selected_font[9] is not None:
-        label.place(relx=0.36, rely=0.74, anchor='nw')
-        label['text'] = os.path.basename(selected_font[9])
-
-
-def EnLtSelectedHint(event):
-    if selected_font[10] is not None:
-        label.place(relx=0.03, rely=0.14, anchor='nw')
-        label['text'] = os.path.basename(selected_font[10])
-
-
-def EnLISelectedHint(event):
-    if selected_font[11] is not None:
-        label.place(relx=0.36, rely=0.14, anchor='nw')
-        label['text'] = os.path.basename(selected_font[11])
-
-
-def EnSLSelectedHint(event):
-    if selected_font[12] is not None:
-        label.place(relx=0.03, rely=0.29, anchor='nw')
-        label['text'] = os.path.basename(selected_font[12])
-
-
-def EnSLISelectedHint(event):
-    if selected_font[13] is not None:
-        label.place(relx=0.36, rely=0.29, anchor='nw')
-        label['text'] = os.path.basename(selected_font[13])
-
-
-def EnBlSelectedHint(event):
-    if selected_font[14] is not None:
-        label.place(relx=0.03, rely=0.89, anchor='nw')
-        label['text'] = os.path.basename(selected_font[14])
-
-
-def EnBlISelectedHint(event):
+def EnVaSelectedHint():
     if selected_font[15] is not None:
-        label.place(relx=0.36, rely=0.89, anchor='nw')
+        label.place(relx=0.69, rely=0.59, anchor='nw')
         label['text'] = os.path.basename(selected_font[15])
 
 
-label_zhr.bind('<Enter>', ZhReSelectedHint)
-label_zhb.bind('<Enter>', ZhBdSelectedHint)
-label_zhl.bind('<Enter>', ZhLtSelectedHint)
-label_enVar.bind('<Enter>', EnVaSelectedHint)
-label_enr.bind('<Enter>', EnReSelectedHint)
-label_enri.bind('<Enter>', EnRISelectedHint)
-label_ensb.bind('<Enter>', EnSBSelectedHint)
-label_ensbi.bind('<Enter>', EnSBISelectedHint)
-label_enb.bind('<Enter>', EnBdSelectedHint)
-label_enbi.bind('<Enter>', EnBISelectedHint)
-label_enl.bind('<Enter>', EnLtSelectedHint)
-label_enli.bind('<Enter>', EnLISelectedHint)
-label_ensl.bind('<Enter>', EnSLSelectedHint)
-label_ensli.bind('<Enter>', EnSLISelectedHint)
-label_enbl.bind('<Enter>', EnBlSelectedHint)
-label_enbli.bind('<Enter>', EnBlISelectedHint)
+def EnReSelectedHint():
+    if selected_font[3] is not None:
+        label.place(relx=0.03, rely=0.44, anchor='nw')
+        label['text'] = os.path.basename(selected_font[3])
 
-label_zhr.bind('<Leave>', HideTips)
-label_zhb.bind('<Leave>', HideTips)
-label_zhl.bind('<Leave>', HideTips)
-label_enVar.bind('<Leave>', HideTips)
-label_enr.bind('<Leave>', HideTips)
-label_enri.bind('<Leave>', HideTips)
-label_ensb.bind('<Leave>', HideTips)
-label_ensbi.bind('<Leave>', HideTips)
-label_enb.bind('<Leave>', HideTips)
-label_enbi.bind('<Leave>', HideTips)
-label_enl.bind('<Leave>', HideTips)
-label_enli.bind('<Leave>', HideTips)
-label_ensl.bind('<Leave>', HideTips)
-label_ensli.bind('<Leave>', HideTips)
-label_enbl.bind('<Leave>', HideTips)
-label_enbli.bind('<Leave>', HideTips)
 
-button_m = [button_mof_zhr, button_mof_zhb,  button_mof_zhl,  button_mof_enVar,
+def EnRISelectedHint():
+    if selected_font[4] is not None:
+        label.place(relx=0.36, rely=0.44, anchor='nw')
+        label['text'] = os.path.basename(selected_font[4])
+
+
+def EnSBSelectedHint():
+    if selected_font[5] is not None:
+        label.place(relx=0.03, rely=0.59, anchor='nw')
+        label['text'] = os.path.basename(selected_font[5])
+
+
+def EnSBISelectedHint():
+    if selected_font[6] is not None:
+        label.place(relx=0.36, rely=0.59, anchor='nw')
+        label['text'] = os.path.basename(selected_font[6])
+
+
+def EnBdSelectedHint():
+    if selected_font[7] is not None:
+        label.place(relx=0.03, rely=0.74, anchor='nw')
+        label['text'] = os.path.basename(selected_font[7])
+
+
+def EnBISelectedHint():
+    if selected_font[8] is not None:
+        label.place(relx=0.36, rely=0.74, anchor='nw')
+        label['text'] = os.path.basename(selected_font[8])
+
+
+def EnLtSelectedHint():
+    if selected_font[9] is not None:
+        label.place(relx=0.03, rely=0.14, anchor='nw')
+        label['text'] = os.path.basename(selected_font[9])
+
+
+def EnLISelectedHint():
+    if selected_font[10] is not None:
+        label.place(relx=0.36, rely=0.14, anchor='nw')
+        label['text'] = os.path.basename(selected_font[10])
+
+
+def EnSLSelectedHint():
+    if selected_font[11] is not None:
+        label.place(relx=0.03, rely=0.29, anchor='nw')
+        label['text'] = os.path.basename(selected_font[11])
+
+
+def EnSLISelectedHint():
+    if selected_font[12] is not None:
+        label.place(relx=0.36, rely=0.29, anchor='nw')
+        label['text'] = os.path.basename(selected_font[12])
+
+
+def EnBlSelectedHint():
+    if selected_font[13] is not None:
+        label.place(relx=0.03, rely=0.89, anchor='nw')
+        label['text'] = os.path.basename(selected_font[13])
+
+
+def EnBlISelectedHint():
+    if selected_font[14] is not None:
+        label.place(relx=0.36, rely=0.89, anchor='nw')
+        label['text'] = os.path.basename(selected_font[14])
+
+
+label_zhr.bind('<Enter>', lambda event: ZhReSelectedHint())
+label_zhb.bind('<Enter>', lambda event: ZhBdSelectedHint())
+label_zhl.bind('<Enter>', lambda event: ZhLtSelectedHint())
+label_enVar.bind('<Enter>', lambda event: EnVaSelectedHint())
+label_enr.bind('<Enter>', lambda event: EnReSelectedHint())
+label_enri.bind('<Enter>', lambda event: EnRISelectedHint())
+label_ensb.bind('<Enter>', lambda event: EnSBSelectedHint())
+label_ensbi.bind('<Enter>', lambda event: EnSBISelectedHint())
+label_enb.bind('<Enter>', lambda event: EnBdSelectedHint())
+label_enbi.bind('<Enter>', lambda event: EnBISelectedHint())
+label_enl.bind('<Enter>', lambda event: EnLtSelectedHint())
+label_enli.bind('<Enter>', lambda event: EnLISelectedHint())
+label_ensl.bind('<Enter>', lambda event: EnSLSelectedHint())
+label_ensli.bind('<Enter>', lambda event: EnSLISelectedHint())
+label_enbl.bind('<Enter>', lambda event: EnBlSelectedHint())
+label_enbli.bind('<Enter>', lambda event: EnBlISelectedHint())
+
+label_zhr.bind('<Leave>', lambda event: HideTips())
+label_zhb.bind('<Leave>', lambda event: HideTips())
+label_zhl.bind('<Leave>', lambda event: HideTips())
+label_enVar.bind('<Leave>', lambda event: HideTips())
+label_enr.bind('<Leave>', lambda event: HideTips())
+label_enri.bind('<Leave>', lambda event: HideTips())
+label_ensb.bind('<Leave>', lambda event: HideTips())
+label_ensbi.bind('<Leave>', lambda event: HideTips())
+label_enb.bind('<Leave>', lambda event: HideTips())
+label_enbi.bind('<Leave>', lambda event: HideTips())
+label_enl.bind('<Leave>', lambda event: HideTips())
+label_enli.bind('<Leave>', lambda event: HideTips())
+label_ensl.bind('<Leave>', lambda event: HideTips())
+label_ensli.bind('<Leave>', lambda event: HideTips())
+label_enbl.bind('<Leave>', lambda event: HideTips())
+label_enbli.bind('<Leave>', lambda event: HideTips())
+
+button_m = [button_mof_zhr, button_mof_zhb,  button_mof_zhl,
             button_mof_enr, button_mof_enri, button_mof_ensb, button_mof_ensbi, button_mof_enb,  button_mof_enbi,
-            button_mof_enl, button_mof_enli, button_mof_ensl, button_mof_ensli, button_mof_enbl, button_mof_enbli]
-label_m = [label_zhr, label_zhb,  label_zhl,  label_enVar,
+            button_mof_enl, button_mof_enli, button_mof_ensl, button_mof_ensli, button_mof_enbl, button_mof_enbli,
+            button_mof_enVar]
+label_m = [label_zhr, label_zhb,  label_zhl,
            label_enr, label_enri, label_ensb, label_ensbi, label_enb,  label_enbi,
-           label_enl, label_enli, label_ensl, label_ensli, label_enbl, label_enbli]
+           label_enl, label_enli, label_ensl, label_ensli, label_enbl, label_enbli,
+           label_enVar]
 
 # root.protocol("WM_DELETE_WINDOW", os._exit(0))
 root.mainloop()
