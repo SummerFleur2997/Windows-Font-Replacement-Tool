@@ -10,10 +10,13 @@ from win32api import GetSystemMetrics
 # region # 功能函数
 def SingleFileModify():
 
-    button_sof['text'] = "选择字体并开始制作"
-    button_sof['fg'] = "#000000"
+    button_sof['text'] = "制作中..."
+    button_sof['fg'] = "#EE0000"
 
+    selected_font[0] = FileOpen()
     if selected_font[0] is None:
+        button_sof['text'] = "选择字体并开始制作"
+        button_sof['fg'] = "#000000"
         return
 
     os.makedirs(f"{path}\\output\\cache", exist_ok=True)
@@ -21,13 +24,13 @@ def SingleFileModify():
     for xml in os.listdir(xmls_path):
         fontPropertyReplace(selected_font[0], xml)
 
-    outputDir = InitOutput()
-
-    for cmd in UniteTTC(outputDir):
-        subprocess.run(cmd, shell=True, cwd=tool_path)
+    mergeTTC(InitOutput())
 
     shutil.rmtree(f"{path}\\output\\cache")
     messagebox.showinfo(title="提示", message=" 字体制作完成，可点击右下角“打开导出目录”\n 来查看做好的字体文件")
+
+    button_sof['text'] = "选择字体并开始制作"
+    button_sof['fg'] = "#000000"
 
 
 def MultiFileModify():
@@ -39,7 +42,7 @@ def MultiFileModify():
     xmlListEN = ["segoeui.ttf", "segoeuii.ttf", "seguisb.ttf", "seguisbi.ttf", "segoeuib.ttf",
                  "segoeuiz.ttf", "segoeuil.ttf", "seguili.ttf", "segoeuisl.ttf", "seguisli.ttf",
                  "seguibl.ttf",  "seguibli.ttf", "SegUIVar.ttf"]
-    xmlListZH = [["msyhr01.ttf", "msyhr02.ttf"], ["msyhb01.ttf", "msyhb02.ttf"], ["msyhl01.ttf", "msyhl02.ttf"]]
+    xmlListZH = [["msyh01.ttf", "msyh02.ttf"], ["msyhbd01.ttf", "msyhbd02.ttf"], ["msyhl01.ttf", "msyhl02.ttf"]]
 
     os.makedirs(f"{path}\\output\\cache", exist_ok=True)
 
@@ -50,10 +53,7 @@ def MultiFileModify():
     for i in range(13):
         fontPropertyReplace(selected_font[i+3], xmlListEN[i])
 
-    outputDir = InitOutput()
-
-    for cmd in UniteTTC(outputDir):
-        subprocess.run(cmd, shell=True, cwd=tool_path)
+    mergeTTC(InitOutput())
 
     shutil.rmtree(f"{path}\\output\\cache")
     messagebox.showinfo(title="提示", message=" 字体制作完成，可点击右下角“打开导出目录”\n 来查看做好的字体文件")
@@ -160,22 +160,14 @@ GitHub.bind("<Button-1>", lambda event: CopyGitHubLink())
 # endregion
 
 
-# region # 单字重编辑区功能函数及组件
-def SingleFileSelect():
-    button_sof['text'] = "制作中..."
-    button_sof['fg'] = "#EE0000"
-    selected_font[0] = FileOpen()
-    SingleFileModify()
-
-
+# region # 单字重编辑区组件
 label_s = tk.Label(Group2, text='选择需要修改的字体：', font=('Microsoft YaHei', 16), fg="#AAAAAA")
 label_s.place(relx=0.04, rely=0.45, anchor='w')
 
 button_sof = tk.Button(Group2, text='选择字体并开始制作', border=2, font=('Microsoft YaHei', 16), relief='groove',
                        state='disabled')
 button_sof.place(relx=0.68, rely=0.45, relwidth=0.43, relheight=0.45, anchor='center')
-button_sof['command'] = SingleFileSelect
-
+button_sof['command'] = SingleFileModify
 # endregion
 
 

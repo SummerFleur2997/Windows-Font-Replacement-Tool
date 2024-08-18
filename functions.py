@@ -2,7 +2,7 @@ import os
 import shutil
 import datetime
 from fontTools.ttLib import TTFont
-
+from fontTools.ttLib.ttCollection import TTCollection
 
 selected_font = []
 
@@ -20,16 +20,6 @@ def IsFontListValid():
         if selected_font[i] is None:
             return False
     return True
-
-
-def UniteTTC(dirname):
-
-    uniteTTC_cmd = [
-        f'uniteTTC.exe "{path}\\output\\{dirname}\\msyh.ttc" "{path}\\output\\cache\\msyhr01.ttf" "{path}\\output\\cache\\msyhr02.ttf"',
-        f'uniteTTC.exe "{path}\\output\\{dirname}\\msyhbd.ttc" "{path}\\output\\cache\\msyhb01.ttf" "{path}\\output\\cache\\msyhb02.ttf"',
-        f'uniteTTC.exe "{path}\\output\\{dirname}\\msyhl.ttc" "{path}\\output\\cache\\msyhl01.ttf" "{path}\\output\\cache\\msyhl02.ttf"']
-
-    return uniteTTC_cmd
 
 
 def InitOutput():
@@ -53,3 +43,12 @@ def fontPropertyReplace(font, xml):
     targeted_font = TTFont(font)
     targeted_font["name"] = temp_font["name"]
     targeted_font.save(f"{path}\\output\\cache\\{xml}")
+
+
+def mergeTTC(dirname):
+    ttcs = ("msyh", "msyhbd", "msyhl")
+    for col in ttcs:
+        ttc = TTCollection()
+        for suf in ("01.ttf", "02.ttf"):
+            ttc.fonts.append(TTFont(f"{path}\\output\\cache\\{col}{suf}"))
+        ttc.save(f"{path}\\output\\{dirname}\\{col}.ttc")
