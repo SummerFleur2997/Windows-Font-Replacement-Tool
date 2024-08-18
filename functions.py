@@ -1,6 +1,7 @@
 import os
 import shutil
 import datetime
+from fontTools.ttLib import TTFont
 
 
 selected_font = []
@@ -46,3 +47,9 @@ def InitOutput():
 
     return dirname
 
+
+def fontPropertyReplace(font, xml):
+    temp_font = TTFont(f"{xmls_path}\\{xml}")
+    targeted_font = TTFont(font)
+    targeted_font["name"] = temp_font["name"]
+    targeted_font.save(f"{path}\\output\\cache\\{xml}")

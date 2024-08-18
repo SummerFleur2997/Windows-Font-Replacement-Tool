@@ -5,21 +5,21 @@ from functions import *
 from tkinter import filedialog
 from tkinter import messagebox
 from win32api import GetSystemMetrics
-from fontTools.ttLib import TTFont
 
 
 # region # 功能函数
 def SingleFileModify():
+
+    button_sof['text'] = "选择字体并开始制作"
+    button_sof['fg'] = "#000000"
+
     if selected_font[0] is None:
         return
 
-    targeted_font = TTFont(selected_font[0])
     os.makedirs(f"{path}\\output\\cache", exist_ok=True)
 
-    for i in os.listdir(xmls_path):
-        temp_font = TTFont(f"{xmls_path}\\{i}")
-        targeted_font["name"] = temp_font["name"]
-        targeted_font.save(f"{path}\\output\\cache\\{i}")
+    for xml in os.listdir(xmls_path):
+        fontPropertyReplace(selected_font[0], xml)
 
     outputDir = InitOutput()
 
@@ -31,27 +31,24 @@ def SingleFileModify():
 
 
 def MultiFileModify():
+
+    for i in selected_font:
+        if i is None:
+            return
+
     xmlListEN = ["segoeui.ttf", "segoeuii.ttf", "seguisb.ttf", "seguisbi.ttf", "segoeuib.ttf",
                  "segoeuiz.ttf", "segoeuil.ttf", "seguili.ttf", "segoeuisl.ttf", "seguisli.ttf",
                  "seguibl.ttf",  "seguibli.ttf", "SegUIVar.ttf"]
-    xmlListZh = [["msyhr01.ttf", "msyhr02.ttf"], ["msyhb01.ttf", "msyhb02.ttf"], ["msyhl01.ttf", "msyhl02.ttf"]]
+    xmlListZH = [["msyhr01.ttf", "msyhr02.ttf"], ["msyhb01.ttf", "msyhb02.ttf"], ["msyhl01.ttf", "msyhl02.ttf"]]
 
     os.makedirs(f"{path}\\output\\cache", exist_ok=True)
 
     for i in range(3):
         for j in range(2):
-            name = xmlListZh[i][j]
-            temp_font = TTFont(f"{xmls_path}\\{name}")
-            targeted_font = TTFont(selected_font[i])
-            targeted_font["name"] = temp_font["name"]
-            targeted_font.save(f"{path}\\output\\cache\\{name}")
+            fontPropertyReplace(selected_font[i], xmlListZH[i][j])
 
     for i in range(13):
-        name = xmlListEN[i]
-        temp_font = TTFont(f"{xmls_path}\\{name}")
-        targeted_font = TTFont(selected_font[i+3])
-        targeted_font["name"] = temp_font["name"]
-        targeted_font.save(f"{path}\\output\\cache\\{name}")
+        fontPropertyReplace(selected_font[i+3], xmlListEN[i])
 
     outputDir = InitOutput()
 
@@ -59,7 +56,6 @@ def MultiFileModify():
         subprocess.run(cmd, shell=True, cwd=tool_path)
 
     shutil.rmtree(f"{path}\\output\\cache")
-
     messagebox.showinfo(title="提示", message=" 字体制作完成，可点击右下角“打开导出目录”\n 来查看做好的字体文件")
 
 
@@ -71,23 +67,32 @@ def FileOpen():
 
 def SingleFileInit():
     button_sof['state'] = 'normal'
-    button_sstart['state'] = 'disabled'
+    label_s['fg'] = "#8E65E8"
     for j, k in zip(button_m, label_m):
         j['state'] = 'disabled'
         k['fg'] = "#AAAAAA"
-    label_s_selected['text'] = "O.o"
-    label_s_selected['fg'] = "#8E65E8"
 
 
 def MultiFileInit():
     selected_font[0] = None
     button_sof['state'] = 'disabled'
-    button_sstart['state'] = 'disabled'
+    label_s['fg'] = "#AAAAAA"
     FontCheck()
     for j in button_m:
         j['state'] = 'normal'
-    label_s_selected['text'] = "o.O"
-    label_s_selected['fg'] = "#AAAAAA"
+
+
+def OpenOutputDir():
+    os.startfile(f"{path}\\output")
+
+
+def CopyGitHubLink():
+    subprocess.run('echo https://github.com/SummerFleur2997/Windows-Font-Replacement-Tool/issues | clip', shell=True)
+    messagebox.showinfo(title="提示", message=" 链接已复制至剪贴板，\n 请前往浏览器粘贴访问")
+
+
+def OpenHelpDoc():
+    os.startfile(f"{path}\\Libs\\Help.pdf")
 # endregion
 
 
@@ -122,7 +127,7 @@ button_multiple = tk.Button(root, text='我的字体有多个字重', border=2, 
 button_multiple.place(relx=0.66, rely=0.06, relheight=0.06, relwidth=0.25)
 button_multiple['command'] = MultiFileInit
 
-# 划分编辑区
+# region # 编辑区UI划分
 Group0 = tk.LabelFrame(root, text=' 说明与帮助 ', padx=0.1 * offset, pady=0.1 * offset,
                        width=0.98 * rootWidth, height=0.21 * rootHeight, font=('Microsoft YaHei', 17))
 Group0.pack(side='bottom', anchor='s', padx=0.3 * offset, pady=0.3 * offset)
@@ -132,8 +137,8 @@ Group1 = tk.LabelFrame(root, text=' 多字重字体编辑区 ', padx=0.1 * offse
 Group1.pack(side='bottom', anchor='s', padx=0.3 * offset)
 
 Group2 = tk.LabelFrame(root, text=' 单字重字体编辑区 ', padx=0.1 * offset, pady=0.1 * offset,
-                       width=0.98 * rootWidth, height=0.16 * rootHeight, font=('Microsoft YaHei', 17))
-Group2.pack(side='bottom', anchor='w', padx=0.3 * offset, pady=0.3 * offset)
+                       width=0.48 * rootWidth, height=0.16 * rootHeight, font=('Microsoft YaHei', 17))
+Group2.pack(side='left', anchor='s', padx=0.3 * offset, pady=0.3 * offset)
 
 label_mtip = tk.Label(Group0, font=('Microsoft YaHei', 16), justify='left', anchor='w')
 label_mtip.place(relx=0.02, rely=0.02, anchor='nw')
@@ -142,15 +147,6 @@ label_mtip['text'] = "★ 本工具仅支持修改 .ttf 字体文件属性\n" \
                      "★ 多字重字体diy较为复杂，如需要帮助，可阅读帮助文档\n" \
                      "★ 多字重编辑区内，将鼠标光标置于文字标签上方，可以查看当前选择的字体是什么"
 
-
-def OpenOutputDir():
-    os.startfile(f"{path}\\output")
-
-
-def OpenHelpDoc():
-    os.startfile(f"{path}\\Libs\\Help.pdf")
-
-
 openoutput = tk.Button(Group0, text='打开导出目录', border=2, font=('Microsoft YaHei', 17), relief='groove')
 openoutput.place(relx=0.87, rely=0.24, relwidth=0.15, relheight=0.34, anchor='center')
 openoutput['command'] = OpenOutputDir
@@ -158,48 +154,32 @@ openoutput['command'] = OpenOutputDir
 helpdocument = tk.Button(Group0, text='打开帮助文档', border=2, font=('Microsoft YaHei', 17), relief='groove')
 helpdocument.place(relx=0.87, rely=0.69, relwidth=0.15, relheight=0.34, anchor='center')
 
-
-def CopyGitHubLink():
-    os.system("echo https://github.com/SummerFleur2997/Windows-Font-Replacement-Tool/issues | clip")
-    messagebox.showinfo(title="提示", message=" 链接已复制至剪贴板，\n 请前往浏览器粘贴访问")
-
-
-GitHub = tk.Label(Group0, text='前往 GitHub 反馈', font=('Microsoft YaHei', 16), fg='blue')
-GitHub.place(relx=0.456, rely=0.34, relwidth=0.15, relheight=0.20, anchor='center')
+GitHub = tk.Label(Group0, text='点击前往 GitHub 反馈', font=('Microsoft YaHei', 16), fg='blue')
+GitHub.place(relx=0.378, rely=0.338, relwidth=0.19, relheight=0.20, anchor='w')
 GitHub.bind("<Button-1>", lambda event: CopyGitHubLink())
+# endregion
 
 
-# 单字重编辑区组件及函数
+# region # 单字重编辑区功能函数及组件
 def SingleFileSelect():
+    button_sof['text'] = "制作中..."
+    button_sof['fg'] = "#EE0000"
     selected_font[0] = FileOpen()
-    if selected_font[0] is not None:
-        label_s_selected['text'] = f'{os.path.basename(selected_font[0])}'
-        button_sstart['state'] = 'normal'
+    SingleFileModify()
 
 
-label_s = tk.Label(Group2, text='选择需要修改的字体：', font=('Microsoft YaHei', 16))
-label_s.place(relx=0.02, rely=0.45, anchor='w')
+label_s = tk.Label(Group2, text='选择需要修改的字体：', font=('Microsoft YaHei', 16), fg="#AAAAAA")
+label_s.place(relx=0.04, rely=0.45, anchor='w')
 
-button_sof = tk.Button(Group2, text='选择字体', border=2, font=('Microsoft YaHei', 16), relief='groove',
+button_sof = tk.Button(Group2, text='选择字体并开始制作', border=2, font=('Microsoft YaHei', 16), relief='groove',
                        state='disabled')
-button_sof.place(relx=0.28, rely=0.45, relwidth=0.12, relheight=0.45, anchor='center')
+button_sof.place(relx=0.68, rely=0.45, relwidth=0.43, relheight=0.45, anchor='center')
 button_sof['command'] = SingleFileSelect
 
-button_sstart = tk.Button(Group2, text='开始制作', border=2, font=('Microsoft YaHei', 16), relief='groove',
-                          state='disabled')
-button_sstart.place(relx=0.88, rely=0.45, relwidth=0.12, relheight=0.45, anchor='center')
-button_sstart['command'] = SingleFileModify
-
-tk.Label(Group2, text='当前选择的字体是：', font=('Microsoft YaHei', 16), justify='left') \
-    .place(relx=0.4, rely=0.25, anchor='w')
-
-label_s_selected = tk.Label(Group2, text='请先选择待替换字体的字重', font=('Microsoft YaHei', 16), fg='#EE0000',
-                            justify='left')
-label_s_selected.place(relx=0.4, rely=0.60, anchor='w')
+# endregion
 
 
-# 多字重编辑区组件及函数
-# region # 功能函数
+# region # 多字重编辑区功能函数
 def FontCheck():
     for ID in range(16):
         if selected_font[ID] is not None:
@@ -293,7 +273,7 @@ def EnBlISelect():
 # endregion
 
 
-# region # 字体选择组件
+# region # 多字重编辑区字体选择组件
 label_zhr = tk.Label(Group1, text='中文常规字体：', font=('Microsoft YaHei', 16), fg='#AAAAAA', justify='left',
                      anchor='w')
 label_zhr.place(relx=0.685, rely=0.1, relheight=0.128, anchor='w')
@@ -421,11 +401,13 @@ button_mof_enbli = tk.Button(Group1, text='选择字体', border=2, font=('Micro
                              state='disabled')
 button_mof_enbli.place(relx=0.50, rely=0.85, relwidth=0.12, relheight=0.128, anchor='w')
 button_mof_enbli['command'] = EnBlISelect
-# endregion
+
 button_mstart = tk.Button(Group1, text='开始制作', border=2, font=('Microsoft YaHei', 16), relief='groove', state='disabled')
 button_mstart.place(relx=0.81, rely=0.78, relwidth=0.12, relheight=0.128, anchor='center')
 button_mstart['command'] = MultiFileModify
+# endregion
 
+# region # Tips组件
 label = tk.Label(Group1, text="abcd.efgh", bg='#ffffff', justify='left', font=('Microsoft YaHei', 16), padx=offset/16, pady=offset/16)
 label.config(relief='groove', borderwidth=2)
 
@@ -564,11 +546,13 @@ label_ensl.bind('<Leave>', lambda event: HideTips())
 label_ensli.bind('<Leave>', lambda event: HideTips())
 label_enbl.bind('<Leave>', lambda event: HideTips())
 label_enbli.bind('<Leave>', lambda event: HideTips())
+# endregion
 
 button_m = [button_mof_zhr, button_mof_zhb,  button_mof_zhl,
             button_mof_enr, button_mof_enri, button_mof_ensb, button_mof_ensbi, button_mof_enb,  button_mof_enbi,
             button_mof_enl, button_mof_enli, button_mof_ensl, button_mof_ensli, button_mof_enbl, button_mof_enbli,
             button_mof_enVar]
+
 label_m = [label_zhr, label_zhb,  label_zhl,
            label_enr, label_enri, label_ensb, label_ensbi, label_enb,  label_enbi,
            label_enl, label_enli, label_ensl, label_ensli, label_enbl, label_enbli,
@@ -577,4 +561,4 @@ label_m = [label_zhr, label_zhb,  label_zhl,
 # root.protocol("WM_DELETE_WINDOW", os._exit(0))
 root.mainloop()
 
-# pyinstaller -F -w --distpath ../Program --workpath ./build Windows-Font-Replacement-Tool/main.py
+# pyinstaller -F -w --distpath ../Program --workpath ./build main.py
