@@ -1,5 +1,7 @@
 __pycache__/
 PythonProject/
 output/
+build/
 .idea/
 test.*
+*.spec
