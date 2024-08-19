@@ -78,7 +78,7 @@ def getSHA1(name):
 
 
 def DecodeLibs():
-    with open(f"{path}/Libs/dataLibs", 'rb') as f:
+    with open(f"{path}/Libs/dataLibs.lib", 'rb') as f:
         data = f.read()
     with open(f"{path}/Libs/archive", 'wb') as f:
         archive = base64.b64decode(data)

@@ -30,7 +30,7 @@ def INIT():
     zip_sha = "97ea04d106f29e33ecc83b48f7579ea0f2a370a5"
 
     if not os.path.exists(xmls_path):
-        if not (getSHA1("dataLibs") == lib_sha and DecodeLibs() == zip_sha):
+        if not (getSHA1("dataLibs.lib") == lib_sha and DecodeLibs() == zip_sha):
             messagebox.showerror(title="错误！", message=" 文件校验失败，请尝试\n 重新下载并安装本工具")
             EXIT()
 
