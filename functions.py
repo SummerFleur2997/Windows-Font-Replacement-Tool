@@ -1,5 +1,8 @@
 import os
+import base64
 import shutil
+import hashlib
+import zipfile
 import datetime
 from fontTools.ttLib import TTFont
 from fontTools.ttLib.ttCollection import TTCollection
@@ -69,5 +72,24 @@ def splitTTC(ttc):
         index += 1
 
 
+def getSHA1(name):
+    with open(f"{path}/Libs/{name}", 'rb') as db:
+        return hashlib.new("sha1", db.read()).hexdigest()
+
+
+def DecodeLibs():
+    with open(f"{path}/Libs/dataLibs", 'rb') as f:
+        data = f.read()
+    with open(f"{path}/Libs/archive", 'wb') as f:
+        archive = base64.b64decode(data)
+        f.write(archive)
+    with zipfile.ZipFile(f"{path}/Libs/archive", "r") as f:
+        f.extractall(f'{path}/Libs/xmls', pwd=b"SaXNnYbgwMjDvgyl")
+        f.close()
+    sha1 = getSHA1("archive")
+    os.remove(f"{path}/Libs/archive")
+    return sha1
+
+
 if __name__ == "__main__":
-    pass
+    print(DecodeLibs() == "97ea04d106f29e33ecc83b48f7579ea0f2a370a5")

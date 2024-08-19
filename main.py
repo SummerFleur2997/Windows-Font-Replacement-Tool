@@ -6,6 +6,44 @@ from win32api import GetSystemMetrics
 
 custom_font = None
 system_fonts = []
+sha1 = [
+    "d46344fc3841184ac741685d53f0b01cd11865e7", "791e18622ff1011b9a6c68bfb8796258a3a1cf85",
+    "ea87b3ddadc073d04b25039f9e41bfbefd8b0eba", "e49a970410fe1b22ac10bdc7c656117c74f22b39",
+    "7d70dd165648425f19346947a268a8ee58262eb2", "83eb72dd5f5285488ed2ca4d72810e266bc2fd4e",
+    "5213a5c8e131255d461ebc4e8b5ed71eaedf01dc", "c6adb891613704c322580732b92b6566a7e80684",
+    "f8808c6fcf9ce4a74a6682fa5d886fe25a60f11b", "12144c399e57c776e7b3ed8f689cce09df5c1a53",
+    "dde72eaa7ba41cac65e21350b613b95f0c04bd4d", "8f4a51f221db950112948a897deacf6d45c10b1a",
+    "b6379d63dd25e0c01c09dec61e56b4e2a4fc2456", "bb6f5d72997a1cd118f67dfc5335943ea600cd1b",
+    "b6ba87aa742964e7103ff654516a017ddf6031e0", "f80b4059b145408bc7948ff57aa2d326a08afa31",
+    "27fa3fd2cf0ad25dc9d87e4892898e6813916719", "cd0bed1303626bf6cfc7412206744c5bd794be1b",
+    "4ebb195ad99add8fa11308749363a1599e29e0c7"]
+
+
+def EXIT():
+    os._exit(0)
+
+
+# 初始化
+def INIT():
+
+    lib_sha = "c6d576d638ad2cfbf77e82d76a42ec4a5606e920"
+    zip_sha = "97ea04d106f29e33ecc83b48f7579ea0f2a370a5"
+
+    if not os.path.exists(xmls_path):
+        if not (getSHA1("dataLibs") == lib_sha and DecodeLibs() == zip_sha):
+            messagebox.showerror(title="错误！", message=" 文件校验失败，请尝试\n 重新下载并安装本工具")
+            EXIT()
+
+    for obj in os.listdir(xmls_path):
+        if not getSHA1(f"xmls\\{obj}") == sha1[os.listdir(xmls_path).index(obj)]:
+            break
+        return
+
+    shutil.rmtree(xmls_path)
+    DecodeLibs()
+
+
+INIT()
 
 
 # region # 功能函数
@@ -491,6 +529,7 @@ button_cfont['command'] = lambda: CustomFileOpen(mode.get())
 button_cstart = tk.Button(Group3, text="开始替换", border=2, font=('Microsoft YaHei', 16), relief='groove')
 button_cstart.place(relx=0.96, rely=0.68, relwidth=0.25, relheight=0.35, anchor='e')
 button_cstart['command'] = CustomFileModify
+# endregion
 
 # region # Tips组件
 label = tk.Label(Group1, text="abcd.efgh", bg='#ffffff', justify='left', font=('Microsoft YaHei', 16),
@@ -643,7 +682,6 @@ label_m = [label_zhr, label_zhb,  label_zhl,
            label_enl, label_enli, label_ensl, label_ensli, label_enbl, label_enbli,
            label_enVar]
 
-# root.protocol("WM_DELETE_WINDOW", os._exit(0))
 CustomFontCheck()
 
 root.mainloop()
