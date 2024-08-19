@@ -1,9 +1,6 @@
 import ctypes
-import subprocess
 import tkinter as tk
 from functions import *
-from tkinter import filedialog
-from tkinter import messagebox
 from win32api import GetSystemMetrics
 
 
@@ -22,7 +19,7 @@ def SingleFileModify():
     os.makedirs(f"{path}\\output\\cache", exist_ok=True)
 
     for xml in os.listdir(xmls_path):
-        fontPropertyReplace(selected_font[0], xml)
+        fontPropertyReplace(selected_font[0], f"{xmls_path}\\{xml}")
 
     mergeTTC(InitOutput())
 
@@ -48,21 +45,15 @@ def MultiFileModify():
 
     for i in range(3):
         for j in range(2):
-            fontPropertyReplace(selected_font[i], xmlListZH[i][j])
+            fontPropertyReplace(selected_font[i], f"{xmls_path}\\{xmlListZH[i][j]}")
 
     for i in range(13):
-        fontPropertyReplace(selected_font[i+3], xmlListEN[i])
+        fontPropertyReplace(selected_font[i+3], f"{xmls_path}\\{xmlListEN[i]}")
 
     mergeTTC(InitOutput())
 
     shutil.rmtree(f"{path}\\output\\cache")
     messagebox.showinfo(title="提示", message=" 字体制作完成，可点击右下角“打开导出目录”\n 来查看做好的字体文件")
-
-
-def FileOpen():
-    font_path = filedialog.askopenfilename(title='选择待替换字体文件', filetypes=[('True Type 字体', '*.ttf')])
-    if font_path != '':
-        return font_path
 
 
 def SingleFileInit():
@@ -80,19 +71,6 @@ def MultiFileInit():
     FontCheck()
     for j in button_m:
         j['state'] = 'normal'
-
-
-def OpenOutputDir():
-    os.startfile(f"{path}\\output")
-
-
-def CopyGitHubLink():
-    subprocess.run('echo https://github.com/SummerFleur2997/Windows-Font-Replacement-Tool/issues | clip', shell=True)
-    messagebox.showinfo(title="提示", message=" 链接已复制至剪贴板，\n 请前往浏览器粘贴访问")
-
-
-def OpenHelpDoc():
-    os.startfile(f"{path}\\Libs\\Help.pdf")
 # endregion
 
 
@@ -105,7 +83,7 @@ ctypes.windll.shcore.SetProcessDpiAwareness(1)
 ScreenHeight = GetSystemMetrics(1)
 
 # 定义窗体的尺寸、标题、背景颜色
-rootHeight = int(ScreenHeight * 3 / 5)
+rootHeight = int(ScreenHeight * 5 / 8)
 rootWidth = int(ScreenHeight * 4 / 5)
 offset = int(ScreenHeight / 25)
 root.geometry(f'{rootWidth}x{rootHeight}+{offset * 5}+{offset * 4}')
@@ -129,16 +107,20 @@ button_multiple['command'] = MultiFileInit
 
 # region # 编辑区UI划分
 Group0 = tk.LabelFrame(root, text=' 说明与帮助 ', padx=0.1 * offset, pady=0.1 * offset,
-                       width=0.98 * rootWidth, height=0.21 * rootHeight, font=('Microsoft YaHei', 17))
+                       width=0.98 * rootWidth, height=0.2016 * rootHeight, font=('Microsoft YaHei', 17))
 Group0.pack(side='bottom', anchor='s', padx=0.3 * offset, pady=0.3 * offset)
 
 Group1 = tk.LabelFrame(root, text=' 多字重字体编辑区 ', padx=0.1 * offset, pady=0.1 * offset,
-                       width=0.98 * rootWidth, height=0.41 * rootHeight, font=('Microsoft YaHei', 17))
+                       width=0.98 * rootWidth, height=0.3936 * rootHeight, font=('Microsoft YaHei', 17))
 Group1.pack(side='bottom', anchor='s', padx=0.3 * offset)
 
 Group2 = tk.LabelFrame(root, text=' 单字重字体编辑区 ', padx=0.1 * offset, pady=0.1 * offset,
-                       width=0.48 * rootWidth, height=0.16 * rootHeight, font=('Microsoft YaHei', 17))
+                       width=0.475 * rootWidth, height=0.18 * rootHeight, font=('Microsoft YaHei', 17))
 Group2.pack(side='left', anchor='s', padx=0.3 * offset, pady=0.3 * offset)
+
+Group3 = tk.LabelFrame(root, text=' 自定义字体替换 ', padx=0.1 * offset, pady=0.1 * offset,
+                       width=0.475 * rootWidth, height=0.18 * rootHeight, font=('Microsoft YaHei', 17))
+Group3.pack(side='left', anchor='s', padx=0.1 * offset, pady=0.3 * offset)
 
 label_mtip = tk.Label(Group0, font=('Microsoft YaHei', 16), justify='left', anchor='w')
 label_mtip.place(relx=0.02, rely=0.02, anchor='nw')
@@ -166,19 +148,27 @@ label_s.place(relx=0.04, rely=0.45, anchor='w')
 
 button_sof = tk.Button(Group2, text='选择字体并开始制作', border=2, font=('Microsoft YaHei', 16), relief='groove',
                        state='disabled')
-button_sof.place(relx=0.68, rely=0.45, relwidth=0.43, relheight=0.45, anchor='center')
+button_sof.place(relx=0.68, rely=0.45, relwidth=0.43, relheight=0.38, anchor='center')
 button_sof['command'] = SingleFileModify
 # endregion
 
 
 # region # 多字重编辑区功能函数
 def FontCheck():
+
+    isFontListValid = True
+
     for ID in range(16):
         if selected_font[ID] is not None:
             label_m[ID]['fg'] = "#3EDE17"
         else:
             label_m[ID]['fg'] = "#8E65E8"
-    if IsFontListValid():
+
+    for i in range(16):
+        if selected_font[i] is None:
+            isFontListValid = False
+
+    if isFontListValid:
         button_mstart['state'] = 'normal'
     else:
         button_mstart['state'] = 'disabled'
@@ -399,9 +389,31 @@ button_mstart.place(relx=0.81, rely=0.78, relwidth=0.12, relheight=0.128, anchor
 button_mstart['command'] = MultiFileModify
 # endregion
 
+
+# region # 自定义编辑区组件
+label_cmode = tk.Label(Group3, text='选择替换模式：', font=('Microsoft YaHei', 16))
+label_cmode.place(relx=0.04, rely=0.25, anchor='w')
+
+mode = tk.StringVar(value="single")
+
+button_cs = tk.Radiobutton(Group3, text="单个替换", font=('Microsoft YaHei', 16), variable=mode, value="single",)
+button_cs.place(relx=0.48, rely=0.26, relwidth=0.25, relheight=0.35, anchor='center')
+
+button_cm = tk.Radiobutton(Group3, text="批量替换", font=('Microsoft YaHei', 16), variable=mode, value="multiple")
+button_cm.place(relx=0.78, rely=0.26, relwidth=0.25, relheight=0.35, anchor='center')
+
+button_cflist = tk.Button(Group3, text="待替换字体", border=2, font=('Microsoft YaHei', 16), relief='groove')
+button_cflist.place(relx=0.04, rely=0.68, relwidth=0.28, relheight=0.35, anchor='w')
+button_cflist['command'] = lambda: CustomFileOpen(mode.get())
+
+button_cfont = tk.Button(Group3, text="模板字体", border=2, font=('Microsoft YaHei', 16), relief='groove')
+button_cfont.place(relx=0.36, rely=0.68, relwidth=0.25, relheight=0.35, anchor='w')
+button_cfont['command'] = lambda: CustomFileOpen("model")
+# endregion
+
 # region # Tips组件
-label = tk.Label(Group1, text="abcd.efgh", bg='#ffffff', justify='left', font=('Microsoft YaHei', 16), padx=offset/16, pady=offset/16)
-label.config(relief='groove', borderwidth=2)
+label = tk.Label(Group1, text="abcd.efgh", bg='#ffffff', justify='left', font=('Microsoft YaHei', 16),
+                 padx=offset/16, pady=offset/16, relief='groove', borderwidth=2)
 
 
 def HideTips():
