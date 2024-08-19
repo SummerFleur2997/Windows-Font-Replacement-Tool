@@ -3,5 +3,6 @@ PythonProject/
 output/
 build/
 .idea/
+Libs/xmls/*.ttf
 test.*
 *.spec

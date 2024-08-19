@@ -244,6 +244,7 @@ openoutput['command'] = OpenOutputDir
 
 helpdocument = tk.Button(Group0, text='打开帮助文档', border=2, font=('Microsoft YaHei', 17), relief='groove')
 helpdocument.place(relx=0.87, rely=0.69, relwidth=0.15, relheight=0.34, anchor='center')
+helpdocument['command'] = OpenHelpDoc
 
 GitHub = tk.Label(Group0, text='点击前往 GitHub 反馈', font=('Microsoft YaHei', 16), fg='blue')
 GitHub.place(relx=0.378, rely=0.168, relwidth=0.19, relheight=0.20, anchor='w')
