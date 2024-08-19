@@ -1,13 +1,10 @@
 import os
 import shutil
 import datetime
-from uitools import *
 from fontTools.ttLib import TTFont
 from fontTools.ttLib.ttCollection import TTCollection
 
 selected_font = []
-custom_font = ()
-model_font = None
 
 for _ in range(16):
     selected_font.append(None)
@@ -42,41 +39,11 @@ def InitOutput():
     return dirname
 
 
-def CustomFileOpen(type_):
-
-    global custom_font, model_font
-
-    if type_ == "single":
-        temp = FileOpen([('所有支持的字体文件', '.ttf .otf .ttc')])
-        if temp is None:
-            return
-        if temp[-4:] == '.ttc':
-            os.makedirs(f"{path}\\output\\cache", exist_ok=True)
-            splitTTC(temp)
-            custom_font = (".ttc", )
-        else:
-            custom_font = (".ttf", temp)
-
-    elif type_ == "multiple":
-        temp = [".ttf"]
-        fonts = FilesOpen()
-        if fonts is None:
-            return
-        temp.extend(fonts)
-        custom_font = temp
-
-    elif type_ == "model":
-        temp = FileOpen()
-        if temp is None:
-            return
-        model_font = temp
-
-
 def fontPropertyReplace(font, xml):
     temp_font = TTFont(xml)
     targeted_font = TTFont(font)
     targeted_font["name"] = temp_font["name"]
-    targeted_font.save(f"{path}\\output\\cache\\{os.path.basename(xml)[:-4]}.ttf")
+    targeted_font.save(f"{path}\\output\\cache\\{os.path.basename(xml)}")
 
 
 def mergeTTC(dirname, ttcs=("msyh", "msyhbd", "msyhl")):

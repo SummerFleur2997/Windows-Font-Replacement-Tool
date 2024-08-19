@@ -1,7 +1,11 @@
 import ctypes
 import tkinter as tk
+from uitools import *
 from functions import *
 from win32api import GetSystemMetrics
+
+custom_font = None
+system_fonts = []
 
 
 # region # 功能函数
@@ -56,6 +60,43 @@ def MultiFileModify():
     messagebox.showinfo(title="提示", message=" 字体制作完成，可点击右下角“打开导出目录”\n 来查看做好的字体文件")
 
 
+def CustomFileModify():
+
+    global custom_font, system_fonts
+
+    time = str(datetime.datetime.now())[0:19]
+    dirname = time.replace('-', '').replace(':', '').replace(' ', '_')
+    dirname = dirname + "_自定义替换_" + os.path.basename(custom_font)[0:-4]
+
+    os.makedirs(f"{path}\\output\\{dirname}")
+    os.makedirs(f"{path}\\output\\cache", exist_ok=True)
+
+    if system_fonts[0] == '.ttf':
+        for font in system_fonts[1:]:
+            fontPropertyReplace(custom_font, font)
+        for file in os.listdir(f"{path}\\output\\cache"):
+            src = os.path.join(f"{path}\\output\\cache", file)
+            dst = os.path.join(f"{path}\\output\\{dirname}", file)
+            shutil.move(src, dst)
+
+    elif system_fonts[0] == '.ttc':
+        splitTTC(system_fonts[1])
+        for font in os.listdir(f"{path}\\output\\cache"):
+            fontPropertyReplace(custom_font, f"{path}\\output\\cache\\{font}")
+        mergeTTC(dirname, (os.path.basename(system_fonts[1])[:-4], ))
+
+    else:
+        shutil.rmtree(f"{path}\\output\\cache")
+        shutil.rmtree(f"{path}\\output\\{dirname}")
+        return
+
+    custom_font = None
+    system_fonts = []
+    CustomFontCheck()
+    shutil.rmtree(f"{path}\\output\\cache")
+    messagebox.showinfo(title="提示", message=" 字体替换完成，可点击右下角“打开导出目录”\n 来查看替换好的字体文件")
+
+
 def SingleFileInit():
     button_sof['state'] = 'normal'
     label_s['fg'] = "#8E65E8"
@@ -68,9 +109,39 @@ def MultiFileInit():
     selected_font[0] = None
     button_sof['state'] = 'disabled'
     label_s['fg'] = "#AAAAAA"
-    FontCheck()
+    MultipleFontCheck()
     for j in button_m:
         j['state'] = 'normal'
+
+
+def CustomFileOpen(type_):
+
+    global custom_font, system_fonts
+
+    if type_ == "single":
+        temp = FileOpen([('所有支持的字体文件', '.ttf .otf .ttc')])
+        if temp is None:
+            return
+        if temp[-4:] == '.ttc':
+            system_fonts = (".ttc", temp)
+        else:
+            system_fonts = (".ttf", temp)
+
+    elif type_ == "multiple":
+        temp = [".ttf"]
+        fonts = FilesOpen()
+        if fonts is None:
+            return
+        temp.extend(fonts)
+        system_fonts = tuple(temp)
+
+    elif type_ == "model":
+        temp = FileOpen()
+        if temp is None:
+            return
+        custom_font = temp
+
+    CustomFontCheck()
 # endregion
 
 
@@ -123,11 +194,11 @@ Group3 = tk.LabelFrame(root, text=' 自定义字体替换 ', padx=0.1 * offset, 
 Group3.pack(side='left', anchor='s', padx=0.1 * offset, pady=0.3 * offset)
 
 label_mtip = tk.Label(Group0, font=('Microsoft YaHei', 16), justify='left', anchor='w')
-label_mtip.place(relx=0.02, rely=0.02, anchor='nw')
-label_mtip['text'] = "★ 本工具仅支持修改 .ttf 字体文件属性\n" \
-                     "★ 使用该工具过程中产生的任何问题，请\n"\
-                     "★ 多字重字体diy较为复杂，如需要帮助，可阅读帮助文档\n" \
-                     "★ 多字重编辑区内，将鼠标光标置于文字标签上方，可以查看当前选择的字体是什么"
+label_mtip.place(relx=0.02, rely=0.05, anchor='nw')
+label_mtip['text'] = "★ 使用该工具过程中产生的任何问题，请\n"\
+                     "★ 多字重字体 DIY 可能较为复杂，如需要帮助，可阅读帮助文档\n" \
+                     "★ 多字重编辑区内，将鼠标光标置于文字标签上方，可以查看当前选择的字体是什么\n" \
+                     "★ 关于自定义字体替换功能的详细用法，详见帮助文档"
 
 openoutput = tk.Button(Group0, text='打开导出目录', border=2, font=('Microsoft YaHei', 17), relief='groove')
 openoutput.place(relx=0.87, rely=0.24, relwidth=0.15, relheight=0.34, anchor='center')
@@ -137,7 +208,7 @@ helpdocument = tk.Button(Group0, text='打开帮助文档', border=2, font=('Mic
 helpdocument.place(relx=0.87, rely=0.69, relwidth=0.15, relheight=0.34, anchor='center')
 
 GitHub = tk.Label(Group0, text='点击前往 GitHub 反馈', font=('Microsoft YaHei', 16), fg='blue')
-GitHub.place(relx=0.378, rely=0.338, relwidth=0.19, relheight=0.20, anchor='w')
+GitHub.place(relx=0.378, rely=0.168, relwidth=0.19, relheight=0.20, anchor='w')
 GitHub.bind("<Button-1>", lambda event: CopyGitHubLink())
 # endregion
 
@@ -154,7 +225,7 @@ button_sof['command'] = SingleFileModify
 
 
 # region # 多字重编辑区功能函数
-def FontCheck():
+def MultipleFontCheck():
 
     isFontListValid = True
 
@@ -176,82 +247,82 @@ def FontCheck():
 
 def ZhReSelect():
     selected_font[0] = FileOpen()
-    FontCheck()
+    MultipleFontCheck()
 
 
 def ZhBdSelect():
     selected_font[1] = FileOpen()
-    FontCheck()
+    MultipleFontCheck()
 
 
 def ZhLtSelect():
     selected_font[2] = FileOpen()
-    FontCheck()
+    MultipleFontCheck()
 
 
 def EnVaSelect():
     selected_font[15] = FileOpen()
-    FontCheck()
+    MultipleFontCheck()
 
 
 def EnReSelect():
     selected_font[3] = FileOpen()
-    FontCheck()
+    MultipleFontCheck()
 
 
 def EnRISelect():
     selected_font[4] = FileOpen()
-    FontCheck()
+    MultipleFontCheck()
 
 
 def EnSBSelect():
     selected_font[5] = FileOpen()
-    FontCheck()
+    MultipleFontCheck()
 
 
 def EnSBISelect():
     selected_font[6] = FileOpen()
-    FontCheck()
+    MultipleFontCheck()
 
 
 def EnBdSelect():
     selected_font[7] = FileOpen()
-    FontCheck()
+    MultipleFontCheck()
 
 
 def EnBISelect():
     selected_font[8] = FileOpen()
-    FontCheck()
+    MultipleFontCheck()
 
 
 def EnLtSelect():
     selected_font[9] = FileOpen()
-    FontCheck()
+    MultipleFontCheck()
 
 
 def EnLISelect():
     selected_font[10] = FileOpen()
-    FontCheck()
+    MultipleFontCheck()
 
 
 def EnSLSelect():
     selected_font[11] = FileOpen()
-    FontCheck()
+    MultipleFontCheck()
 
 
 def EnSLISelect():
     selected_font[12] = FileOpen()
-    FontCheck()
+    MultipleFontCheck()
 
 
 def EnBlSelect():
     selected_font[13] = FileOpen()
-    FontCheck()
+    MultipleFontCheck()
 
 
 def EnBlISelect():
     selected_font[14] = FileOpen()
-    FontCheck()
+    MultipleFontCheck()
 # endregion
 
 
@@ -390,7 +461,14 @@ button_mstart['command'] = MultiFileModify
 # endregion
 
 
-# region # 自定义编辑区组件
+# region # 自定义编辑区组件及功能函数
+def CustomFontCheck():
+    if system_fonts and custom_font:
+        button_cstart['state'] = "normal"
+    else:
+        button_cstart['state'] = "disabled"
+
+
 label_cmode = tk.Label(Group3, text='选择替换模式：', font=('Microsoft YaHei', 16))
 label_cmode.place(relx=0.04, rely=0.25, anchor='w')
 
@@ -402,14 +480,17 @@ button_cs.place(relx=0.48, rely=0.26, relwidth=0.25, relheight=0.35, anchor='cen
 button_cm = tk.Radiobutton(Group3, text="批量替换", font=('Microsoft YaHei', 16), variable=mode, value="multiple")
 button_cm.place(relx=0.78, rely=0.26, relwidth=0.25, relheight=0.35, anchor='center')
 
-button_cflist = tk.Button(Group3, text="待替换字体", border=2, font=('Microsoft YaHei', 16), relief='groove')
-button_cflist.place(relx=0.04, rely=0.68, relwidth=0.28, relheight=0.35, anchor='w')
-button_cflist['command'] = lambda: CustomFileOpen(mode.get())
+button_cflist = tk.Button(Group3, text="个性字体", border=2, font=('Microsoft YaHei', 16), relief='groove')
+button_cflist.place(relx=0.04, rely=0.68, relwidth=0.25, relheight=0.35, anchor='w')
+button_cflist['command'] = lambda: CustomFileOpen('model')
 
-button_cfont = tk.Button(Group3, text="模板字体", border=2, font=('Microsoft YaHei', 16), relief='groove')
-button_cfont.place(relx=0.36, rely=0.68, relwidth=0.25, relheight=0.35, anchor='w')
-button_cfont['command'] = lambda: CustomFileOpen("model")
-# endregion
+button_cfont = tk.Button(Group3, text="待替换字体", border=2, font=('Microsoft YaHei', 16), relief='groove')
+button_cfont.place(relx=0.33, rely=0.68, relwidth=0.28, relheight=0.35, anchor='w')
+button_cfont['command'] = lambda: CustomFileOpen(mode.get())
+
+button_cstart = tk.Button(Group3, text="开始替换", border=2, font=('Microsoft YaHei', 16), relief='groove')
+button_cstart.place(relx=0.96, rely=0.68, relwidth=0.25, relheight=0.35, anchor='e')
+button_cstart['command'] = CustomFileModify
 
 # region # Tips组件
 label = tk.Label(Group1, text="abcd.efgh", bg='#ffffff', justify='left', font=('Microsoft YaHei', 16),
@@ -563,6 +644,8 @@ label_m = [label_zhr, label_zhb,  label_zhl,
            label_enVar]
 
 # root.protocol("WM_DELETE_WINDOW", os._exit(0))
+CustomFontCheck()
+
 root.mainloop()
 
 # pyinstaller -F -w --distpath ../Program --workpath ./build main.py
