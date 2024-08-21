@@ -263,7 +263,7 @@ button_sof['command'] = SingleFileModify
 # endregion
 
 
-# region # 多字重编辑区功能函数
+# region # 多字重编辑区组件及功能函数
 def MultipleFontCheck():
 
     isFontListValid = True
@@ -284,95 +284,18 @@ def MultipleFontCheck():
         button_mstart['state'] = 'disabled'
 
 
-def ZhReSelect():
-    selected_font[0] = FileOpen()
+def MultipleFileOpen(index):
+    selected_font[index] = FileOpen()
     MultipleFontCheck()
 
 
-def ZhBdSelect():
-    selected_font[1] = FileOpen()
-    MultipleFontCheck()
-
-
-def ZhLtSelect():
-    selected_font[2] = FileOpen()
-    MultipleFontCheck()
-
-
-def EnVaSelect():
-    selected_font[15] = FileOpen()
-    MultipleFontCheck()
-
-
-def EnReSelect():
-    selected_font[3] = FileOpen()
-    MultipleFontCheck()
-
-
-def EnRISelect():
-    selected_font[4] = FileOpen()
-    MultipleFontCheck()
-
-
-def EnSBSelect():
-    selected_font[5] = FileOpen()
-    MultipleFontCheck()
-
-
-def EnSBISelect():
-    selected_font[6] = FileOpen()
-    MultipleFontCheck()
-
-
-def EnBdSelect():
-    selected_font[7] = FileOpen()
-    MultipleFontCheck()
-
-
-def EnBISelect():
-    selected_font[8] = FileOpen()
-    MultipleFontCheck()
-
-
-def EnLtSelect():
-    selected_font[9] = FileOpen()
-    MultipleFontCheck()
-
-
-def EnLISelect():
-    selected_font[10] = FileOpen()
-    MultipleFontCheck()
-
-
-def EnSLSelect():
-    selected_font[11] = FileOpen()
-    MultipleFontCheck()
-
-
-def EnSLISelect():
-    selected_font[12] = FileOpen()
-    MultipleFontCheck()
-
-
-def EnBlSelect():
-    selected_font[13] = FileOpen()
-    MultipleFontCheck()
-
-
-def EnBlISelect():
-    selected_font[14] = FileOpen()
-    MultipleFontCheck()
-# endregion
-
-
-# region # 多字重编辑区字体选择组件
 label_zhr = tk.Label(Group1, text='中文常规字体：', font=('Microsoft YaHei', 16), fg='#AAAAAA', justify='left',
                      anchor='w')
 label_zhr.place(relx=0.685, rely=0.1, relheight=0.128, anchor='w')
 button_mof_zhr = tk.Button(Group1, text='选择字体', border=2, font=('Microsoft YaHei', 16), relief='groove',
                            state='disabled')
 button_mof_zhr.place(relx=0.83, rely=0.1, relwidth=0.12, relheight=0.128, anchor='w')
-button_mof_zhr['command'] = ZhReSelect
+button_mof_zhr['command'] = lambda: MultipleFileOpen(0)
 
 label_zhb = tk.Label(Group1, text='中文粗体字体：', font=('Microsoft YaHei', 16), fg='#AAAAAA', justify='left',
                      anchor='w')
@@ -380,7 +303,7 @@ label_zhb.place(relx=0.685, rely=0.25, relheight=0.128, anchor='w')
 button_mof_zhb = tk.Button(Group1, text='选择字体', border=2, font=('Microsoft YaHei', 16), relief='groove',
                            state='disabled')
 button_mof_zhb.place(relx=0.83, rely=0.25, relwidth=0.12, relheight=0.128, anchor='w')
-button_mof_zhb['command'] = ZhBdSelect
+button_mof_zhb['command'] = lambda: MultipleFileOpen(1)
 
 label_zhl = tk.Label(Group1, text='中文细体字体：', font=('Microsoft YaHei', 16), fg='#AAAAAA', justify='left',
                      anchor='w')
@@ -388,7 +311,7 @@ label_zhl.place(relx=0.685, rely=0.4, relheight=0.128, anchor='w')
 button_mof_zhl = tk.Button(Group1, text='选择字体', border=2, font=('Microsoft YaHei', 16), relief='groove',
                            state='disabled')
 button_mof_zhl.place(relx=0.83, rely=0.4, relwidth=0.12, relheight=0.128, anchor='w')
-button_mof_zhl['command'] = ZhLtSelect
+button_mof_zhl['command'] = lambda: MultipleFileOpen(2)
 
 label_enVar = tk.Label(Group1, text='西文可变字体：', font=('Microsoft YaHei', 16), fg='#AAAAAA', justify='left',
                        anchor='w')
@@ -396,7 +319,7 @@ label_enVar.place(relx=0.685, rely=0.55, relheight=0.128, anchor='w')
 button_mof_enVar = tk.Button(Group1, text='选择字体', border=2, font=('Microsoft YaHei', 16), relief='groove',
                              state='disabled')
 button_mof_enVar.place(relx=0.83, rely=0.55, relwidth=0.12, relheight=0.128, anchor='w')
-button_mof_enVar['command'] = EnVaSelect
+button_mof_enVar['command'] = lambda: MultipleFileOpen(15)
 
 label_enl = tk.Label(Group1, text='西文细体字体：', font=('Microsoft YaHei', 16), fg='#AAAAAA', justify='left',
                      anchor='w')
@@ -404,7 +327,7 @@ label_enl.place(relx=0.025, rely=0.1, relheight=0.128, anchor='w')
 button_mof_enl = tk.Button(Group1, text='选择字体', border=2, font=('Microsoft YaHei', 16), relief='groove',
                            state='disabled')
 button_mof_enl.place(relx=0.17, rely=0.1, relwidth=0.12, relheight=0.128, anchor='w')
-button_mof_enl['command'] = EnLtSelect
+button_mof_enl['command'] = lambda: MultipleFileOpen(9)
 
 label_ensl = tk.Label(Group1, text='西文半细字体：', font=('Microsoft YaHei', 16), fg='#AAAAAA', justify='left',
                       anchor='w')
@@ -412,7 +335,7 @@ label_ensl.place(relx=0.025, rely=0.25, relheight=0.128, anchor='w')
 button_mof_ensl = tk.Button(Group1, text='选择字体', border=2, font=('Microsoft YaHei', 16), relief='groove',
                             state='disabled')
 button_mof_ensl.place(relx=0.17, rely=0.25, relwidth=0.12, relheight=0.128, anchor='w')
-button_mof_ensl['command'] = EnSLSelect
+button_mof_ensl['command'] = lambda: MultipleFileOpen(11)
 
 label_enr = tk.Label(Group1, text='西文常规字体：', font=('Microsoft YaHei', 16), fg='#AAAAAA', justify='left',
                      anchor='w')
@@ -420,7 +343,7 @@ label_enr.place(relx=0.025, rely=0.4, relheight=0.128, anchor='w')
 button_mof_enr = tk.Button(Group1, text='选择字体', border=2, font=('Microsoft YaHei', 16), relief='groove',
                            state='disabled')
 button_mof_enr.place(relx=0.17, rely=0.4, relwidth=0.12, relheight=0.128, anchor='w')
-button_mof_enr['command'] = EnReSelect
+button_mof_enr['command'] = lambda: MultipleFileOpen(3)
 
 label_ensb = tk.Label(Group1, text='西文半粗字体：', font=('Microsoft YaHei', 16), fg='#AAAAAA', justify='left',
                       anchor='w')
@@ -428,7 +351,7 @@ label_ensb.place(relx=0.025, rely=0.55, relheight=0.128, anchor='w')
 button_mof_ensb = tk.Button(Group1, text='选择字体', border=2, font=('Microsoft YaHei', 16), relief='groove',
                             state='disabled')
 button_mof_ensb.place(relx=0.17, rely=0.55, relwidth=0.12, relheight=0.128, anchor='w')
-button_mof_ensb['command'] = EnSBSelect
+button_mof_ensb['command'] = lambda: MultipleFileOpen(5)
 
 label_enb = tk.Label(Group1, text='西文粗体字体：', font=('Microsoft YaHei', 16), fg='#AAAAAA', justify='left',
                      anchor='w')
@@ -436,7 +359,7 @@ label_enb.place(relx=0.025, rely=0.7, relheight=0.128, anchor='w')
 button_mof_enb = tk.Button(Group1, text='选择字体', border=2, font=('Microsoft YaHei', 16), relief='groove',
                            state='disabled')
 button_mof_enb.place(relx=0.17, rely=0.7, relwidth=0.12, relheight=0.128, anchor='w')
-button_mof_enb['command'] = EnBdSelect
+button_mof_enb['command'] = lambda: MultipleFileOpen(7)
 
 label_enbl = tk.Label(Group1, text='西文特粗字体：', font=('Microsoft YaHei', 16), fg='#AAAAAA', justify='left',
                       anchor='w')
@@ -444,7 +367,7 @@ label_enbl.place(relx=0.025, rely=0.85, relheight=0.128, anchor='w')
 button_mof_enbl = tk.Button(Group1, text='选择字体', border=2, font=('Microsoft YaHei', 16), relief='groove',
                             state='disabled')
 button_mof_enbl.place(relx=0.17, rely=0.85, relwidth=0.12, relheight=0.128, anchor='w')
-button_mof_enbl['command'] = EnBlSelect
+button_mof_enbl['command'] = lambda: MultipleFileOpen(13)
 
 label_enli = tk.Label(Group1, text='西文细斜字体：', font=('Microsoft YaHei', 16), fg='#AAAAAA', justify='left',
                       anchor='w')
@@ -452,7 +375,7 @@ label_enli.place(relx=0.355, rely=0.1, relheight=0.128, anchor='w')
 button_mof_enli = tk.Button(Group1, text='选择字体', border=2, font=('Microsoft YaHei', 16), relief='groove',
                             state='disabled')
 button_mof_enli.place(relx=0.50, rely=0.1, relwidth=0.12, relheight=0.128, anchor='w')
-button_mof_enli['command'] = EnLISelect
+button_mof_enli['command'] = lambda: MultipleFileOpen(10)
 
 label_ensli = tk.Label(Group1, text='西文半细斜体：', font=('Microsoft YaHei', 16), fg='#AAAAAA', justify='left',
                        anchor='w')
@@ -460,7 +383,7 @@ label_ensli.place(relx=0.355, rely=0.25, relheight=0.128, anchor='w')
 button_mof_ensli = tk.Button(Group1, text='选择字体', border=2, font=('Microsoft YaHei', 16), relief='groove',
                              state='disabled')
 button_mof_ensli.place(relx=0.50, rely=0.25, relwidth=0.12, relheight=0.128, anchor='w')
-button_mof_ensli['command'] = EnSLISelect
+button_mof_ensli['command'] = lambda: MultipleFileOpen(12)
 
 label_enri = tk.Label(Group1, text='西文斜体字体：', font=('Microsoft YaHei', 16), fg='#AAAAAA', justify='left',
                       anchor='w')
@@ -468,7 +391,7 @@ label_enri.place(relx=0.355, rely=0.4, relheight=0.128, anchor='w')
 button_mof_enri = tk.Button(Group1, text='选择字体', border=2, font=('Microsoft YaHei', 16), relief='groove',
                             state='disabled')
 button_mof_enri.place(relx=0.50, rely=0.4, relwidth=0.12, relheight=0.128, anchor='w')
-button_mof_enri['command'] = EnRISelect
+button_mof_enri['command'] = lambda: MultipleFileOpen(4)
 
 label_ensbi = tk.Label(Group1, text='西文半粗斜体：', font=('Microsoft YaHei', 16), fg='#AAAAAA', justify='left',
                        anchor='w')
@@ -476,7 +399,7 @@ label_ensbi.place(relx=0.355, rely=0.55, relheight=0.128, anchor='w')
 button_mof_ensbi = tk.Button(Group1, text='选择字体', border=2, font=('Microsoft YaHei', 16), relief='groove',
                              state='disabled')
 button_mof_ensbi.place(relx=0.50, rely=0.55, relwidth=0.12, relheight=0.128, anchor='w')
-button_mof_ensbi['command'] = EnSBISelect
+button_mof_ensbi['command'] = lambda: MultipleFileOpen(6)
 
 label_enbi = tk.Label(Group1, text='西文粗斜字体：', font=('Microsoft YaHei', 16), fg='#AAAAAA', justify='left',
                       anchor='w')
@@ -484,7 +407,7 @@ label_enbi.place(relx=0.355, rely=0.7, relheight=0.128, anchor='w')
 button_mof_enbi = tk.Button(Group1, text='选择字体', border=2, font=('Microsoft YaHei', 16), relief='groove',
                             state='disabled')
 button_mof_enbi.place(relx=0.50, rely=0.7, relwidth=0.12, relheight=0.128, anchor='w')
-button_mof_enbi['command'] = EnBISelect
+button_mof_enbi['command'] = lambda: MultipleFileOpen(8)
 
 label_enbli = tk.Label(Group1, text='西文特粗斜体：', font=('Microsoft YaHei', 16), fg='#AAAAAA', justify='left',
                        anchor='w')
@@ -492,7 +415,7 @@ label_enbli.place(relx=0.355, rely=0.85, relheight=0.128, anchor='w')
 button_mof_enbli = tk.Button(Group1, text='选择字体', border=2, font=('Microsoft YaHei', 16), relief='groove',
                              state='disabled')
 button_mof_enbli.place(relx=0.50, rely=0.85, relwidth=0.12, relheight=0.128, anchor='w')
-button_mof_enbli['command'] = EnBlISelect
+button_mof_enbli['command'] = lambda: MultipleFileOpen(14)
 
 button_mstart = tk.Button(Group1, text='开始制作', border=2, font=('Microsoft YaHei', 16), relief='groove', state='disabled')
 button_mstart.place(relx=0.81, rely=0.78, relwidth=0.12, relheight=0.128, anchor='center')
@@ -542,136 +465,16 @@ def HideTips():
     label['text'] = ""
 
 
-def ZhReSelectedHint():
-    if selected_font[0] is not None:
-        label.place(relx=0.69, rely=0.14, anchor='nw')
-        label['text'] = os.path.basename(selected_font[0])
+def ShowTips(index):
 
+    place = {0: (0.69, 0.14), 1: (0.69, 0.29), 2: (0.69, 0.44), 3: (0.03, 0.44), 4: (0.36, 0.44), 15: (0.69, 0.59),
+             5: (0.03, 0.59), 6: (0.36, 0.59), 7: (0.03, 0.74), 8: (0.36, 0.74), 9: (0.03, 0.14), 10: (0.36, 0.14),
+             11: (0.03, 0.29), 12: (0.36, 0.29), 13: (0.03, 0.89), 14: (0.36, 0.89)}
 
-def ZhBdSelectedHint():
-    if selected_font[1] is not None:
-        label.place(relx=0.69, rely=0.29, anchor='nw')
-        label['text'] = os.path.basename(selected_font[1])
+    if selected_font[index] is not None:
+        label.place(relx=place.get(index)[0], rely=place.get(index)[1], anchor='nw')
+        label['text'] = os.path.basename(selected_font[index])
 
-
-def ZhLtSelectedHint():
-    if selected_font[2] is not None:
-        label.place(relx=0.69, rely=0.44, anchor='nw')
-        label['text'] = os.path.basename(selected_font[2])
-
-
-def EnVaSelectedHint():
-    if selected_font[15] is not None:
-        label.place(relx=0.69, rely=0.59, anchor='nw')
-        label['text'] = os.path.basename(selected_font[15])
-
-
-def EnReSelectedHint():
-    if selected_font[3] is not None:
-        label.place(relx=0.03, rely=0.44, anchor='nw')
-        label['text'] = os.path.basename(selected_font[3])
-
-
-def EnRISelectedHint():
-    if selected_font[4] is not None:
-        label.place(relx=0.36, rely=0.44, anchor='nw')
-        label['text'] = os.path.basename(selected_font[4])
-
-
-def EnSBSelectedHint():
-    if selected_font[5] is not None:
-        label.place(relx=0.03, rely=0.59, anchor='nw')
-        label['text'] = os.path.basename(selected_font[5])
-
-
-def EnSBISelectedHint():
-    if selected_font[6] is not None:
-        label.place(relx=0.36, rely=0.59, anchor='nw')
-        label['text'] = os.path.basename(selected_font[6])
-
-
-def EnBdSelectedHint():
-    if selected_font[7] is not None:
-        label.place(relx=0.03, rely=0.74, anchor='nw')
-        label['text'] = os.path.basename(selected_font[7])
-
-
-def EnBISelectedHint():
-    if selected_font[8] is not None:
-        label.place(relx=0.36, rely=0.74, anchor='nw')
-        label['text'] = os.path.basename(selected_font[8])
-
-
-def EnLtSelectedHint():
-    if selected_font[9] is not None:
-        label.place(relx=0.03, rely=0.14, anchor='nw')
-        label['text'] = os.path.basename(selected_font[9])
-
-
-def EnLISelectedHint():
-    if selected_font[10] is not None:
-        label.place(relx=0.36, rely=0.14, anchor='nw')
-        label['text'] = os.path.basename(selected_font[10])
-
-
-def EnSLSelectedHint():
-    if selected_font[11] is not None:
-        label.place(relx=0.03, rely=0.29, anchor='nw')
-        label['text'] = os.path.basename(selected_font[11])
-
-
-def EnSLISelectedHint():
-    if selected_font[12] is not None:
-        label.place(relx=0.36, rely=0.29, anchor='nw')
-        label['text'] = os.path.basename(selected_font[12])
-
-
-def EnBlSelectedHint():
-    if selected_font[13] is not None:
-        label.place(relx=0.03, rely=0.89, anchor='nw')
-        label['text'] = os.path.basename(selected_font[13])
-
-
-def EnBlISelectedHint():
-    if selected_font[14] is not None:
-        label.place(relx=0.36, rely=0.89, anchor='nw')
-        label['text'] = os.path.basename(selected_font[14])
-
-
-label_zhr.bind('<Enter>', lambda event: ZhReSelectedHint())
-label_zhb.bind('<Enter>', lambda event: ZhBdSelectedHint())
-label_zhl.bind('<Enter>', lambda event: ZhLtSelectedHint())
-label_enVar.bind('<Enter>', lambda event: EnVaSelectedHint())
-label_enr.bind('<Enter>', lambda event: EnReSelectedHint())
-label_enri.bind('<Enter>', lambda event: EnRISelectedHint())
-label_ensb.bind('<Enter>', lambda event: EnSBSelectedHint())
-label_ensbi.bind('<Enter>', lambda event: EnSBISelectedHint())
-label_enb.bind('<Enter>', lambda event: EnBdSelectedHint())
-label_enbi.bind('<Enter>', lambda event: EnBISelectedHint())
-label_enl.bind('<Enter>', lambda event: EnLtSelectedHint())
-label_enli.bind('<Enter>', lambda event: EnLISelectedHint())
-label_ensl.bind('<Enter>', lambda event: EnSLSelectedHint())
-label_ensli.bind('<Enter>', lambda event: EnSLISelectedHint())
-label_enbl.bind('<Enter>', lambda event: EnBlSelectedHint())
-label_enbli.bind('<Enter>', lambda event: EnBlISelectedHint())
-
-label_zhr.bind('<Leave>', lambda event: HideTips())
-label_zhb.bind('<Leave>', lambda event: HideTips())
-label_zhl.bind('<Leave>', lambda event: HideTips())
-label_enVar.bind('<Leave>', lambda event: HideTips())
-label_enr.bind('<Leave>', lambda event: HideTips())
-label_enri.bind('<Leave>', lambda event: HideTips())
-label_ensb.bind('<Leave>', lambda event: HideTips())
-label_ensbi.bind('<Leave>', lambda event: HideTips())
-label_enb.bind('<Leave>', lambda event: HideTips())
-label_enbi.bind('<Leave>', lambda event: HideTips())
-label_enl.bind('<Leave>', lambda event: HideTips())
-label_enli.bind('<Leave>', lambda event: HideTips())
-label_ensl.bind('<Leave>', lambda event: HideTips())
-label_ensli.bind('<Leave>', lambda event: HideTips())
-label_enbl.bind('<Leave>', lambda event: HideTips())
-label_enbli.bind('<Leave>', lambda event: HideTips())
-# endregion
 
 button_m = [button_mof_zhr, button_mof_zhb,  button_mof_zhl,
             button_mof_enr, button_mof_enri, button_mof_ensb, button_mof_ensbi, button_mof_enb,  button_mof_enbi,
@@ -682,6 +485,12 @@ label_m = [label_zhr, label_zhb,  label_zhl,
            label_enr, label_enri, label_ensb, label_ensbi, label_enb,  label_enbi,
            label_enl, label_enli, label_ensl, label_ensli, label_enbl, label_enbli,
            label_enVar]
+
+
+for obj_label in label_m:
+    obj_label.bind('<Enter>', lambda event, index=label_m.index(obj_label): ShowTips(index))
+    obj_label.bind('<Leave>', lambda event: HideTips())
+# endregion
 
 CustomFontCheck()
 
