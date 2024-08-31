@@ -12,15 +12,15 @@
 
 选择好字体以后，对应字形的标签会变成<mark style="background: #BBFABBA6;">绿色的</mark>，并且当你的鼠标指针置于这个标签上方时，会显示当前选中的字体是什么。
 
-- [?] **我该如何选择不同字形对应的字体文件？**
-
-一般来说，拥有多个自重的字体文件的文件名会有专门的标识名称来区分不同字重的文件，常见字重的名称按照从细到粗排序，大致是这样的：
-
-$$\rm Thin\approx Extra(Ultra)Light\lt Light\lt Semi(Demi)Light\lt Regular\approx Normal\lt Medium$$
-
-$$\rm Medium\lt Semi(Demi)Bold\lt Bold\lt Black\approx Heavy\lt Extra(Ultra)Black$$
-
-不同厂商所制作的字体，其字重标识名称存在差异，因此不必太过追求完美，大致按照上述排序，选择差不多的字体文件即可；当然，你也可以用同一个字体来替换多种不同的字形，例如你可以将“细体”、“半细”、“常规”三种字型全部设置为 $\rm Regular$，或者将同一种字重的常规字体和斜体字体设置为一样的，这么做通常来说不会有什么大的问题，<mark style="background: #ABF7F7A6;">甚至有可能让屏幕上的部分细体或粗体字变得更加容易阅读</mark>。
+> [!TIP] **我该如何选择不同字形对应的字体文件？**
+>
+> 一般来说，拥有多个自重的字体文件的文件名会有专门的标识名称来区分不同字重的文件，常见字重的名称按照从细到粗排序，大致是这样的：
+>
+> $$\rm Thin\approx Extra(Ultra)Light\lt Light\lt Semi(Demi)Light\lt Regular\approx Normal\lt Medium$$
+> 
+> $$\rm Medium\lt Semi(Demi)Bold\lt Bold\lt Black\approx Heavy\lt Extra(Ultra)Black$$
+> 
+> 不同厂商所制作的字体，其字重标识名称存在差异，因此不必太过追求完美，大致按照上述排序，选择差不多的字体文件即可；当然，你也可以用同一个字体来替换多种不同的字形，例如你可以将“细体”、“半细”、“常规”三种字型全部设置为 $\rm Regular$，或者将同一种字重的常规字体和斜体字体设置为一样的，这么做通常来说不会有什么大的问题，<mark style="background: #ABF7F7A6;">甚至有可能让屏幕上的部分细体或粗体字变得更加容易阅读</mark>。
 
 你必须选择完全部 16 种字形后，<mark style="background: #FFF3A3A6;">“开始制作”</mark> 按钮才会亮起。
 
