@@ -1,7 +1,5 @@
 import os
 import argparse
-from multiprocessing.managers import Namespace
-
 from fontTools.ttLib import TTFont
 from fontTools.ttLib.ttCollection import TTCollection
 
@@ -39,7 +37,7 @@ path = os.getcwd()
 #     return dirname
 
 
-def fontPropertyReplace(args: Namespace) -> int:
+def fontPropertyReplace(args) -> int:
     """
     将 args.xml 中的 name 表数据转移至 args.font 中，进行字体属性替换。
     :param args: 命令行传递参数
