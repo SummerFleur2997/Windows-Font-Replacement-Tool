@@ -4,6 +4,7 @@ from uitools import *
 from functions import *
 from win32api import GetSystemMetrics
 
+xmls_path = path + r'\Libs\xmls'
 custom_font = None
 system_fonts = []
 sha1 = [
