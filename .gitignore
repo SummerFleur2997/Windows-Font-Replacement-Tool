@@ -6,3 +6,4 @@ build/
 Libs/xmls/*.ttf
 test.*
 *.spec
+rebuild plan.md
