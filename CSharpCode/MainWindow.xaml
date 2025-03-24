@@ -1,0 +1,157 @@
+﻿<Window x:Class="Windows_Font_Replacement_Tool.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Windows_Font_Replacement_Tool"
+        mc:Ignorable="d"
+        AllowsTransparency="True"
+        Background="Transparent"
+        WindowStyle="None"
+        ResizeMode="NoResize"
+        WindowStartupLocation="CenterScreen"
+        Title="MainWindow" Height="576" Width="896">
+
+    <Window.Resources>
+        <FontFamily x:Key="FluentIconFont">Segoe Fluent Icons, Segoe MDL2 Assets</FontFamily>
+        <Color x:Key="PrimaryColor">#6750A4</Color>
+        <Color x:Key="OnPrimaryColor">#FFFFFF</Color>
+        <Color x:Key="SurfaceColor">#FEF7FF</Color>
+        <Color x:Key="OnSurfaceColor">#1D1B20</Color>
+        
+        <SolidColorBrush x:Key="PrimaryBrush" Color="{StaticResource PrimaryColor}"/>
+        <SolidColorBrush x:Key="OnPrimaryBrush" Color="{StaticResource OnPrimaryColor}"/>
+        <SolidColorBrush x:Key="SurfaceBrush" Color="{StaticResource SurfaceColor}"/>
+        <SolidColorBrush x:Key="OnSurfaceBrush" Color="{StaticResource OnSurfaceColor}"/>
+        
+        <Style x:Key="CloseButtonStyle" TargetType="Button" BasedOn="{x:Null}">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderBrush" Value="Transparent"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border 
+                            x:Name="border"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="1"
+                            CornerRadius="3">
+                            <ContentPresenter 
+                                HorizontalAlignment="Center" 
+                                VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="border" 
+                                        Property="Background" 
+                                        Value="#ff5a5a"/>
+                                <Setter TargetName="border" 
+                                        Property="BorderBrush" 
+                                        Value="#ff5a5a"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style x:Key="MinimizeButtonStyle" TargetType="Button" BasedOn="{x:Null}">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderBrush" Value="Transparent"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border 
+                            x:Name="border"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="1"
+                            CornerRadius="3">
+                            <ContentPresenter 
+                                HorizontalAlignment="Center" 
+                                VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="border" 
+                                        Property="Background" 
+                                        Value="#7faaaaaa"/>
+                                <Setter TargetName="border" 
+                                        Property="BorderBrush" 
+                                        Value="#7faaaaaa"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+    
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="0.09*"/>
+            <RowDefinition Height="0.91*"/>
+        </Grid.RowDefinitions>
+        
+        <Grid Grid.Row="0">
+            <Border 
+                CornerRadius="10 10 0 0" 
+                BorderThickness="4 4 4 0"
+                MouseDown="Border_MouseDown" >
+                <Border.Background>
+                    <LinearGradientBrush>
+                        <GradientStop Color="#7147a9" Offset="0"/>
+                        <GradientStop Color="#a350c9" Offset="1"/>
+                    </LinearGradientBrush>
+                </Border.Background>
+                <TextBlock Name="TextBlock" Text="字体属性替换工具" 
+                           VerticalAlignment="Center" HorizontalAlignment="Left" Margin="20 0" 
+                           FontSize="16" Foreground="White"></TextBlock>
+            </Border>
+            
+            <StackPanel Orientation="Horizontal" 
+                        HorizontalAlignment="Center" 
+                        VerticalAlignment="Center">
+                <Button x:Name="Tab1Btn" Content="标签页1" Width="100" Margin="5 0" 
+                        Background="{StaticResource PrimaryBrush}"
+                        Foreground="White" Click="TabButton_Click"/>
+                <Button x:Name="Tab2Btn" Content="标签页2" Width="100" Margin="5 0" 
+                        Background="{StaticResource PrimaryBrush}"
+                        Foreground="White" Click="TabButton_Click"/>
+                <Button x:Name="Tab3Btn" Content="标签页3" Width="100" Margin="5 0" 
+                        Background="{StaticResource PrimaryBrush}"
+                        Foreground="White" Click="TabButton_Click"/>
+            </StackPanel>
+            
+            <Button Name="CloseButton" Height="28" Width="28" 
+                    HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0 0 16 0"
+                    Content="&#xE653;" FontFamily="{StaticResource FluentIconFont}" FontSize="14" Foreground="White"
+                    Click="CloseButton_Click" Style="{StaticResource CloseButtonStyle}"/>
+                
+            <Button Name="MinimizeButton" Height="28" Width="28" 
+                    HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0 0 54 0"
+                    Content="&#xE654;" FontFamily="{StaticResource FluentIconFont}" FontSize="14" Foreground="White"
+                    Click="MinimizeButton_Click" Style="{StaticResource MinimizeButtonStyle}"/>
+        </Grid>
+        
+        <Grid Grid.Row="1">
+                <Border Background="#ffffff" 
+                        CornerRadius="0 0 10 10" 
+                        BorderThickness="4 0 4 4"/>
+                
+                <Border Background="{StaticResource SurfaceBrush}" CornerRadius="0 0 10 10" BorderThickness="4 0 4 4">
+                    <Grid>
+                        <Grid x:Name="Tab1Content" Visibility="Visible">
+                            <TextBlock Text="你好" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Grid>
+            
+                        <Grid x:Name="Tab2Content" Visibility="Collapsed">
+                            <Button Content="按钮" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Grid>
+            
+                        <Grid x:Name="Tab3Content" Visibility="Collapsed"/>
+                    </Grid>
+                </Border>
+        </Grid>
+    </Grid>
+
+</Window>

@@ -2,7 +2,10 @@ __pycache__/
 PythonProject/
 output/
 build/
+dist/
 .idea/
+CSharpCode/bin
+CSharpCode/obj
 Libs/xmls/*.ttf
 test.*
 *.spec
