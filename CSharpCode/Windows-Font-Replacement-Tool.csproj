@@ -12,4 +12,9 @@
         <Resource Include="Resources\iconfont.ttf" />
     </ItemGroup>
 
+    <ItemGroup>
+        <PackageReference Include="System.IO.Compression.ZipFile" Version="4.3.0" />
+        <PackageReference Include="SharpZipLib" Version="1.4.0" />
+    </ItemGroup>
+
 </Project>

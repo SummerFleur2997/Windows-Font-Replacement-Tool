@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Windows_Font_Replacement_Tool.Framework;
 
 namespace Windows_Font_Replacement_Tool
 {
@@ -23,7 +24,7 @@ namespace Windows_Font_Replacement_Tool
         public MainWindow()
         {
             InitializeComponent();
-            // DetectSystemIconFont();
+            HashTab.Initialize();
         }
 
         private void CloseButton_Click(object sender, RoutedEventArgs e)
