@@ -13,89 +13,18 @@
         Title="MainWindow" Height="576" Width="896">
 
     <Window.Resources>
-        <FontFamily x:Key="FluentIconFont">Segoe Fluent Icons, Segoe MDL2 Assets</FontFamily>
-        <Color x:Key="PrimaryColor">#6750A4</Color>
-        <Color x:Key="OnPrimaryColor">#FFFFFF</Color>
-        <Color x:Key="SurfaceColor">#FEF7FF</Color>
-        <Color x:Key="OnSurfaceColor">#1D1B20</Color>
-        
-        <SolidColorBrush x:Key="PrimaryBrush" Color="{StaticResource PrimaryColor}"/>
-        <SolidColorBrush x:Key="OnPrimaryBrush" Color="{StaticResource OnPrimaryColor}"/>
-        <SolidColorBrush x:Key="SurfaceBrush" Color="{StaticResource SurfaceColor}"/>
-        <SolidColorBrush x:Key="OnSurfaceBrush" Color="{StaticResource OnSurfaceColor}"/>
-        
-        <Style x:Key="CloseButtonStyle" TargetType="Button" BasedOn="{x:Null}">
-            <Setter Property="Background" Value="Transparent"/>
-            <Setter Property="BorderBrush" Value="Transparent"/>
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="Button">
-                        <Border 
-                            x:Name="border"
-                            Background="{TemplateBinding Background}"
-                            BorderBrush="{TemplateBinding BorderBrush}"
-                            BorderThickness="1"
-                            CornerRadius="3">
-                            <ContentPresenter 
-                                HorizontalAlignment="Center" 
-                                VerticalAlignment="Center"/>
-                        </Border>
-                        <ControlTemplate.Triggers>
-                            <Trigger Property="IsMouseOver" Value="True">
-                                <Setter TargetName="border" 
-                                        Property="Background" 
-                                        Value="#ff5a5a"/>
-                                <Setter TargetName="border" 
-                                        Property="BorderBrush" 
-                                        Value="#ff5a5a"/>
-                            </Trigger>
-                        </ControlTemplate.Triggers>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-        <Style x:Key="MinimizeButtonStyle" TargetType="Button" BasedOn="{x:Null}">
-            <Setter Property="Background" Value="Transparent"/>
-            <Setter Property="BorderBrush" Value="Transparent"/>
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="Button">
-                        <Border 
-                            x:Name="border"
-                            Background="{TemplateBinding Background}"
-                            BorderBrush="{TemplateBinding BorderBrush}"
-                            BorderThickness="1"
-                            CornerRadius="3">
-                            <ContentPresenter 
-                                HorizontalAlignment="Center" 
-                                VerticalAlignment="Center"/>
-                        </Border>
-                        <ControlTemplate.Triggers>
-                            <Trigger Property="IsMouseOver" Value="True">
-                                <Setter TargetName="border" 
-                                        Property="Background" 
-                                        Value="#7faaaaaa"/>
-                                <Setter TargetName="border" 
-                                        Property="BorderBrush" 
-                                        Value="#7faaaaaa"/>
-                            </Trigger>
-                        </ControlTemplate.Triggers>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
     </Window.Resources>
     
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="0.09*"/>
-            <RowDefinition Height="0.91*"/>
+            <RowDefinition Height="52"/>
+            <RowDefinition Height="1*"/>
         </Grid.RowDefinitions>
         
         <Grid Grid.Row="0">
             <Border 
                 CornerRadius="10 10 0 0" 
-                BorderThickness="4 4 4 0"
+                BorderThickness="0"
                 MouseDown="Border_MouseDown" >
                 <Border.Background>
                     <LinearGradientBrush>
@@ -105,52 +34,236 @@
                 </Border.Background>
                 <TextBlock Name="TextBlock" Text="字体属性替换工具" 
                            VerticalAlignment="Center" HorizontalAlignment="Left" Margin="20 0" 
-                           FontSize="16" Foreground="White"></TextBlock>
+                           FontSize="17" Foreground="White"></TextBlock>
             </Border>
             
-            <StackPanel Orientation="Horizontal" 
-                        HorizontalAlignment="Center" 
-                        VerticalAlignment="Center">
-                <Button x:Name="Tab1Btn" Content="标签页1" Width="100" Margin="5 0" 
-                        Background="{StaticResource PrimaryBrush}"
-                        Foreground="White" Click="TabButton_Click"/>
-                <Button x:Name="Tab2Btn" Content="标签页2" Width="100" Margin="5 0" 
-                        Background="{StaticResource PrimaryBrush}"
-                        Foreground="White" Click="TabButton_Click"/>
-                <Button x:Name="Tab3Btn" Content="标签页3" Width="100" Margin="5 0" 
-                        Background="{StaticResource PrimaryBrush}"
-                        Foreground="White" Click="TabButton_Click"/>
-            </StackPanel>
-            
             <Button Name="CloseButton" Height="28" Width="28" 
-                    HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0 0 16 0"
-                    Content="&#xE653;" FontFamily="{StaticResource FluentIconFont}" FontSize="14" Foreground="White"
+                    HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0 0 12 0"
+                    Content="&#xE6EA;" FontSize="18" Foreground="White"
                     Click="CloseButton_Click" Style="{StaticResource CloseButtonStyle}"/>
                 
             <Button Name="MinimizeButton" Height="28" Width="28" 
-                    HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0 0 54 0"
-                    Content="&#xE654;" FontFamily="{StaticResource FluentIconFont}" FontSize="14" Foreground="White"
+                    HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0 0 48 0"
+                    Content="&#xE687;" FontSize="18" Foreground="White"
                     Click="MinimizeButton_Click" Style="{StaticResource MinimizeButtonStyle}"/>
         </Grid>
         
-        <Grid Grid.Row="1">
-                <Border Background="#ffffff" 
-                        CornerRadius="0 0 10 10" 
-                        BorderThickness="4 0 4 4"/>
-                
-                <Border Background="{StaticResource SurfaceBrush}" CornerRadius="0 0 10 10" BorderThickness="4 0 4 4">
-                    <Grid>
-                        <Grid x:Name="Tab1Content" Visibility="Visible">
-                            <TextBlock Text="你好" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                        </Grid>
+        <Grid Grid.Row="1" ClipToBounds="True">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="1"/>
+                <ColumnDefinition Width="735"/>
+            </Grid.ColumnDefinitions>
             
-                        <Grid x:Name="Tab2Content" Visibility="Collapsed">
-                            <Button Content="按钮" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                        </Grid>
-            
-                        <Grid x:Name="Tab3Content" Visibility="Collapsed"/>
+            <Border Grid.Column="2" 
+                    Background="{StaticResource SurfaceBrush}"
+                    CornerRadius="0 0 10 0"
+                    BorderThickness="0 "
+                    Margin="-1 0 0 0">
+                <Grid>
+                    <!-- 主页详细内容 -->
+                    <Grid x:Name="WelcomeContent" Visibility="Collapsed">
+                        <Border Background="{StaticResource MainBrush}"
+                                CornerRadius="6"
+                                Margin="16">
+                            <Border.Effect>
+                                <DropShadowEffect BlurRadius="8" ShadowDepth="0" 
+                                                  Direction="270" Color="#90cdb9df"/>
+                            </Border.Effect>
+                        </Border>
+                        <StackPanel Width="360" Margin="0 16">
+                            <Label VerticalAlignment="Top" HorizontalAlignment="Center"
+                                   Foreground="{StaticResource TextBrush}"
+                                   FontSize="22" FontWeight="Bold"
+                                   Content="欢迎使用本工具！" 
+                                   Margin="0 66 0 0">
+                            </Label>
+                            <Label VerticalAlignment="Top" HorizontalAlignment="Center"
+                                   Foreground="{StaticResource CommentBrush}"
+                                   Content="请选择您的 DIY 模式：" Margin="0 10 0 0">
+                            </Label>
+                        </StackPanel>
+                        <DockPanel Height="160" Margin="16 0"
+                                   HorizontalAlignment="Center">
+                            <Button Name="Button1" Style="{StaticResource WelcomePageButton}"
+                                    Click="AltTabButton_Click">
+                                <StackPanel Orientation="Vertical">
+                                    <TextBlock Text="&#xE63C;" FontSize="56" Margin="0 -10 0 0"
+                                               HorizontalAlignment="Center" />
+                                    <TextBlock Text="快速制作" Margin="0 16 0 0"/>
+                                </StackPanel>
+                            </Button>
+                            <Button Name="Button2" Style="{StaticResource WelcomePageButton}"
+                                    Click="AltTabButton_Click">
+                                <StackPanel Orientation="Vertical">
+                                    <TextBlock Text="&#xE63F;" FontSize="56" Margin="0 -10 0 0"
+                                               HorizontalAlignment="Center" />
+                                    <TextBlock Text="精细制作" Margin="0 16 0 0"/>
+                                </StackPanel>
+                            </Button>
+                        </DockPanel>
+                        <Button Style="{StaticResource BorderlessButton}"
+                                VerticalAlignment="Bottom" Margin="0 0 0 20"
+                                FontSize="12" Width="167">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="© 2025 SummerFleur2997" Margin="0" 
+                                           VerticalAlignment="Center"/>
+                                <TextBlock Text="&#xE681;" FontSize="18" Margin="5 0 0 0"/>
+                            </StackPanel>
+                        </Button>
                     </Grid>
-                </Border>
+                    <!-- 快速制作页详细内容 -->
+                    <Grid x:Name="Tab1Content" Visibility="Visible">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="45"/>
+                            <RowDefinition Height="150"/>
+                            <RowDefinition Height="1*"/>
+                        </Grid.RowDefinitions>
+                        
+                        <Grid Grid.Row="0">
+                            <Border>
+                                <Button Name="Back" Style="{StaticResource BorderlessButton}"
+                                        HorizontalAlignment="Left" Margin="24 10 0 0"
+                                        Click="AltTabButton_Click">
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="&#xE61A;" FontSize="19" VerticalAlignment="Center"/>
+                                        <TextBlock Text="返回主页" Margin="8,0,0,0" 
+                                                   VerticalAlignment="Center"/>
+                                    </StackPanel>
+                                </Button>
+                            </Border>
+                        </Grid>
+                        
+                        <Grid Grid.Row="1">
+                            <Border Background="{StaticResource MainBrush}"
+                                    CornerRadius="6" Margin="27 10">
+                                <Border.Effect>
+                                    <DropShadowEffect BlurRadius="8" ShadowDepth="0" 
+                                                      Direction="270" Color="#90cdb9df"/>
+                                </Border.Effect>
+                            </Border>
+                            <Label>
+                                
+                            </Label>
+                        </Grid>
+                        
+                        <Grid Grid.Row="2">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="0.5*"/>
+                                <ColumnDefinition Width="0.5*"/>
+                            </Grid.ColumnDefinitions>
+                            
+                            <Grid Grid.Column="0">
+                                <Border Background="{StaticResource MainBrush}"
+                                        CornerRadius="6" Margin="27 4 7 20">
+                                    <Border.Effect>
+                                        <DropShadowEffect BlurRadius="8" ShadowDepth="0" 
+                                                          Direction="270" Color="#90cdb9df"/>
+                                    </Border.Effect>
+                                </Border>
+                                <Label Margin="38 16 18 36"
+                                       Foreground="{StaticResource OnSurfaceBrush}"
+                                       FontSize="14" Content="当前系统字体预览："/>
+                                <StackPanel Margin="38 40 18 36">
+                                    <Label Margin="0 10 0 5" Content="常规文本："/>
+                                    <Label Style="{StaticResource Preview1}"/>
+                                    <Label Style="{StaticResource Preview2}"/>
+                                        
+                                    <Label Margin="0 10 0 5" Content="粗体文本：" FontWeight="Bold"/>
+                                    <Label Style="{StaticResource Preview1}" FontWeight="Bold"/>
+                                    <Label Style="{StaticResource Preview2}" FontWeight="Bold"/>
+
+                                    <Label Margin="0 10 0 5" Content="细体文本：" FontWeight="Light"/>
+                                    <Label Style="{StaticResource Preview1}" FontWeight="Light"/>
+                                    <Label Style="{StaticResource Preview2}" FontWeight="Light"/>
+                                </StackPanel>
+                            </Grid>
+                            
+                            <Grid Grid.Column="1">
+                                <Border Background="{StaticResource MainBrush}"
+                                        CornerRadius="6" Margin="7 4 27 20">
+                                    <Border.Effect>
+                                        <DropShadowEffect BlurRadius="8" ShadowDepth="0" 
+                                                          Direction="270" Color="#90cdb9df"/>
+                                    </Border.Effect>
+                                </Border>
+                                <Label Margin="18 16 38 36"
+                                       Foreground="{StaticResource OnSurfaceBrush}" 
+                                       FontSize="14" Content="即将制作的字体预览："/>
+                                <StackPanel Margin="18 60 38 36" >
+                                    <Label Name="RegPrw1" Style="{StaticResource Preview1}"/>
+                                    <Label Name="RegPrw2" Style="{StaticResource Preview2}"/>
+                                </StackPanel>
+
+                            </Grid>
+                            
+                        </Grid>
+                    </Grid>
+                    <!-- 精细制作页详细内容 -->
+                    <Grid x:Name="Tab2Content" Visibility="Collapsed"></Grid>
+                    <!-- 实用工具页详细内容 -->
+                    <Grid x:Name="Tab3Content" Visibility="Collapsed"></Grid>
+                </Grid>
+            </Border>
+            
+            <!-- 用于实现阴影的细长条 -->
+            <Border Grid.Column="1"
+                    Background="{StaticResource MainBrush}">
+                <Border.Effect>
+                    <DropShadowEffect BlurRadius="8" ShadowDepth="0" Direction="90"
+                                      Color="#7c4ca9"/>
+                </Border.Effect>
+            </Border>
+            
+            <!-- 左侧的功能栏 -->
+            <Border Grid.Column="0"
+                    Background="{StaticResource MainBrush}"
+                    CornerRadius="0 0 0 10"
+                    BorderThickness="0 0">
+                <StackPanel Margin="0 8 0 0" Height="220" VerticalAlignment="Top">
+                    <!-- 主页按钮 -->
+                    <RadioButton x:Name="WelcomeTab" GroupName="MainTabs"
+                                 Style="{StaticResource MyRadioButtonStyle}"
+                                 Height="48" IsChecked="True" Click="TabButton_Click">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="&#xE617;" FontSize="18" Margin="2 0 0 0"
+                                       VerticalAlignment="Center"/>
+                            <TextBlock Text="主页" Margin="8 0 0 0" 
+                                       VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </RadioButton>
+                    <!-- 快速制作按钮 -->
+                    <RadioButton x:Name="Tab1" GroupName="MainTabs"
+                                 Style="{StaticResource MyRadioButtonStyle}"
+                                 Height="48" Click="TabButton_Click">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="&#xE63C;" FontSize="20" VerticalAlignment="Center"/>
+                            <TextBlock Text="快速制作" Margin="8 0 0 0" 
+                                       VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </RadioButton>
+                    <!-- 精细制作按钮 -->
+                    <RadioButton x:Name="Tab2" GroupName="MainTabs"
+                                 Style="{StaticResource MyRadioButtonStyle}"
+                                 Height="48" Click="TabButton_Click">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="&#xE63F;" FontSize="20" VerticalAlignment="Center"/>
+                            <TextBlock Text="精细制作" Margin="8 0 0 0" 
+                                       VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </RadioButton>
+                    <!-- 实用工具按钮 -->
+                    <RadioButton x:Name="Tab3" GroupName="MainTabs"
+                                 Style="{StaticResource MyRadioButtonStyle}"
+                                 Height="48" Click="TabButton_Click">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="&#xE75F;" FontSize="20" VerticalAlignment="Center"/>
+                            <TextBlock Text="实用工具" Margin="8 0 0 0" 
+                                       VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </RadioButton>
+                </StackPanel>
+            </Border>
         </Grid>
     </Grid>
 

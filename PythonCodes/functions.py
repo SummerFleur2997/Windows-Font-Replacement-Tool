@@ -100,10 +100,22 @@ def getFontFamily(arg) -> str:
     """
     _getFontFamily() 函数的命令行调用形式。命令行使用样例：
 
-    functions.exe fontFamily [ttf绝对路径]
+    functions.exe fontFamily [font绝对路径]
     """
-    ttfont = TTFont(arg.ttf)
+    ttfont = TTFont(arg.font)
     return _getFontFamily(ttfont)
+
+
+def convertType(args) -> int:
+    ttfont = TTFont(args.font)
+    filename = os.path.basename(args.font)[:-4]
+    if args.type == "otf2ttf":
+        ttfont.save(f"{path}\\output\\{args.diranme}\\{filename}.ttf")
+        return 0
+    elif args.type == "ttf2otf":
+        ttfont.save(f"{path}\\output\\{args.diranme}\\{filename}.otf")
+        return 0
+    return 5001
 
 
 def main():
@@ -127,8 +139,14 @@ def main():
     parser_func3.set_defaults(func=splitTTC)
 
     parser_func4 = subparsers.add_parser("fontFamily")
-    parser_func4.add_argument("ttf")
+    parser_func4.add_argument("font")
     parser_func4.set_defaults(func=getFontFamily)
+
+    parser_func5 = subparsers.add_parser("convertType")
+    parser_func5.add_argument("type")
+    parser_func5.add_argument("diranme")
+    parser_func5.add_argument("font")
+    parser_func5.set_defaults(func=convertType)
 
     args = parser.parse_args()
     try:

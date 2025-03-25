@@ -4,6 +4,7 @@ output/
 build/
 dist/
 .idea/
+Resources/
 CSharpCode/bin
 CSharpCode/obj
 Libs/xmls/*.ttf

@@ -43,32 +43,45 @@ namespace Windows_Font_Replacement_Tool
         
         private void TabButton_Click(object sender, RoutedEventArgs e)
         {
+            WelcomeContent.Visibility = Visibility.Collapsed;
             Tab1Content.Visibility = Visibility.Collapsed;
             Tab2Content.Visibility = Visibility.Collapsed;
             Tab3Content.Visibility = Visibility.Collapsed;
             
-            var btn = sender as Button;
-            switch (btn?.Name)
+            switch (((RadioButton)sender).Name)
             {
-                case "Tab1Btn":
+                case "WelcomeTab":
+                    WelcomeContent.Visibility = Visibility.Visible;
+                    break;
+                case "Tab1":
                     Tab1Content.Visibility = Visibility.Visible;
                     break;
-                case "Tab2Btn":
+                case "Tab2":
                     Tab2Content.Visibility = Visibility.Visible;
                     break;
-                case "Tab3Btn":
+                case "Tab3":
                     Tab3Content.Visibility = Visibility.Visible;
                     break;
             }
-            
-            foreach (var child in ((StackPanel)btn.Parent).Children)
+        }
+
+        private void AltTabButton_Click(object sender, RoutedEventArgs e)
+        {
+            switch (((Button)sender).Name)
             {
-                if (child is Button b)
-                {
-                    b.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#6750A4"));
-                }
+                case "Back":
+                    WelcomeTab.IsChecked = true;
+                    TabButton_Click(WelcomeTab, new RoutedEventArgs());
+                    break;
+                case "Button1":
+                    Tab1.IsChecked = true;
+                    TabButton_Click(Tab1, new RoutedEventArgs());
+                    break;
+                case "Button2":
+                    Tab2.IsChecked = true;
+                    TabButton_Click(Tab2, new RoutedEventArgs());
+                    break;
             }
-            btn.Background = new SolidColorBrush(Colors.DarkViolet);
         }
     }
 }
