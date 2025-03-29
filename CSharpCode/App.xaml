@@ -7,7 +7,7 @@
         <ResourceDictionary>
             <Color x:Key="PrimaryColor">#7c4ca9</Color>
             <Color x:Key="SurfaceColor">#D3BFDE</Color>
-            <Color x:Key="HoverColor">#EFE7F3</Color>
+            <Color x:Key="HoverColor">#EDE4F1</Color>
             <Color x:Key="MainColor">#FEF7FF</Color>
             <Color x:Key="OnSurfaceColor">#1D1B20</Color>
             <Color x:Key="TextColor">#56428F</Color>
@@ -23,6 +23,7 @@
             <SolidColorBrush x:Key="AltTextBrush" Color="{StaticResource AltTextColor}"/>
             <SolidColorBrush x:Key="CommentBrush" Color="{StaticResource CommentColor}"/>
             
+            <!-- 关闭按钮 -->
             <Style x:Key="CloseButtonStyle" TargetType="Button">
                 <Setter Property="Background" Value="Transparent"/>
                 <Setter Property="BorderBrush" Value="Transparent"/>
@@ -54,6 +55,8 @@
                     </Setter.Value>
                 </Setter>
             </Style>
+            
+            <!-- 最小化按钮 -->
             <Style x:Key="MinimizeButtonStyle" TargetType="Button">
                 <Setter Property="Background" Value="Transparent"/>
                 <Setter Property="BorderBrush" Value="Transparent"/>
@@ -85,6 +88,8 @@
                     </Setter.Value>
                 </Setter>
             </Style>
+            
+            <!-- 欢迎页面按钮 -->
             <Style x:Key="WelcomePageButton" TargetType="Button">
                 <Setter Property="Background" Value="{StaticResource MainBrush}"/>
                 <Setter Property="BorderBrush" Value="{StaticResource TextBrush}"/>
@@ -117,7 +122,7 @@
                                 <Trigger Property="IsMouseOver" Value="True">
                                     <Trigger.EnterActions>
                                         <BeginStoryboard>
-                                            <Storyboard Duration="0:0:0.2">
+                                            <Storyboard Duration="0:0:0.3">
                                                 <ColorAnimation
                                                     Storyboard.TargetName="Border" 
                                                     Storyboard.TargetProperty="Background.Color"
@@ -141,7 +146,7 @@
                                     </Trigger.EnterActions>
                                     <Trigger.ExitActions>
                                         <BeginStoryboard>
-                                            <Storyboard Duration="0:0:0.2">
+                                            <Storyboard Duration="0:0:0.3">
                                                 <ColorAnimation
                                                     Storyboard.TargetName="Border" 
                                                     Storyboard.TargetProperty="Background.Color"
@@ -170,6 +175,137 @@
                     </Setter.Value>
                 </Setter>
             </Style>
+            
+            <!-- 普通按钮 -->
+            <Style TargetType="Button">
+                <Setter Property="Background" Value="{StaticResource MainBrush}"/>
+                <Setter Property="BorderBrush" Value="{StaticResource TextBrush}"/>
+                <Setter Property="Foreground" Value="{StaticResource TextBrush}"/>
+                <Setter Property="FontFamily" Value="Resources/#iconfont, Microsoft YaHei UI"/>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="Button">
+                            <Border 
+                                x:Name="Border"
+                                Background="{StaticResource MainBrush}"
+                                BorderBrush="{StaticResource TextBrush}"
+                                BorderThickness="1" 
+                                CornerRadius="4">
+                                <ContentPresenter 
+                                    HorizontalAlignment="Center" 
+                                    VerticalAlignment="Center"/>
+                            </Border>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Trigger.EnterActions>
+                                        <BeginStoryboard>
+                                            <Storyboard Duration="0:0:0.2">
+                                                <ColorAnimation
+                                                    Storyboard.TargetName="Border" 
+                                                    Storyboard.TargetProperty="Background.Color"
+                                                    To="{StaticResource HoverColor}" Duration="0:0:0.2"/>
+                                            </Storyboard>
+                                        </BeginStoryboard>
+                                    </Trigger.EnterActions>
+                                    <Trigger.ExitActions>
+                                        <BeginStoryboard>
+                                            <Storyboard Duration="0:0:0.2">
+                                                <ColorAnimation
+                                                    Storyboard.TargetName="Border" 
+                                                    Storyboard.TargetProperty="Background.Color"
+                                                    To="{StaticResource MainColor}" Duration="0:0:0.2"/>
+                                            </Storyboard>
+                                        </BeginStoryboard>
+                                    </Trigger.ExitActions>
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style> 
+            
+            <!-- 填充按钮 -->
+            <Style x:Key="ColoredButton" TargetType="Button">
+                <Setter Property="Foreground" Value="{StaticResource MainBrush}"/>
+                <Setter Property="FontFamily" Value="Resources/#iconfont, Microsoft YaHei UI"/>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="Button">
+                            <Border 
+                                x:Name="Border"
+                                BorderThickness="0" 
+                                CornerRadius="4">
+                                <ContentPresenter 
+                                    HorizontalAlignment="Center" 
+                                    VerticalAlignment="Center"/>
+                                <Border.RenderTransform>
+                                    <TransformGroup>
+                                        <ScaleTransform x:Name="Scale" ScaleX="1" ScaleY="1" 
+                                                        CenterX="48" CenterY="18"/>
+                                        <TranslateTransform x:Name="Translate" Y="0"/>
+                                    </TransformGroup>
+                                </Border.RenderTransform>
+                                <Border.Background>
+                                    <LinearGradientBrush StartPoint="0, 1" EndPoint="1, 0">
+                                        <GradientStop Color="#533eb1" Offset="0"/>
+                                        <GradientStop Color="#a54acf" Offset="1"/>
+                                    </LinearGradientBrush>
+                                </Border.Background>
+                            </Border>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Trigger.EnterActions>
+                                        <BeginStoryboard>
+                                            <Storyboard Duration="0:0:0.2">
+                                                <DoubleAnimation
+                                                    Storyboard.TargetName="Scale" 
+                                                    Storyboard.TargetProperty="ScaleX"
+                                                    To="1.05" Duration="0:0:0.2" 
+                                                    AccelerationRatio="0.2" DecelerationRatio="0.4"/>
+                                                <DoubleAnimation
+                                                    Storyboard.TargetName="Scale" 
+                                                    Storyboard.TargetProperty="ScaleY"
+                                                    To="1.05" Duration="0:0:0.2"
+                                                    AccelerationRatio="0.2" DecelerationRatio="0.4"/>
+                                                <DoubleAnimation
+                                                    Storyboard.TargetName="Translate" Storyboard.TargetProperty="Y"
+                                                    To="-1.8" Duration="0:0:0.2"
+                                                    AccelerationRatio="0.2" DecelerationRatio="0.4"/>
+                                            </Storyboard>
+                                        </BeginStoryboard>
+                                    </Trigger.EnterActions>
+                                    <Trigger.ExitActions>
+                                        <BeginStoryboard>
+                                            <Storyboard Duration="0:0:0.3">
+                                                <DoubleAnimation
+                                                    Storyboard.TargetName="Scale" 
+                                                    Storyboard.TargetProperty="ScaleX"
+                                                    To="1" Duration="0:0:0.2"
+                                                    AccelerationRatio="0.2" DecelerationRatio="0.4"/>
+                                                <DoubleAnimation
+                                                    Storyboard.TargetName="Scale" 
+                                                    Storyboard.TargetProperty="ScaleY"
+                                                    To="1" Duration="0:0:0.2"
+                                                    AccelerationRatio="0.2" DecelerationRatio="0.4"/>
+                                                <DoubleAnimation
+                                                    Storyboard.TargetName="Translate" 
+                                                    Storyboard.TargetProperty="Y"
+                                                    To="0" Duration="0:0:0.2"
+                                                    AccelerationRatio="0.2" DecelerationRatio="0.4"/>
+                                            </Storyboard>
+                                        </BeginStoryboard>
+                                    </Trigger.ExitActions>
+                                </Trigger>
+                                <Trigger Property="IsEnabled" Value="False">
+                                    <Setter TargetName="Border" Property="Background" Value="Gray" />
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style> 
+            
+            <!-- 无边框按钮 -->
             <Style x:Key="BorderlessButton" TargetType="Button">
                 <Setter Property="Background" Value="Transparent"/>
                 <Setter Property="BorderBrush" Value="Transparent"/>
@@ -217,6 +353,8 @@
                     </Setter.Value>
                 </Setter>
             </Style>
+            
+            <!-- 导航栏按钮 -->
             <Style x:Key="MyRadioButtonStyle" TargetType="RadioButton">
                 <Setter Property="Background" Value="Transparent"/>
                 <Setter Property="BorderBrush" Value="Transparent"/>
@@ -283,6 +421,8 @@
                     </Setter.Value>
                 </Setter>
             </Style>
+            
+            <!-- 标签页动画 -->
             <Style TargetType="Grid">
                 <Setter Property="Opacity" Value="0"/>
                 <Setter Property="RenderTransform">
@@ -311,16 +451,112 @@
                     </Trigger>
                 </Style.Triggers>
             </Style>
+            
+            <!-- 容器动画 -->
+            <Style x:Key="StackPanelFadeIn" TargetType="StackPanel">
+                <Setter Property="Opacity" Value="0"/>
+                <Setter Property="RenderTransform">
+                    <Setter.Value>
+                        <TranslateTransform X="0" Y="20"/>
+                    </Setter.Value>
+                </Setter>
+                <Style.Triggers>
+                    <Trigger Property="Visibility" Value="Visible">
+                        <Trigger.EnterActions>
+                            <BeginStoryboard>
+                                <Storyboard>
+                                    <DoubleAnimation
+                                        Storyboard.TargetProperty="Opacity"
+                                        From="0" To="1"
+                                        Duration="0:0:0.4"/>
+                                    <DoubleAnimation
+                                        Storyboard.TargetProperty="RenderTransform.Y"
+                                        From="32" To="-8"
+                                        Duration="0:0:0.4"
+                                        AccelerationRatio="0.3"
+                                        DecelerationRatio="0.2"/>
+                                    <DoubleAnimation
+                                        Storyboard.TargetProperty="RenderTransform.Y"
+                                        From="-8" To="0"
+                                        BeginTime="0:0:0.4"
+                                        Duration="0:0:0.1"/>
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </Trigger.EnterActions>
+                    </Trigger>
+                </Style.Triggers>
+            </Style>
+            
+            <!-- 锤子动画 -->
+            <Style x:Key="AnimatedHammerStyle" TargetType="Label">
+                <Setter Property="FontFamily" Value="Resources/#iconfont"/>
+                <Setter Property="FontSize" Value="48"/>
+                <Setter Property="Foreground" Value="{StaticResource TextBrush}"/>
+                <Setter Property="HorizontalAlignment" Value="Center"/>
+                <Setter Property="RenderTransformOrigin" Value="0.2 0.8"/>
+                <Setter Property="RenderTransform">
+                    <Setter.Value>
+                        <RotateTransform x:Name="HammerRotation" Angle="0"/>
+                    </Setter.Value>
+                </Setter>
+                <Style.Triggers>
+                    <Trigger Property="IsVisible" Value="True">
+                        <Trigger.EnterActions>
+                            <BeginStoryboard>
+                                <Storyboard RepeatBehavior="Forever">
+                                    <DoubleAnimation
+                                        Storyboard.TargetProperty="RenderTransform.Angle"
+                                        From="0" To="40"
+                                        BeginTime="0:0:0.7" Duration="0:0:0.2"
+                                        AccelerationRatio="0.2" DecelerationRatio="0.05"/>
+                                    <DoubleAnimation
+                                        Storyboard.TargetProperty="RenderTransform.Angle"
+                                        From="40" To="-5"
+                                        BeginTime="0:0:0.9" Duration="0:0:0.4"
+                                        AccelerationRatio="0.5" DecelerationRatio="0.5"/>
+                                    <DoubleAnimation
+                                        Storyboard.TargetProperty="RenderTransform.Angle"
+                                        From="-5" To="0"
+                                        BeginTime="0:0:1.3" Duration="0:0:0.1"/>
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </Trigger.EnterActions>
+                    </Trigger>
+                </Style.Triggers>
+            </Style>
+            
+            <Style x:Key="VerifiedIcon" TargetType="TextBlock">
+                <Setter Property="Text" Value="&#xE6F3;"/>
+                <Setter Property="FontFamily" Value="Resources/#iconfont"/>
+                <Setter Property="FontSize" Value="16"/>
+                <Setter Property="VerticalAlignment" Value="Center"/>
+                <Setter Property="Foreground" Value="SpringGreen"/>
+            </Style>
+            
+            <Style x:Key="OmitIcon" TargetType="TextBlock">
+                <Setter Property="Text" Value="&#xE6AF;"/>
+                <Setter Property="FontFamily" Value="Resources/#iconfont"/>
+                <Setter Property="FontSize" Value="16"/>
+                <Setter Property="VerticalAlignment" Value="Center"/>
+                <Setter Property="Foreground" Value="Orange"/>
+            </Style>
+            
+            <Style x:Key="WarningIcon" TargetType="TextBlock">
+                <Setter Property="Text" Value="&#xE65D;"/>
+                <Setter Property="FontFamily" Value="Resources/#iconfont"/>
+                <Setter Property="FontSize" Value="16"/>
+                <Setter Property="VerticalAlignment" Value="Center"/>
+                <Setter Property="Foreground" Value="Red"/>
+            </Style>
+            
             <Style x:Key="Preview1" TargetType="Label">
                 <Setter Property="Foreground" Value="{StaticResource OnSurfaceBrush}"/>
-                <Setter Property="FontSize" Value="12"/>
                 <Setter Property="FontFamily" Value="Segoe UI, Microsoft YaHei UI"/>
                 <Setter Property="Margin" Value="8 -8 0 0"></Setter>
                 <Setter Property="Content" Value="落霞与孤鹜齐飞，秋水共长天一色。 0123456789"/>
             </Style>
             <Style x:Key="Preview2" TargetType="Label">
                 <Setter Property="Foreground" Value="{StaticResource OnSurfaceBrush}"/>
-                <Setter Property="FontSize" Value="12"/>
                 <Setter Property="FontFamily" Value="Segoe UI, Microsoft YaHei UI"/>
                 <Setter Property="Margin" Value="8 -8 0 0"></Setter>
                 <Setter Property="Content" Value="The quick brown fox jumps over the lazy dog."/>

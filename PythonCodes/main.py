@@ -1,6 +1,5 @@
 import ctypes
 import tkinter as tk
-from uitools import *
 from win32api import GetSystemMetrics
 
 xmls_path = path + r'\Libs\xmls'

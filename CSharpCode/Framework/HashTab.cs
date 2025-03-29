@@ -9,10 +9,10 @@ namespace Windows_Font_Replacement_Tool.Framework
 {
     public static class HashTab
     {
-        private static readonly string LibsPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Libs");
-        private static readonly string XmlsPath = Path.Combine(LibsPath, "xmls");
+        private static readonly string LibsPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Resources");
+        public static readonly string XmlsPath = Path.Combine(LibsPath, "xmls");
         
-        private static readonly string LibSha = "2f7349a1ec9dc23c1385d91505b67df010505ce4";
+        private const string LibSha = "2f7349a1ec9dc23c1385d91505b67df010505ce4";
 
         public static void Initialize()
         {
@@ -20,7 +20,7 @@ namespace Windows_Font_Replacement_Tool.Framework
             {
                 if (!Directory.Exists(XmlsPath))
                 {
-                    ValidateCoreFiles();
+                    ValidateLibFiles();
                 }
                 ValidateXmlFiles();
             }
@@ -30,12 +30,12 @@ namespace Windows_Font_Replacement_Tool.Framework
             }
         }
 
-        private static void ValidateCoreFiles()
+        private static void ValidateLibFiles()
         {
             var dataLibsPath = Path.Combine(LibsPath, "xmlLibs");
             
             if (!File.Exists(dataLibsPath) || ComputeSha1(dataLibsPath) != LibSha)
-                throw new InvalidOperationException("xmlLibs 文件损坏");
+                throw new Exception("xmlLibs 文件损坏");
             
             DecodeLibs();
         }
@@ -100,13 +100,11 @@ namespace Windows_Font_Replacement_Tool.Framework
 
         private static void HandleError(string message, Exception ex)
         {
-            var sb = new StringBuilder();
-            sb.AppendLine("错误详情：");
-            sb.AppendLine(message);
-            sb.AppendLine();
-            sb.AppendLine(ex.ToString());
+            var warning = new StringBuilder();
+            warning.AppendLine(message);
+            warning.AppendLine("错误信息：" + ex.Message);
 
-            MessageBox.Show(sb.ToString(), "严重错误", 
+            MessageBox.Show(warning.ToString(), "错误", 
                 MessageBoxButton.OK, 
                 MessageBoxImage.Error);
 

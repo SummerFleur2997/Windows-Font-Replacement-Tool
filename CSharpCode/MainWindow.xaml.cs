@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,6 +13,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Diagnostics;
 using Windows_Font_Replacement_Tool.Framework;
 
 namespace Windows_Font_Replacement_Tool
@@ -27,9 +29,9 @@ namespace Windows_Font_Replacement_Tool
             HashTab.Initialize();
         }
 
-        private void CloseButton_Click(object sender, RoutedEventArgs e)
+        private void ExitButton_Click(object sender, RoutedEventArgs e)
         {
-            Close();
+            Application.Current.Shutdown();
         }
 
         private void MinimizeButton_Click(object sender, RoutedEventArgs e)
@@ -42,7 +44,7 @@ namespace Windows_Font_Replacement_Tool
             DragMove();
         }
         
-        private void TabButton_Click(object sender, RoutedEventArgs e)
+        private void TabButton_Checked(object sender, RoutedEventArgs e)
         {
             WelcomeContent.Visibility = Visibility.Collapsed;
             Tab1Content.Visibility = Visibility.Collapsed;
@@ -70,18 +72,40 @@ namespace Windows_Font_Replacement_Tool
         {
             switch (((Button)sender).Name)
             {
-                case "Back":
+                case "Back1" or "Back2" or "Back3":
                     WelcomeTab.IsChecked = true;
-                    TabButton_Click(WelcomeTab, new RoutedEventArgs());
                     break;
                 case "Button1":
                     Tab1.IsChecked = true;
-                    TabButton_Click(Tab1, new RoutedEventArgs());
                     break;
                 case "Button2":
                     Tab2.IsChecked = true;
-                    TabButton_Click(Tab2, new RoutedEventArgs());
                     break;
+            }
+        }
+
+        private void DocumentButton_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                string pdfPath = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Resources", "Help.pdf");
+        
+                if (!File.Exists(pdfPath))
+                {
+                    MessageBox.Show("你把帮助文档弄哪儿去了？", "嗯哼？", 
+                        MessageBoxButton.OK, MessageBoxImage.Error);
+                    return;
+                }
+                Process.Start(new ProcessStartInfo
+                {
+                    FileName = pdfPath,
+                    UseShellExecute = true
+                });
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"未能打开文档：{ex.Message}", "错误",
+                    MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
     }
