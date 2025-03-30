@@ -1,13 +1,44 @@
-﻿using System;
-using System.IO;
-using System.Diagnostics;
+﻿using System.IO;
 using System.Collections.Generic;
 
 namespace Windows_Font_Replacement_Tool.Framework;
 
-public class ReplaceTask
+/// <summary>
+/// 类 SingleReplace与 MultipleReplace的基类，仅用于存储类属性与类函数，不应当被实例化
+/// </summary>
+public abstract class ReplaceTask
 {
-    protected readonly Dictionary<string, string> Sha2File = new()
+    /// <summary>
+    /// 用于存储 19种字形的处理进程
+    /// </summary>
+    protected readonly ReplaceThread[] ReplaceThreads = new ReplaceThread[19];
+    
+    /// <summary>
+    /// 任务的名称，用于命名输出文件夹
+    /// </summary>
+    protected string? TaskName { get; init; }
+    
+    /// <summary>
+    /// 任务的输出文件夹绝对路径
+    /// </summary>
+    protected string? OutputDirPath { get; init; }
+    
+    /// <summary>
+    /// 给定文件名，返回该文件最终的存储路径
+    /// </summary>
+    /// <param name="fileName">给定的文件名</param>
+    /// <returns></returns>
+    protected string FileOutputPath(string fileName)
+    {
+        if (OutputDirPath != null) 
+            return Path.Combine(OutputDirPath, fileName);
+        return "Null";
+    }
+    
+    /// <summary>
+    /// 存储 xmls文件夹内每一个哈希值对应的文件名
+    /// </summary>
+    protected static readonly Dictionary<string, string> Sha2File = new()
     {
         {"d46344fc3841184ac741685d53f0b01cd11865e7", "msyh01.ttf"},
         {"791e18622ff1011b9a6c68bfb8796258a3a1cf85", "msyh02.ttf"},
@@ -29,67 +60,4 @@ public class ReplaceTask
         {"cd0bed1303626bf6cfc7412206744c5bd794be1b", "seguisli.ttf"},
         {"4ebb195ad99add8fa11308749363a1599e29e0c7", "SegUIVar.ttf"}
     };
-    private string TaskName { get; set; }
-    private string TaskOutput { get; set; }
-    private string TaskResource { get; set; }
-    
-
-    private static string CreateOutputDir(string taskName)
-    {
-        var outputDir = DateTime.Now.ToString("yyyyMMdd_HHmmss") + "_" + taskName;
-        var outputDirPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "output", outputDir);
-        Directory.CreateDirectory(outputDirPath);
-        return outputDirPath;
-    }
-
-    private static string OutputPath(string fileName, string taskName)
-    {
-        var outputDirPath = CreateOutputDir(taskName);
-        return Path.Combine(outputDirPath, fileName);
-    }
-
-    protected int RunPropertyRep(string font, string xml)
-    {
-        try
-        {
-            // 1. 配置进程启动参数
-            var startInfo = new ProcessStartInfo
-            {
-                FileName = "functions.exe",  // 如果未添加到环境变量，需指定完整路径
-                Arguments = $"propertyRep \"{font}\" \"{xml}\"",
-                UseShellExecute = false,
-                RedirectStandardOutput = true,
-                RedirectStandardError = true,
-                CreateNoWindow = true
-            };
-            // 2. 启动进程并等待结束
-            using (var process = new Process { StartInfo = startInfo })
-            {
-                process.Start();
-                
-                string output = process.StandardOutput.ReadToEnd();
-                string error = process.StandardError.ReadToEnd();
-                
-                process.WaitForExit(); // 等待程序退出
-                
-                Console.WriteLine("标准输出:\n" + output);
-                if (!string.IsNullOrEmpty(error))
-                    Console.WriteLine("错误输出:\n" + error);
-                
-                return process.ExitCode;
-            }
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine($"执行失败: {ex.Message}");
-            return -1;
-        }
-    }
-
-    protected ReplaceTask(string sha1, string taskName)
-    {
-        TaskName = taskName;
-        TaskOutput = OutputPath(TaskName, Sha2File[sha1]);
-        TaskResource = Path.Combine(HashTab.XmlsPath, sha1);
-    }
 }

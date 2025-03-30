@@ -177,7 +177,8 @@
                                     </Button>
                                 </DockPanel>
                                 <DockPanel Margin="0 12 0 0" HorizontalAlignment="Center">
-                                    <Button Name="FileOpen1" Width="96" Height="36"  Margin="6 0">
+                                    <Button Name="FileOpen1" Width="96" Height="36"  Margin="6 0"
+                                            Click="SingleFileOpenButton_Click">
                                         <StackPanel Orientation="Horizontal">
                                             <TextBlock Text="&#xE6FD;" FontSize="19" VerticalAlignment="Center"/>
                                             <TextBlock Text="打开文件" FontSize="14"
@@ -185,8 +186,9 @@
                                                        VerticalAlignment="Center"/>
                                         </StackPanel>
                                     </Button>
-                                    <Button Name="Run1" Width="96" Height="36" Margin="6 0" IsEnabled="True"
-                                            Style="{StaticResource ColoredButton}">
+                                    <Button Name="Run1" Width="96" Height="36" Margin="6 0" IsEnabled="False"
+                                            Style="{StaticResource ColoredButton}"
+                                            Click="SingleFileRunButton_Click">
                                         <StackPanel Orientation="Horizontal">
                                             <TextBlock Text="&#xE647;" FontSize="19" VerticalAlignment="Center"/>
                                             <TextBlock Text="开始制作" FontSize="14"

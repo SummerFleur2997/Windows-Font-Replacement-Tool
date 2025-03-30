@@ -1,16 +1,16 @@
 ﻿using System;
 using System.IO;
-using System.Security.Cryptography;
 using System.Text;
 using System.Windows;
+using System.Security.Cryptography;
 using ICSharpCode.SharpZipLib.Zip;
 
 namespace Windows_Font_Replacement_Tool.Framework
 {
     public static class HashTab
     {
-        private static readonly string LibsPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Resources");
-        public static readonly string XmlsPath = Path.Combine(LibsPath, "xmls");
+        public static readonly string ResourcePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Resources");
+        public static readonly string XmlsPath = Path.Combine(ResourcePath, "xmls");
         
         private const string LibSha = "2f7349a1ec9dc23c1385d91505b67df010505ce4";
 
@@ -32,7 +32,7 @@ namespace Windows_Font_Replacement_Tool.Framework
 
         private static void ValidateLibFiles()
         {
-            var dataLibsPath = Path.Combine(LibsPath, "xmlLibs");
+            var dataLibsPath = Path.Combine(ResourcePath, "xmlLibs");
             
             if (!File.Exists(dataLibsPath) || ComputeSha1(dataLibsPath) != LibSha)
                 throw new Exception("xmlLibs 文件损坏");
@@ -42,8 +42,8 @@ namespace Windows_Font_Replacement_Tool.Framework
 
         private static void DecodeLibs()
         {
-            var dataLibsPath = Path.Combine(LibsPath, "xmlLibs");
-            var archivePath = Path.Combine(LibsPath, "archive");
+            var dataLibsPath = Path.Combine(ResourcePath, "xmlLibs");
+            var archivePath = Path.Combine(ResourcePath, "archive");
             
             var base64Data = File.ReadAllText(dataLibsPath);
             var zipBytes = Convert.FromBase64String(base64Data);
@@ -54,7 +54,7 @@ namespace Windows_Font_Replacement_Tool.Framework
                 ZipEntry entry;
                 while ((entry = zipStream.GetNextEntry()) != null)
                 {
-                    var entryPath = Path.Combine(LibsPath, entry.Name);
+                    var entryPath = Path.Combine(ResourcePath, entry.Name);
                     var directoryPath = Path.GetDirectoryName(entryPath);
 
                     if (!Directory.Exists(directoryPath))
@@ -62,11 +62,9 @@ namespace Windows_Font_Replacement_Tool.Framework
                         Directory.CreateDirectory(directoryPath);
                     }
                     
-                    if (!entry.IsDirectory)
-                    {
-                        using (var fileStream = File.Create(entryPath))
-                            zipStream.CopyTo(fileStream);
-                    }
+                    if (entry.IsDirectory) return;
+                    using var fileStream = File.Create(entryPath);
+                    zipStream.CopyTo(fileStream);
                 }
             }
             
