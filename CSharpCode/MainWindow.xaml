@@ -313,10 +313,10 @@
                                        Content="　　为每一种变体字体（粗体字、斜体字）选择它们对应的个性"/>
                                 <Label Foreground="{StaticResource CommentBrush}"
                                        Margin="5 -7 0 0"
-                                       Content="化字体进行制作，若选用合适的字体组，能够制作出包含所有变"/>
+                                       Content="化字体进行制作。若选用合适的字体系列，能够制作出包含所有"/>
                                 <Label Foreground="{StaticResource CommentBrush}"
                                        Margin="5 -7 0 0"
-                                       Content="体字样式的个性化字体，但也需要相对更繁琐的操作。"/>
+                                       Content="变体字样式的个性化字体，但也需要相对更繁琐的操作。"/>
                             </StackPanel>
                             <StackPanel Margin="0 32 58 21" Width="220" 
                                         HorizontalAlignment="Right" VerticalAlignment="Top">
@@ -360,15 +360,11 @@
                                 </DockPanel>
                             </StackPanel>
                             
-                            <DockPanel Margin="27 144 27 27"
-                                       HorizontalAlignment="Left">
+                            <DockPanel Margin="27 144 27 27" HorizontalAlignment="Left">
                                 <StackPanel Width="216" Margin="10 0 5 0">
                                     <DockPanel Margin="60 0 0 12" HorizontalAlignment="Left">
                                         <TextBlock Foreground="{StaticResource TextBrush}"
                                                    VerticalAlignment="Center" FontSize="14" Text="西文正体"/>
-                                        <Button Style="{StaticResource BorderlessButton}"
-                                                Margin="5 0 0 0" Width="16"
-                                                Content="&#xE644;" IsEnabled="False"/>
                                     </DockPanel>
                                     <DockPanel Margin="20 0 0 0"
                                                HorizontalAlignment="Left">
@@ -435,9 +431,6 @@
                                     <DockPanel Margin="45 0 0 12" HorizontalAlignment="Left">
                                         <TextBlock Foreground="{StaticResource TextBrush}"
                                                    VerticalAlignment="Center" FontSize="14" Text="西文斜体"/>
-                                        <Button Style="{StaticResource BorderlessButton}"
-                                                Margin="5 0 0 0" Width="16"
-                                                Content="&#xE644;"/>
                                     </DockPanel>
                                     <DockPanel Margin="5 0 0 0"
                                                HorizontalAlignment="Left">
