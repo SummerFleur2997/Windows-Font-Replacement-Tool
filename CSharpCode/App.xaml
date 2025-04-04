@@ -525,6 +525,7 @@
                 </Style.Triggers>
             </Style>
             
+            <!-- 通过标签 -->
             <Style x:Key="VerifiedIcon" TargetType="TextBlock">
                 <Setter Property="Text" Value="&#xE6F3;"/>
                 <Setter Property="FontFamily" Value="Resources/#iconfont"/>
@@ -533,6 +534,7 @@
                 <Setter Property="Foreground" Value="SpringGreen"/>
             </Style>
             
+            <!-- 缺少文件标签 -->
             <Style x:Key="OmitIcon" TargetType="TextBlock">
                 <Setter Property="Text" Value="&#xE6AF;"/>
                 <Setter Property="FontFamily" Value="Resources/#iconfont"/>
@@ -541,7 +543,17 @@
                 <Setter Property="Foreground" Value="Orange"/>
             </Style>
             
+            <!-- 提示标签 -->
             <Style x:Key="WarningIcon" TargetType="TextBlock">
+                <Setter Property="Text" Value="&#xE65D;"/>
+                <Setter Property="FontFamily" Value="Resources/#iconfont"/>
+                <Setter Property="FontSize" Value="16"/>
+                <Setter Property="VerticalAlignment" Value="Center"/>
+                <Setter Property="Foreground" Value="Orange"/>
+            </Style>
+            
+            <!-- 错误标签 -->
+            <Style x:Key="ErrorIcon" TargetType="TextBlock">
                 <Setter Property="Text" Value="&#xE65D;"/>
                 <Setter Property="FontFamily" Value="Resources/#iconfont"/>
                 <Setter Property="FontSize" Value="16"/>

@@ -17,6 +17,7 @@ using System.Windows.Shapes;
 using System.Diagnostics;
 using Microsoft.Win32;
 using Windows_Font_Replacement_Tool.Framework;
+using Validation = Windows_Font_Replacement_Tool.Framework.Validation;
 
 namespace Windows_Font_Replacement_Tool;
 
@@ -25,7 +26,8 @@ namespace Windows_Font_Replacement_Tool;
 /// </summary>
 public partial class MainWindow : Window
 {
-    private SingleReplace? SingleReplaceTask { get; set; }
+    private SingleReplace?   SingleReplaceTask   { get; set; }
+    private MultipleReplace? MultipleReplaceTask { get; set; }
     
     public MainWindow()
     {
@@ -158,6 +160,7 @@ public partial class MainWindow : Window
         
         SingleReplaceTask = new SingleReplace(singleFilePath);
         Run1.IsEnabled = true;
+        Console.WriteLine(Validation.GetCjkCharacterCount(singleFilePath));
     }
 
     /// <summary>
@@ -170,12 +173,55 @@ public partial class MainWindow : Window
 
         if (SingleReplaceTask != null)
         {
-            await SingleReplaceTask.SingleStartPropRep();
-            await SingleReplaceTask.SingleMerge();
-            SingleReplaceTask.SingleFinishing();
+            await SingleReplaceTask.TaskStartPropRep();
+            await SingleReplaceTask.TaskMergeFont();
+            SingleReplaceTask.TaskFinishing();
         }
         Run1.IsEnabled = false;
         SingleReplaceTask = null;
         SinglePanelUpdate(FinishPanel1);
+    }
+    
+    /// <summary>
+    /// 精细替换选择单个文件。
+    /// </summary>
+    private void MultipleFileOpenButton_Click(object sender, RoutedEventArgs e)
+    {
+        var multipleFile = new OpenFileDialog();
+        multipleFile.Filter = "字体文件 (*.ttf,*.otf)|*.ttf;*.otf";
+        
+        if (multipleFile.ShowDialog() == false) return;
+        var multipleFilePath = multipleFile.FileName;
+        
+        if (MultipleReplaceTask == null) MultipleReplaceTask = new MultipleReplace();
+        var button = (Button)sender;
+        var tbName = button.Name + "S";
+        var textBlock = FindName(tbName) as TextBlock;
+        
+        if (textBlock == null) return;
+        Run2.IsEnabled = MultipleReplaceTask.AddReplaceThread(multipleFilePath, button, textBlock);
+    }
+    
+    /// <summary>
+    /// 精细替换模式开始制作。
+    /// </summary>
+    private async void MultipleFileRunButton_Click(object sender, RoutedEventArgs e)
+    {
+        await Application.Current.Dispatcher.InvokeAsync(() => { }, DispatcherPriority.Background);
+
+        if (MultipleReplaceTask != null)
+        {
+            if (!MultipleReplaceTask.FontCheck())
+            {
+                Run2.IsEnabled = false;
+                return;
+            }
+            await MultipleReplaceTask.TaskStartPropRep();
+            await MultipleReplaceTask.TaskMergeFont();
+            MultipleReplaceTask.TaskFinishing();
+            MultipleReplaceTask.InitInterface();
+        }
+        Run2.IsEnabled = false;
+        MultipleReplaceTask = null;
     }
 }

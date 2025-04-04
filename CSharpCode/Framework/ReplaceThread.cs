@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Diagnostics;
+using System.Windows.Controls;
 
 namespace Windows_Font_Replacement_Tool.Framework;
 
@@ -17,12 +18,17 @@ public class ReplaceThread
     /// <summary>
     /// 个性化字体资源的绝对路径。
     /// </summary>
-    private string FontResource { get; }
+    public string FontResource { get; }
     
     /// <summary>
     /// xml字体资源的绝对路径。
     /// </summary>
     private string XmlResource { get; }
+    
+    /// <summary>
+    /// 精细制作下的提示按钮控件。
+    /// </summary>
+    public TextBlock? HintSign { get; set; }
 
     /// <summary>
     /// Python程序，替换字体属性。
@@ -62,10 +68,13 @@ public class ReplaceThread
     /// <param name="threadName"></param>
     /// <param name="fontResource">个性化字体文件绝对路径</param>
     /// <param name="sha1">xml字体文件名</param>
-    public ReplaceThread(string threadName, string fontResource, string sha1)
+    /// <param name="hintSign">精细制作模式下的提示标志</param>
+    public ReplaceThread(string threadName, string fontResource, string sha1, TextBlock? hintSign = null)
     {
         ThreadName = threadName;
         FontResource = fontResource;
         XmlResource = Path.Combine(HashTab.XmlsPath, sha1);
+        if (hintSign == null) return;
+        HintSign = hintSign;
     }
 }

@@ -348,8 +348,9 @@
                                                        VerticalAlignment="Center"/>
                                         </StackPanel>
                                     </Button>
-                                    <Button Name="Run2" Width="96" Height="36" Margin="6 0" IsEnabled="True"
-                                            Style="{StaticResource ColoredButton}">
+                                    <Button Name="Run2" Width="96" Height="36" Margin="6 0" IsEnabled="False"
+                                            Style="{StaticResource ColoredButton}"
+                                            Click="MultipleFileRunButton_Click">
                                         <StackPanel Orientation="Horizontal">
                                             <TextBlock Text="&#xE647;" FontSize="19" VerticalAlignment="Center"/>
                                             <TextBlock Text="开始制作" FontSize="14"
@@ -370,8 +371,8 @@
                                                HorizontalAlignment="Left">
                                         <Label Foreground="{StaticResource TextBrush}"
                                                FontSize="14" Content="常规字体"/>
-                                        <Button Name="RgRm" Margin="4  0 0 0" Content="选择字体"
-                                                Width="64"/>
+                                        <Button Name="RgRm" Tag="6" Width="64" Click="MultipleFileOpenButton_Click"
+                                                Margin="4  0 0 0" Content="选择字体"/>
                                         <TextBlock Name="RgRmS" Visibility="Collapsed"
                                                    Style="{StaticResource VerifiedIcon}"
                                                    Margin="8  0 0 0" Width="16"/>
@@ -380,8 +381,8 @@
                                                HorizontalAlignment="Left">
                                         <Label Foreground="{StaticResource TextBrush}"
                                                FontSize="14" Content="细体字体"/>
-                                        <Button Name="LtRm" Margin="4  0 0 0" Content="选择字体"
-                                                Width="64"/>
+                                        <Button Name="LtRm" Tag="7" Width="64" Click="MultipleFileOpenButton_Click"
+                                                Margin="4  0 0 0" Content="选择字体"/>
                                         <TextBlock Name="LtRmS" Visibility="Collapsed"
                                                    Style="{StaticResource VerifiedIcon}"
                                                    Margin="8  0 0 0" Width="16"/>
@@ -390,8 +391,8 @@
                                                HorizontalAlignment="Left">
                                         <Label Foreground="{StaticResource TextBrush}"
                                                FontSize="14" Content="半细字体"/>
-                                        <Button Name="SlRm" Margin="4  0 0 0" Content="选择字体"
-                                                Width="64"/>
+                                        <Button Name="SlRm" Tag="8" Width="64" Click="MultipleFileOpenButton_Click"
+                                                Margin="4  0 0 0" Content="选择字体"/>
                                         <TextBlock Name="SlRmS" Visibility="Collapsed"
                                                    Style="{StaticResource VerifiedIcon}"
                                                    Margin="8  0 0 0" Width="16"/>
@@ -400,8 +401,8 @@
                                                HorizontalAlignment="Left">
                                         <Label Foreground="{StaticResource TextBrush}"
                                                FontSize="14" Content="半粗字体"/>
-                                        <Button Name="SbRm" Margin="4  0 0 0" Content="选择字体"
-                                                Width="64"/>
+                                        <Button Name="SbRm" Tag="9" Width="64" Click="MultipleFileOpenButton_Click"
+                                                Margin="4  0 0 0" Content="选择字体"/>
                                         <TextBlock Name="SbRmS" Visibility="Collapsed"
                                                    Style="{StaticResource VerifiedIcon}"
                                                    Margin="8  0 0 0" Width="16"/>
@@ -410,8 +411,8 @@
                                                HorizontalAlignment="Left">
                                         <Label Foreground="{StaticResource TextBrush}"
                                                FontSize="14" Content="粗体字体"/>
-                                        <Button Name="BdRm" Margin="4  0 0 0" Content="选择字体"
-                                                Width="64"/>
+                                        <Button Name="BdRm" Tag="10" Width="64" Click="MultipleFileOpenButton_Click"
+                                                Margin="4  0 0 0" Content="选择字体"/>
                                         <TextBlock Name="BdRmS" Visibility="Collapsed"
                                                    Style="{StaticResource VerifiedIcon}"
                                                    Margin="8  0 0 0" Width="16"/>
@@ -420,8 +421,8 @@
                                                HorizontalAlignment="Left">
                                         <Label Foreground="{StaticResource TextBrush}"
                                                FontSize="14" Content="特粗字体"/>
-                                        <Button Name="HvRm" Margin="4  0 0 0" Content="选择字体"
-                                                Width="64"/>
+                                        <Button Name="HvRm" Tag="11" Width="64" Click="MultipleFileOpenButton_Click"
+                                                Margin="4  0 0 0" Content="选择字体"/>
                                         <TextBlock Name="HvRmS" Visibility="Collapsed"
                                                    Style="{StaticResource VerifiedIcon}"
                                                    Margin="8  0 0 0" Width="16"/>
@@ -436,8 +437,8 @@
                                                HorizontalAlignment="Left">
                                         <Label Foreground="{StaticResource TextBrush}"
                                                FontSize="14" Content="斜体字体"/>
-                                        <Button Name="RgIt" Margin="4  0 0 0" Content="选择字体"
-                                                Width="64"/>
+                                        <Button Name="RgIt" Tag="12" Width="64" Click="MultipleFileOpenButton_Click"
+                                                Margin="4  0 0 0" Content="选择字体"/>
                                         <TextBlock Name="RgItS" Visibility="Collapsed"
                                                    Style="{StaticResource VerifiedIcon}"
                                                    Margin="8  0 0 0" Width="16"/>
@@ -446,8 +447,8 @@
                                                HorizontalAlignment="Left">
                                         <Label Foreground="{StaticResource TextBrush}"
                                                FontSize="14" Content="细体斜体"/>
-                                        <Button Name="LtIt" Margin="4  0 0 0" Content="选择字体"
-                                                Width="64"/>
+                                        <Button Name="LtIt" Tag="13" Width="64" Click="MultipleFileOpenButton_Click"
+                                                Margin="4  0 0 0" Content="选择字体"/>
                                         <TextBlock Name="LtItS" Visibility="Collapsed"
                                                     Style="{StaticResource VerifiedIcon}"
                                                     Margin="8  0 0 0" Width="16"/>
@@ -456,8 +457,8 @@
                                                HorizontalAlignment="Left">
                                         <Label Foreground="{StaticResource TextBrush}"
                                                FontSize="14" Content="半细斜体"/>
-                                        <Button Name="SlIt" Margin="4  0 0 0" Content="选择字体"
-                                                Width="64"/>
+                                        <Button Name="SlIt" Tag="14" Width="64" Click="MultipleFileOpenButton_Click"
+                                                Margin="4  0 0 0" Content="选择字体"/>
                                         <TextBlock Name="SlItS" Visibility="Collapsed"
                                                    Style="{StaticResource VerifiedIcon}"
                                                    Margin="8  0 0 0" Width="16"/>
@@ -466,8 +467,8 @@
                                                HorizontalAlignment="Left">
                                         <Label Foreground="{StaticResource TextBrush}"
                                                FontSize="14" Content="半粗斜体"/>
-                                        <Button Name="SbIt" Margin="4  0 0 0" Content="选择字体"
-                                                Width="64"/>
+                                        <Button Name="SbIt" Tag="15" Width="64" Click="MultipleFileOpenButton_Click"
+                                                Margin="4  0 0 0" Content="选择字体"/>
                                         <TextBlock Name="SbItS" Visibility="Collapsed"
                                                    Style="{StaticResource VerifiedIcon}"
                                                    Margin="8  0 0 0" Width="16"/>
@@ -476,8 +477,8 @@
                                                HorizontalAlignment="Left">
                                         <Label Foreground="{StaticResource TextBrush}"
                                                FontSize="14" Content="粗体斜体"/>
-                                        <Button Name="BdIt" Margin="4  0 0 0" Content="选择字体"
-                                                Width="64"/>
+                                        <Button Name="BdIt" Tag="16" Width="64" Click="MultipleFileOpenButton_Click"
+                                                Margin="4  0 0 0" Content="选择字体"/>
                                         <TextBlock Name="BdItS" Visibility="Collapsed"
                                                    Style="{StaticResource VerifiedIcon}"
                                                    Margin="8  0 0 0" Width="16"/>
@@ -486,8 +487,8 @@
                                                HorizontalAlignment="Left">
                                         <Label Foreground="{StaticResource TextBrush}"
                                                FontSize="14" Content="特粗斜体"/>
-                                        <Button Name="HvIt" Margin="4  0 0 0" Content="选择字体"
-                                                Width="64"/>
+                                        <Button Name="HvIt" Tag="17" Width="64" Click="MultipleFileOpenButton_Click"
+                                                Margin="4  0 0 0" Content="选择字体"/>
                                         <TextBlock Name="HvItS" Visibility="Collapsed"
                                                    Style="{StaticResource VerifiedIcon}"
                                                    Margin="8  0 0 0" Width="16"/>
@@ -502,8 +503,8 @@
                                                HorizontalAlignment="Left">
                                         <Label Foreground="{StaticResource TextBrush}"
                                                FontSize="14" Content="常规字体"/>
-                                        <Button Name="ZhRg" Margin="4  0 0 0" Content="选择字体"
-                                                Width="64"/>
+                                        <Button Name="ZhRg" Tag="0,1" Width="64" Click="MultipleFileOpenButton_Click"
+                                                Margin="4  0 0 0" Content="选择字体"/>
                                         <TextBlock Name="ZhRgS" Visibility="Collapsed"
                                                    Style="{StaticResource VerifiedIcon}"
                                                    Margin="8  0 0 0" Width="16"/>
@@ -512,8 +513,8 @@
                                                HorizontalAlignment="Left">
                                         <Label Foreground="{StaticResource TextBrush}"
                                                FontSize="14" Content="细体字体"/>
-                                        <Button Name="ZhLt" Margin="4  0 0 0" Content="选择字体"
-                                                Width="64"/>
+                                        <Button Name="ZhLt" Tag="2,3" Width="64" Click="MultipleFileOpenButton_Click"
+                                                Margin="4  0 0 0" Content="选择字体"/>
                                         <TextBlock Name="ZhLtS" Visibility="Collapsed"
                                                    Style="{StaticResource VerifiedIcon}"
                                                    Margin="8  0 0 0" Width="16"/>
@@ -522,8 +523,8 @@
                                                HorizontalAlignment="Left">
                                         <Label Foreground="{StaticResource TextBrush}"
                                                FontSize="14" Content="粗体字体"/>
-                                        <Button Name="ZhBd" Margin="4  0 0 0" Content="选择字体"
-                                                Width="64"/>
+                                        <Button Name="ZhBd" Tag="4,5" Width="64" Click="MultipleFileOpenButton_Click"
+                                                Margin="4  0 0 0" Content="选择字体"/>
                                         <TextBlock Name="ZhBdS" Visibility="Collapsed"
                                                    Style="{StaticResource VerifiedIcon}"
                                                    Margin="8  0 0 0" Width="16"/>
@@ -532,8 +533,8 @@
                                                HorizontalAlignment="Left">
                                         <Label Foreground="{StaticResource TextBrush}"
                                                FontSize="14" Content="可变字体"/>
-                                        <Button Name="Vary" Margin="4  0 0 0" Content="选择字体"
-                                                Width="64"/>
+                                        <Button Name="Vary" Tag="18" Width="64" Click="MultipleFileOpenButton_Click"
+                                                Margin="4  0 0 0" Content="选择字体"/>
                                         <TextBlock Name="VaryS" Visibility="Collapsed"
                                                    Style="{StaticResource VerifiedIcon}"
                                                    Margin="8  0 0 0" Width="16"/>

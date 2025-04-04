@@ -1,6 +1,6 @@
 ﻿using System;
 using System.IO;
-using System.Threading.Tasks;
+
 
 namespace Windows_Font_Replacement_Tool.Framework;
 
@@ -23,61 +23,5 @@ public class SingleReplace: ReplaceTask
             ReplaceThreads[index] = new ReplaceThread(TaskName, customFont, sha1);
             index++;
         }
-    }
-
-    /// <summary>
-    /// 多线程运行 Python程序进行属性替换。
-    /// </summary>
-    public async Task SingleStartPropRep()
-    {
-        OutputDirPath = CreateOutputDir(TaskName);
-        CreateCacheDir();
-        await Task.Run(() => 
-        {
-            Parallel.ForEach(
-                ReplaceThreads,
-                new ParallelOptions { MaxDegreeOfParallelism = MaxDegree },
-                task => task.RunPropertyRep()
-            );
-        });
-        foreach (var sha1 in Sha2File.Keys)
-        {
-            var originalFilePath = Path.Combine(CacheDirPath, sha1);
-            var newFilePath = Path.Combine(CacheDirPath, Sha2File[sha1]);
-            File.Move(originalFilePath, newFilePath);
-        }
-    }
-
-    /// <summary>
-    /// 
-    /// </summary>
-    public async Task SingleMerge()
-    {
-        string[] filePrefixes = { "msyh", "msyhl", "msyhbd" };
-        await Task.Run(() =>
-        {
-            Parallel.ForEach(
-                filePrefixes,
-                new ParallelOptions { MaxDegreeOfParallelism = MaxDegree },
-                filePrefix => RunMerge(filePrefix)
-            );
-        });
-    }
-
-    public void SingleFinishing()
-    {
-        foreach (var sha1 in Sha2File.Keys)
-        {
-            var seg = Sha2File[sha1].Substring(0, 3);
-            switch (seg)
-            {
-                case "Seg" or "seg":
-                    var originalFilePath = Path.Combine(CacheDirPath, Sha2File[sha1]);
-                    var newFilePath = OutputFilePath(Sha2File[sha1]);
-                    File.Move(originalFilePath, newFilePath);
-                    break;
-            }
-        }
-        InitCacheDir(CacheDirPath);
     }
 }
