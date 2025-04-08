@@ -13,7 +13,7 @@
             <Color x:Key="TextColor">#56428F</Color>
             <Color x:Key="AltTextColor">#9B65B3</Color>
             <Color x:Key="CommentColor">#8D869E</Color>
-        
+            
             <SolidColorBrush x:Key="PrimaryBrush" Color="{StaticResource PrimaryColor}"/>
             <SolidColorBrush x:Key="SurfaceBrush" Color="{StaticResource SurfaceColor}"/>
             <SolidColorBrush x:Key="HoverBrush" Color="{StaticResource HoverColor}"/>
@@ -309,10 +309,10 @@
             <Style x:Key="BorderlessButton" TargetType="Button">
                 <Setter Property="Background" Value="Transparent"/>
                 <Setter Property="BorderBrush" Value="Transparent"/>
-                
                 <Setter Property="FontFamily" Value="Resources/#iconfont, Microsoft YaHei UI"/>
                 <Setter Property="FontSize" Value="16"/>
                 <Setter Property="Foreground" Value="{StaticResource TextBrush}"/>
+                <Setter Property="ToolTipService.InitialShowDelay" Value="200"/>
                 <Setter Property="Template">
                     <Setter.Value>
                         <ControlTemplate TargetType="Button">
@@ -347,7 +347,18 @@
                                         </BeginStoryboard>
                                     </Trigger.ExitActions>
                                 </Trigger>
-
+                                <Trigger Property="Visibility" Value="Visible">
+                                    <Trigger.EnterActions>
+                                        <BeginStoryboard>
+                                            <Storyboard>
+                                                <DoubleAnimation
+                                                    Storyboard.TargetProperty="Opacity"
+                                                    From="0" To="1"
+                                                    Duration="0:0:0.4"/>
+                                            </Storyboard>
+                                        </BeginStoryboard>
+                                    </Trigger.EnterActions>
+                                </Trigger>
                             </ControlTemplate.Triggers>
                         </ControlTemplate>
                     </Setter.Value>
@@ -452,7 +463,7 @@
                 </Style.Triggers>
             </Style>
             
-            <!-- 容器动画 -->
+            <!-- 垂直容器动画 -->
             <Style x:Key="StackPanelFadeIn" TargetType="StackPanel">
                 <Setter Property="Opacity" Value="0"/>
                 <Setter Property="RenderTransform">
@@ -477,6 +488,41 @@
                                         DecelerationRatio="0.2"/>
                                     <DoubleAnimation
                                         Storyboard.TargetProperty="RenderTransform.Y"
+                                        From="-8" To="0"
+                                        BeginTime="0:0:0.4"
+                                        Duration="0:0:0.1"/>
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </Trigger.EnterActions>
+                    </Trigger>
+                </Style.Triggers>
+            </Style>
+            
+            <!-- 水平容器动画 -->
+            <Style x:Key="DockPanelFadeIn" TargetType="DockPanel">
+                <Setter Property="Opacity" Value="0"/>
+                <Setter Property="RenderTransform">
+                    <Setter.Value>
+                        <TranslateTransform X="20" Y="0"/>
+                    </Setter.Value>
+                </Setter>
+                <Style.Triggers>
+                    <Trigger Property="Visibility" Value="Visible">
+                        <Trigger.EnterActions>
+                            <BeginStoryboard>
+                                <Storyboard>
+                                    <DoubleAnimation
+                                        Storyboard.TargetProperty="Opacity"
+                                        From="0" To="1"
+                                        Duration="0:0:0.4"/>
+                                    <DoubleAnimation
+                                        Storyboard.TargetProperty="RenderTransform.X"
+                                        From="32" To="-8"
+                                        Duration="0:0:0.4"
+                                        AccelerationRatio="0.3"
+                                        DecelerationRatio="0.2"/>
+                                    <DoubleAnimation
+                                        Storyboard.TargetProperty="RenderTransform.X"
                                         From="-8" To="0"
                                         BeginTime="0:0:0.4"
                                         Duration="0:0:0.1"/>
@@ -525,6 +571,37 @@
                 </Style.Triggers>
             </Style>
             
+            <!-- 提示框样式 -->
+            <Style TargetType="ToolTip">
+                <Setter Property="Background" Value="{StaticResource MainBrush}"/>
+                <Setter Property="Foreground" Value="{StaticResource AltTextBrush}"/>
+                <Setter Property="FontFamily" Value="Microsoft YaHei UI"/>
+                <Setter Property="FontSize" Value="12"/>
+                <Setter Property="Margin" Value="10"/>
+                <Setter Property="Placement" Value="Bottom"/>
+                <Setter Property="VerticalOffset" Value="8"/>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="ToolTip">
+                            <Border 
+                                x:Name="Border"
+                                Background="{StaticResource MainBrush}"
+                                BorderBrush="{StaticResource AltTextBrush}"
+                                BorderThickness="1.5" CornerRadius="3">
+                                <ContentPresenter 
+                                    Margin="5"
+                                    HorizontalAlignment="Center" 
+                                    VerticalAlignment="Center"/>
+                                <Border.Effect>
+                                    <DropShadowEffect BlurRadius="3" ShadowDepth="0" Direction="-90"
+                                                      Color="{StaticResource CommentColor}"/>
+                                </Border.Effect>
+                            </Border>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style> 
+            
             <!-- 通过标签 -->
             <Style x:Key="VerifiedIcon" TargetType="TextBlock">
                 <Setter Property="Text" Value="&#xE6F3;"/>
@@ -532,6 +609,7 @@
                 <Setter Property="FontSize" Value="16"/>
                 <Setter Property="VerticalAlignment" Value="Center"/>
                 <Setter Property="Foreground" Value="SpringGreen"/>
+                <Setter Property="ToolTipService.InitialShowDelay" Value="200"/>
             </Style>
             
             <!-- 缺少文件标签 -->
@@ -541,6 +619,14 @@
                 <Setter Property="FontSize" Value="16"/>
                 <Setter Property="VerticalAlignment" Value="Center"/>
                 <Setter Property="Foreground" Value="Orange"/>
+                <Setter Property="ToolTipService.InitialShowDelay" Value="200"/>
+                <Setter Property="ToolTip">
+                    <Setter.Value>
+                        <ToolTip>
+                            <TextBlock Text="未能找到字体文件，该文件路径可能不正确。"/>
+                        </ToolTip>
+                    </Setter.Value>
+                </Setter>
             </Style>
             
             <!-- 提示标签 -->
@@ -549,7 +635,8 @@
                 <Setter Property="FontFamily" Value="Resources/#iconfont"/>
                 <Setter Property="FontSize" Value="16"/>
                 <Setter Property="VerticalAlignment" Value="Center"/>
-                <Setter Property="Foreground" Value="Orange"/>
+                <Setter Property="Foreground" Value="Gold"/>
+                <Setter Property="ToolTipService.InitialShowDelay" Value="200"/>
             </Style>
             
             <!-- 错误标签 -->
@@ -559,6 +646,30 @@
                 <Setter Property="FontSize" Value="16"/>
                 <Setter Property="VerticalAlignment" Value="Center"/>
                 <Setter Property="Foreground" Value="Red"/>
+                <Setter Property="ToolTipService.InitialShowDelay" Value="200"/>
+                <Setter Property="ToolTip">
+                    <Setter.Value>
+                        <ToolTip>
+                            <TextBlock Text="该字体文件不合法！" MaxWidth="200" TextWrapping="Wrap"/>
+                        </ToolTip>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+            
+            <!-- 滚动内容块 -->
+            <Style x:Key="MyScrollViewer" TargetType="ScrollViewer">
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="ScrollViewer">
+                            <Grid>
+                                <Border Grid.Column="0" Margin="0 0 0 0">
+                                    <ScrollContentPresenter HorizontalAlignment="Stretch"
+                                        CanContentScroll="{TemplateBinding CanContentScroll}"/>
+                                </Border>
+                            </Grid>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
             </Style>
             
             <Style x:Key="Preview1" TargetType="Label">
@@ -573,7 +684,14 @@
                 <Setter Property="Margin" Value="8 -8 0 0"></Setter>
                 <Setter Property="Content" Value="The quick brown fox jumps over the lazy dog."/>
             </Style>
+            <Style x:Key="PreviewA" TargetType="TextBlock">
+                <Setter Property="Foreground" Value="{StaticResource OnSurfaceBrush}"/>
+                <Setter Property="FontFamily" Value="Segoe UI, Microsoft YaHei UI"/>
+                <Setter Property="Margin" Value="8 8 8 0"></Setter>
+                <Setter Property="TextWrapping" Value="Wrap"/>
+                <Setter Property="LineHeight" Value="19"/>
+                <Setter Property="Text" Value="3.14159265358979323846264338327950&#x0a;The quick brown fox jumps over the lazy dog.&#x0a;　　南昌故郡，洪都新府。星分翼轸，地接衡庐。襟三江而带五湖，控蛮荆而引瓯越。物华天宝，龙光射牛斗之墟；人杰地灵，徐孺下陈蕃之榻。雄州雾列，俊采星驰。台隍枕夷夏之交，宾主尽东南之美。都督阎公之雅望，棨戟遥临；宇文新州之懿范，襜帷暂驻。十旬休假，胜友如云；千里逢迎，高朋满座。腾蛟起凤，孟学士之词宗；紫电青霜，王将军之武库。家君作宰，路出名区；童子何知，躬逢胜饯。&#x0a;　　时维九月，序属三秋。潦水尽而寒潭清，烟光凝而暮山紫。俨骖騑于上路，访风景于崇阿。临帝子之长洲，得天人之旧馆。层峦耸翠，上出重霄；飞阁流丹，下临无地。鹤汀凫渚，穷岛屿之萦回；桂殿兰宫，即冈峦之体势。&#x0a;　　披绣闼，俯雕甍，山原旷其盈视，川泽纡其骇瞩。闾阎扑地，钟鸣鼎食之家；舸舰迷津，青雀黄龙之舳。云销雨霁，彩彻区明。落霞与孤鹜齐飞，秋水共长天一色。渔舟唱晚，响穷彭蠡之滨，雁阵惊寒，声断衡阳之浦。&#x0a;　　遥襟甫畅，逸兴遄飞。爽籁发而清风生，纤歌凝而白云遏。睢园绿竹，气凌彭泽之樽；邺水朱华，光照临川之笔。四美具，二难并。穷睇眄于中天，极娱游于暇日。天高地迥，觉宇宙之无穷；兴尽悲来，识盈虚之有数。望长安于日下，目吴会于云间。地势极而南溟深，天柱高而北辰远。关山难越，谁悲失路之人；萍水相逢，尽是他乡之客。怀帝阍而不见，奉宣室以何年？&#x0a;　　嗟乎！时运不齐，命途多舛。冯唐易老，李广难封。屈贾谊于长沙，非无圣主；窜梁鸿于海曲，岂乏明时？所赖君子见机，达人知命。老当益壮，宁移白首之心？穷且益坚，不坠青云之志。酌贪泉而觉爽，处涸辙以犹欢。北海虽赊，扶摇可接；东隅已逝，桑榆非晚。孟尝高洁，空余报国之情；阮籍猖狂，岂效穷途之哭！&#x0a;　　勃，三尺微命，一介书生。无路请缨，等终军之弱冠；有怀投笔，慕宗悫之长风。舍簪笏于百龄，奉晨昏于万里。非谢家之宝树，接孟氏之芳邻。他日趋庭，叨陪鲤对；今兹捧袂，喜托龙门。杨意不逢，抚凌云而自惜；钟期既遇，奏流水以何惭？&#x0a;　　呜乎！胜地不常，盛筵难再；兰亭已矣，梓泽丘墟。临别赠言，幸承恩于伟饯；登高作赋，是所望于群公。敢竭鄙怀，恭疏短引；一言均赋，四韵俱成。请洒潘江，各倾陆海云尔：&#x0a;　　滕王高阁临江渚，佩玉鸣鸾罢歌舞。&#x0a;　　画栋朝飞南浦云，珠帘暮卷西山雨。&#x0a;　　闲云潭影日悠悠，物换星移几度秋。&#x0a;　　阁中帝子今何在？槛外长江空自流。"/>
+            </Style>
         </ResourceDictionary>
     </Application.Resources>
-    
 </Application>

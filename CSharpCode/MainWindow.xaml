@@ -113,7 +113,7 @@
                         </Button>
                     </Grid>
                     <!-- 快速制作页详细内容 -->
-                    <Grid x:Name="Tab1Content" Visibility="Collapsed">
+                    <Grid x:Name="Tab1Content" Visibility="Visible">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="45"/>
                             <RowDefinition Height="150"/>
@@ -145,39 +145,19 @@
                             <StackPanel Margin="38 21 0 21" Width="400" HorizontalAlignment="Left" >
                                 <Label Foreground="{StaticResource TextBrush}"
                                        FontSize="14" Content="快速制作字体：" />
-                                <Label Foreground="{StaticResource CommentBrush}"
-                                       Margin="5 5 0 0"
-                                       Content="　　使用单个字体文件制作一整组可以用来替换系统默认字体的"/>
-                                <Label Foreground="{StaticResource CommentBrush}"
-                                       Margin="5 -7 0 0"
-                                       Content="个性化字体，方便快捷。缺点是所有制作出来的字体外观都是一"/>
-                                <Label Foreground="{StaticResource CommentBrush}"
-                                       Margin="5 -7 0 0"
-                                       Content="致的，没有变体字（例如粗体字、斜体字）。"/>
+                                <TextBlock Foreground="{StaticResource CommentBrush}"
+                                           Margin="10 8 0 0" HorizontalAlignment="Left"
+                                           Width="345" TextWrapping="Wrap" TextAlignment="Left"
+                                           LineHeight="19">
+                                            　　使用单个字体文件制作一整组可以用来替换系统默认字体的
+                                            &#x0a;个性化字体，方便快捷。缺点是所有制作出来的字体外观都是一
+                                            &#x0a;致的，没有变体字（例如粗体字、斜体字）。
+                                </TextBlock>
                             </StackPanel>
                             <StackPanel Margin="0 32 58 21" Width="220" 
                                         HorizontalAlignment="Right" VerticalAlignment="Top">
-                                <DockPanel HorizontalAlignment="Center">
-                                    <Button Name="Doc1" Width="96" Height="36" Margin="6 0"
-                                            Click="DocumentButton_Click">
-                                        <StackPanel Orientation="Horizontal">
-                                            <TextBlock Text="&#xE641;" FontSize="19" VerticalAlignment="Center"/>
-                                            <TextBlock Text="帮助文档" FontSize="14"
-                                                       Margin="4,0,0,0" 
-                                                       VerticalAlignment="Center"/>
-                                        </StackPanel>
-                                    </Button>
-                                    <Button Name="Output1" Width="96" Height="36" Margin="6 0">
-                                        <StackPanel Orientation="Horizontal">
-                                            <TextBlock Text="&#xE701;" FontSize="19" VerticalAlignment="Center"/>
-                                            <TextBlock Text="导出目录" FontSize="14"
-                                                       Margin="4,0,0,0" 
-                                                       VerticalAlignment="Center"/>
-                                        </StackPanel>
-                                    </Button>
-                                </DockPanel>
-                                <DockPanel Margin="0 12 0 0" HorizontalAlignment="Center">
-                                    <Button Name="FileOpen1" Width="96" Height="36"  Margin="6 0"
+                                <DockPanel Margin="0 48 0 0" HorizontalAlignment="Center">
+                                    <Button Name="FileOpen" Width="96" Height="36"  Margin="6 0"
                                             Click="SingleFileOpenButton_Click">
                                         <StackPanel Orientation="Horizontal">
                                             <TextBlock Text="&#xE6FD;" FontSize="19" VerticalAlignment="Center"/>
@@ -243,11 +223,31 @@
                                 
                                 <StackPanel Name="PreviewPanel1" Margin="18 18 38 36"
                                             VerticalAlignment="Top" Visibility="Collapsed">
-                                    <Label Margin="0 0 0 10"
-                                           Foreground="{StaticResource OnSurfaceBrush}" 
-                                           FontSize="14" Content="即将制作的字体预览："/>
-                                    <Label Name="Preview1" Style="{StaticResource Preview1}"/>
-                                    <Label Name="Preview2" Style="{StaticResource Preview2}"/>
+                                    <DockPanel>
+                                        <DockPanel HorizontalAlignment="Left">
+                                            <Label Margin="0 0 0 2" VerticalAlignment="Center"
+                                                   Foreground="{StaticResource OnSurfaceBrush}" 
+                                                   FontSize="14" Content="即将制作的字体预览："/>
+                                            <TextBlock Name="SHint" Style="{StaticResource VerifiedIcon}"/>
+                                        </DockPanel>
+                                        <DockPanel Name="PreviewFontSizeController" HorizontalAlignment="Right"
+                                                   Margin="0 -4 6 0">
+                                            <Button Name="Fm" Style="{StaticResource BorderlessButton}"
+                                                    ToolTip="缩小预览字号" Click="SingleChangeFontSize">
+                                                <TextBlock FontSize="19" VerticalAlignment="Center" Text="&#xE688;" />
+                                            </Button>
+                                            <Button Name="Fp" Style="{StaticResource BorderlessButton}" 
+                                                    ToolTip="增大预览字号" Click="SingleChangeFontSize">
+                                                <TextBlock FontSize="19" VerticalAlignment="Center" Text="&#xE722;" />
+                                            </Button>
+                                        </DockPanel>
+                                    </DockPanel>
+
+                                    <ScrollViewer Name="Previewer1" VerticalScrollBarVisibility="Visible" Height="230"
+                                                  Style="{StaticResource MyScrollViewer}">
+                                        <TextBlock Name="PreviewA" Style="{StaticResource PreviewA}"/>
+                                    </ScrollViewer>
+                                    
                                 </StackPanel>
                                 
                                 <StackPanel Name="ProcessingPanel1" Margin="18 18 38 36" 
@@ -272,12 +272,23 @@
                                            HorizontalAlignment="Center" FontSize="16" Margin="0 5"
                                            Content="　制作完成！"/>
                                 </StackPanel>
+                                
+                                <Button Name="OutDirButton1" Style="{StaticResource BorderlessButton}"
+                                        VerticalAlignment="Bottom" HorizontalAlignment="Right" Visibility="Collapsed"
+                                        Margin="0 0 50 48" Click="OutputDirectoryButton_Click">
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="&#xE701;" FontSize="16" VerticalAlignment="Center"/>
+                                        <TextBlock Text="打开导出目录" FontSize="13"
+                                                   Margin="4,0,0,0" 
+                                                   VerticalAlignment="Center"/>
+                                    </StackPanel>
+                                </Button>
                             </Grid>
                             
                         </Grid>
                     </Grid>
                     <!-- 精细制作页详细内容 -->
-                    <Grid x:Name="Tab2Content" Visibility="Visible">
+                    <Grid x:Name="Tab2Content" Visibility="Collapsed">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="45"/>
                             <RowDefinition Height="1*"/>
@@ -308,39 +319,19 @@
                             <StackPanel Margin="38 21 0 21" Width="400" HorizontalAlignment="Left" >
                                 <Label Foreground="{StaticResource TextBrush}"
                                        FontSize="14" Content="精细制作字体：" />
-                                <Label Foreground="{StaticResource CommentBrush}"
-                                       Margin="5 5 0 0"
-                                       Content="　　为每一种变体字体（粗体字、斜体字）选择它们对应的个性"/>
-                                <Label Foreground="{StaticResource CommentBrush}"
-                                       Margin="5 -7 0 0"
-                                       Content="化字体进行制作。若选用合适的字体系列，能够制作出包含所有"/>
-                                <Label Foreground="{StaticResource CommentBrush}"
-                                       Margin="5 -7 0 0"
-                                       Content="变体字样式的个性化字体，但也需要相对更繁琐的操作。"/>
+                                <TextBlock Foreground="{StaticResource CommentBrush}"
+                                           Margin="10 8 0 0" HorizontalAlignment="Left"
+                                           Width="345" TextWrapping="Wrap" TextAlignment="Left"
+                                           LineHeight="19">
+                                    　　为每一种变体字体（粗体字、斜体字）选择它们对应的个性
+                                    &#x0a;化字体进行制作。若选用合适的字体系列，能够制作出包含所有
+                                    &#x0a;变体字样式的个性化字体，但也需要相对更繁琐的操作。
+                                </TextBlock>
                             </StackPanel>
                             <StackPanel Margin="0 32 58 21" Width="220" 
                                         HorizontalAlignment="Right" VerticalAlignment="Top">
-                                <DockPanel HorizontalAlignment="Center">
-                                    <Button Name="Doc2" Width="96" Height="36" Margin="6 0"
-                                            Click="DocumentButton_Click">
-                                        <StackPanel Orientation="Horizontal">
-                                            <TextBlock Text="&#xE641;" FontSize="19" VerticalAlignment="Center"/>
-                                            <TextBlock Text="帮助文档" FontSize="14"
-                                                       Margin="4,0,0,0" 
-                                                       VerticalAlignment="Center"/>
-                                        </StackPanel>
-                                    </Button>
-                                    <Button Name="Output2" Width="96" Height="36" Margin="6 0">
-                                        <StackPanel Orientation="Horizontal">
-                                            <TextBlock Text="&#xE701;" FontSize="19" VerticalAlignment="Center"/>
-                                            <TextBlock Text="导出目录" FontSize="14"
-                                                       Margin="4,0,0,0" 
-                                                       VerticalAlignment="Center"/>
-                                        </StackPanel>
-                                    </Button>
-                                </DockPanel>
-                                <DockPanel Margin="0 12 0 0" HorizontalAlignment="Center">
-                                    <Button Name="FileOpen2" Width="96" Height="36"  Margin="6 0">
+                                <DockPanel Margin="0 48 0 0" HorizontalAlignment="Center">
+                                    <Button Name="MakePreview" Width="96" Height="36"  Margin="6 0">
                                         <StackPanel Orientation="Horizontal">
                                             <TextBlock Text="&#xE642;" FontSize="19" VerticalAlignment="Center"/>
                                             <TextBlock Text="构建预览" FontSize="14"
@@ -360,7 +351,6 @@
                                     </Button>
                                 </DockPanel>
                             </StackPanel>
-                            
                             <DockPanel Margin="27 144 27 27" HorizontalAlignment="Left">
                                 <StackPanel Width="216" Margin="10 0 5 0">
                                     <DockPanel Margin="60 0 0 12" HorizontalAlignment="Left">
@@ -541,6 +531,39 @@
                                     </DockPanel>
                                 </StackPanel>
                             </DockPanel>
+                            <DockPanel Name="ProcessingPanel2" Margin="0 0 80 64" 
+                                       HorizontalAlignment="Right" VerticalAlignment="Bottom"
+                                       Width="180" Height="90" Visibility="Collapsed">
+                                <Label Style="{StaticResource AnimatedHammerStyle}"
+                                       Content="&#xE70B;" VerticalAlignment="Center"/>
+                                <Label Foreground="{StaticResource TextBrush}" 
+                                       VerticalAlignment="Center" Width="100" FontSize="16"
+                                       Content="制作中……"/>
+                            </DockPanel>
+                            <DockPanel Name="FinishPanel2" Margin="0 0 80 64" 
+                                       Style="{StaticResource DockPanelFadeIn}"
+                                       HorizontalAlignment="Right" VerticalAlignment="Bottom"
+                                       Width="180" Height="90" Visibility="Collapsed">
+                                <Label VerticalAlignment="Center" FontFamily="Resources/#iconfont"
+                                       FontSize="64" Foreground="{StaticResource TextBrush}"
+                                       Content="&#xE646;" />
+                                <Label VerticalAlignment="Center" FontFamily="Resources/#iconfont"
+                                       FontSize="40" Foreground="{StaticResource TextBrush}"
+                                       Margin="-62 1  0 0" Content="&#xE63E;" />
+                                <Label Foreground="{StaticResource TextBrush}" 
+                                       VerticalAlignment="Center" Width="100" FontSize="16"
+                                       Content="制作完成"/>
+                            </DockPanel>
+                            <Button Name="OutDirButton2" Style="{StaticResource BorderlessButton}"
+                                    VerticalAlignment="Bottom" HorizontalAlignment="Right" Visibility="Collapsed"
+                                    Margin="0 0 50 48" Click="OutputDirectoryButton_Click">
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="&#xE701;" FontSize="16" VerticalAlignment="Center"/>
+                                    <TextBlock Text="打开导出目录" FontSize="13"
+                                               Margin="4,0,0,0" 
+                                               VerticalAlignment="Center"/>
+                                </StackPanel>
+                            </Button>
                         </Grid>
                     </Grid>
                     <!-- 实用工具页详细内容 -->

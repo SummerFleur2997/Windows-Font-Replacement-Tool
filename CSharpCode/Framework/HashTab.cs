@@ -41,7 +41,6 @@ public static class HashTab
     /// <summary>
     /// 验证 Resources/xmlLibs文件完整性。
     /// </summary>
-    /// <exception cref="Exception"></exception>
     private static void ValidateLibFiles()
     {
         var dataLibsPath = Path.Combine(ResourcePath, "xmlLibs");
@@ -72,7 +71,7 @@ public static class HashTab
                 var entryPath = Path.Combine(ResourcePath, entry.Name);
                 var directoryPath = Path.GetDirectoryName(entryPath);
 
-                if (!Directory.Exists(directoryPath))
+                if (!Directory.Exists(directoryPath) && directoryPath != null)
                 {
                     Directory.CreateDirectory(directoryPath);
                 }
@@ -133,8 +132,7 @@ public static class HashTab
         warning.AppendLine("错误信息：" + ex.Message);
 
         MessageBox.Show(warning.ToString(), "错误", 
-            MessageBoxButton.OK, 
-            MessageBoxImage.Error);
+            MessageBoxButton.OK, MessageBoxImage.Error);
 
         Application.Current.Shutdown();
     }

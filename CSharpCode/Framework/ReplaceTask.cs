@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace Windows_Font_Replacement_Tool.Framework;
 
 /// <summary>
-/// 类 SingleReplace与 MultipleReplace的基类，仅用于存储类属性与类函数，不应当被实例化。
+/// 类 SingleReplace 与 MultipleReplace 的基类，仅用于存储类属性与类函数，不应当被实例化。
 /// </summary>
 public abstract class ReplaceTask
 {
@@ -19,7 +19,7 @@ public abstract class ReplaceTask
     /// <summary>
     /// 任务的输出文件夹绝对路径。
     /// </summary>
-    private string OutputDirPath { get; set; } = "NULL";
+    public string OutputDirPath { get; set; } = "NULL";
     
     /// <summary>
     /// 任务的缓存文件夹绝对路径。
@@ -27,9 +27,9 @@ public abstract class ReplaceTask
     protected string CacheDirPath  { get; } = CreateCacheDir(false);
     
     /// <summary>
-    /// 用于存储 19种字形的处理进程。
+    /// 用于存储 19 种字形的处理进程。
     /// </summary>
-    protected ReplaceThread[] ReplaceThreads = new ReplaceThread[19];
+    protected readonly ReplaceThread[] ReplaceThreads = new ReplaceThread[19];
     
     /// <summary>
     /// 获取当前计算机线程数。
@@ -50,7 +50,7 @@ public abstract class ReplaceTask
     }
     
     /// <summary>
-    /// 新建 cache文件夹。
+    /// 新建 cache 文件夹。
     /// </summary>
     /// <param name="create">是否创建文件夹</param>
     /// <returns>cache文件夹绝对路径</returns>
@@ -62,7 +62,7 @@ public abstract class ReplaceTask
     }
     
     /// <summary>
-    /// 初始化 cache文件夹。
+    /// 初始化 cache 文件夹。
     /// </summary>
     protected static void InitCacheDir(string cacheDirPath)
     {
@@ -74,22 +74,22 @@ public abstract class ReplaceTask
     /// 给定文件名，返回该文件最终的存储路径。
     /// </summary>
     /// <param name="fileName">给定的文件名</param>
-    /// <returns></returns>
+    /// <returns>导出文件绝对路径</returns>
     private string OutputFilePath(string fileName)
     {
         return Path.Combine(OutputDirPath, fileName);
     }
     
     /// <summary>
-    /// Python程序，合并两个 ttf为 ttc。
+    /// Python 程序，合并两个 ttf 为 ttc。
     /// </summary>
+    /// <param name="filePrefix">导出的 ttf 文件名前缀</param>
     /// <returns>Python程序退出代码</returns>
     private int RunMerge(string filePrefix)
     {
         var outputDirName = Path.GetFileName(OutputDirPath);
         try
         {
-            // 设定进程运行参数
             var startInfo = new ProcessStartInfo
             {
                 FileName = Path.Combine(HashTab.ResourcePath, "functions.exe"),
@@ -99,35 +99,46 @@ public abstract class ReplaceTask
                 RedirectStandardError = true,
                 CreateNoWindow = true
             };
-            // 运行进程并返回进程退出值
-            using var process = new Process { StartInfo = startInfo };
+            using var process = new Process();
+            process.StartInfo = startInfo;
             process.Start();
             process.WaitForExit(); 
             return process.ExitCode;
         }
-        // 报错，需完善错误代码 TODO
-        catch (Exception ex)
+        catch
         {
-            Console.WriteLine($"执行失败: {ex.Message}");
             return -1;
         }
     }
     
     /// <summary>
-    /// 多线程运行 Python程序进行属性替换。
+    /// 多线程运行 Python 程序进行属性替换。
     /// </summary>
     public async Task TaskStartPropRep()
     {
         OutputDirPath = CreateOutputDir(TaskName);
         CreateCacheDir();
+        var hasError = false;
+        
         await Task.Run(() => 
         {
             Parallel.ForEach(
                 ReplaceThreads,
                 new ParallelOptions { MaxDegreeOfParallelism = _maxDegree },
-                task => task.RunPropertyRep()
+                (task, state) =>
+                {
+                    var exitCode = task.RunPropertyRep();
+                    if (exitCode is 99 or -1) 
+                    {
+                        hasError = true;
+                        state.Stop();
+                    }
+                }
             );
         });
+        if (hasError)
+            throw new Exception("关键依赖文件缺失，请重新下载并安装本工具");
+        
         foreach (var sha1 in Sha2File.Keys)
         {
             var originalFilePath = Path.Combine(CacheDirPath, sha1);
@@ -137,21 +148,36 @@ public abstract class ReplaceTask
     }
 
     /// <summary>
-    /// 
+    /// 多线程运行 Python程序合并字体为 ttc。
     /// </summary>
     public async Task TaskMergeFont()
     {
         string[] filePrefixes = { "msyh", "msyhl", "msyhbd" };
+        var hasError = false;
+        
         await Task.Run(() =>
         {
             Parallel.ForEach(
                 filePrefixes,
                 new ParallelOptions { MaxDegreeOfParallelism = _maxDegree },
-                filePrefix => RunMerge(filePrefix)
+                (filePrefix, state) =>
+                {
+                    var exitCode = RunMerge(filePrefix);
+                    if (exitCode is 99 or -1) 
+                    {
+                        hasError = true;
+                        state.Stop();
+                    }
+                }
             );
         });
+        if (hasError)
+            throw new Exception("关键依赖文件缺失，请重新下载并安装本工具");
     }
 
+    /// <summary>
+    /// 将字体从 cache 目录移动至导出目录，然后删除 cache 目录。
+    /// </summary>
     public void TaskFinishing()
     {
         foreach (var sha1 in Sha2File.Keys)
@@ -170,7 +196,7 @@ public abstract class ReplaceTask
     }
     
     /// <summary>
-    /// 存储 xmls文件夹内每一个哈希值对应的文件名。
+    /// 存储 xmls 文件夹内每一个哈希值对应的文件名。
     /// </summary>
     protected static readonly Dictionary<string, string> Sha2File = new()
     {

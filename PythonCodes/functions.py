@@ -8,7 +8,7 @@ from fontTools.ttLib.ttCollection import TTCollection
 path = os.getcwd()
 
 
-def _getFontFamily(ttfont: TTFont) -> str:
+def _getFontFamily(ttfont: TTFont, subfamily: bool = True) -> str:
     """内部函数\n
     输入一个 ttfont 字体，返回其 FontFamily 属性。
     :param ttfont: ttf 字体
@@ -25,7 +25,9 @@ def _getFontFamily(ttfont: TTFont) -> str:
         if data.nameID == 2 and data.langID == 0x409:
             font_subfamily = data.toUnicode()
 
-    return "" + font_family + "-" + font_subfamily
+    if subfamily:
+        return font_family + "-" + font_subfamily
+    return font_family
 
 
 def fontPropertyReplace(args) -> int:
@@ -103,19 +105,41 @@ def getFontFamily(arg) -> str:
     functions.exe fontFamily [font绝对路径]
     """
     ttfont = TTFont(arg.font)
-    return _getFontFamily(ttfont)
+    return _getFontFamily(ttfont, False)
 
 
 def convertType(args) -> int:
+    """
+    转化字体文件格式为 ttf 或 otf。命令行使用样例：
+
+    functions.exe convertType ttf2otf [导出文件夹名称] [font绝对路径]
+    """
     ttfont = TTFont(args.font)
     filename = os.path.basename(args.font)[:-4]
+    dirname = args.dirname
     if args.type == "otf2ttf":
-        ttfont.save(f"{path}\\output\\{args.diranme}\\{filename}.ttf")
+        ttfont.save(f"{path}\\output\\{dirname}\\{filename}.ttf")
         return 0
     elif args.type == "ttf2otf":
-        ttfont.save(f"{path}\\output\\{args.diranme}\\{filename}.otf")
+        ttfont.save(f"{path}\\output\\{dirname}\\{filename}.otf")
         return 0
     return 5001
+
+
+def getCjkCharacterCount(args) -> str:
+    """
+    获取 CJK Unified Ideographs (U+4E00～U+9FFF) 内的字符数量。命令行使用样例：
+
+    functions.exe getCjk [font绝对路径]
+    """
+    font = TTFont(args.font)
+    cjk_chars = set()
+
+    for table in font["cmap"].tables:
+        if table.isUnicode():
+            cjk_chars.update(code for code in table.cmap if 0x4E00 <= code <= 0x9FFF)
+
+    return str(len(cjk_chars))
 
 
 def main():
@@ -144,9 +168,13 @@ def main():
 
     parser_func5 = subparsers.add_parser("convertType")
     parser_func5.add_argument("type")
-    parser_func5.add_argument("diranme")
+    parser_func5.add_argument("dirname")
     parser_func5.add_argument("font")
     parser_func5.set_defaults(func=convertType)
+
+    parser_func6 = subparsers.add_parser("getCjk")
+    parser_func6.add_argument("font")
+    parser_func6.set_defaults(func=getCjkCharacterCount)
 
     args = parser.parse_args()
     try:

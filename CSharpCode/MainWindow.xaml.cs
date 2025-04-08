@@ -1,23 +1,13 @@
 ﻿using System;
 using System.IO;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Windows;
+using System.Windows.Media;
 using System.Windows.Controls;
 using System.Windows.Threading;
-using System.Threading.Tasks;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using System.Diagnostics;
 using Microsoft.Win32;
 using Windows_Font_Replacement_Tool.Framework;
-using Validation = Windows_Font_Replacement_Tool.Framework.Validation;
+using System.Runtime.InteropServices;
 
 namespace Windows_Font_Replacement_Tool;
 
@@ -28,6 +18,7 @@ public partial class MainWindow : Window
 {
     private SingleReplace?   SingleReplaceTask   { get; set; }
     private MultipleReplace? MultipleReplaceTask { get; set; }
+    private string? OutputDirectory { get; set; }
     
     public MainWindow()
     {
@@ -40,6 +31,8 @@ public partial class MainWindow : Window
     /// </summary>
     private void ExitButton_Click(object sender, RoutedEventArgs e)
     {
+        SingleReplaceTask   = null;
+        MultipleReplaceTask = null;
         Application.Current.Shutdown();
     }
 
@@ -106,13 +99,36 @@ public partial class MainWindow : Window
     }
 
     /// <summary>
+    /// 打开导出目录。
+    /// </summary>
+    private void OutputDirectoryButton_Click(object sender, RoutedEventArgs e)
+    {
+        try
+        {
+            var outputDirectory = Directory.Exists(OutputDirectory)
+                ? OutputDirectory
+                : AppDomain.CurrentDomain.BaseDirectory;
+            Process.Start(new ProcessStartInfo
+            {
+                FileName = outputDirectory,
+                UseShellExecute = true
+            });
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show($"未能打开导出目录：{ex.Message}", "错误",
+                MessageBoxButton.OK, MessageBoxImage.Error);
+        }
+    }
+
+    /// <summary>
     /// 打开帮助文档。
     /// </summary>
     private void DocumentButton_Click(object sender, RoutedEventArgs e)
     {
         try
         {
-            string pdfPath = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Resources", "Help.pdf");
+            string pdfPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Resources", "Help.pdf");
     
             if (!File.Exists(pdfPath))
             {
@@ -134,17 +150,35 @@ public partial class MainWindow : Window
     }
 
     /// <summary>
-    /// 控制切换“快速替换”标签页右下角的控件显示内容，增强交互性。
+    /// 控制切换“快速制作”标签页右下角的控件显示内容，增强交互性。
     /// </summary>
-    /// <param name="stackPanel">需要显示的 Panel名。</param>
-    private void SinglePanelUpdate(StackPanel? stackPanel)
+    /// <param name="stackPanel">需要显示的 Panel 名。</param>
+    private void SinglePanelUpdate(StackPanel? stackPanel=null)
     {
         PreviewPanel1.Visibility = Visibility.Collapsed;
         ProcessingPanel1.Visibility = Visibility.Collapsed;
         FinishPanel1.Visibility = Visibility.Collapsed;
+        OutDirButton1.Visibility = Visibility.Collapsed;
         
-        if (stackPanel != null)
-            stackPanel.Visibility = Visibility.Visible;
+        if (stackPanel == null) return;
+        stackPanel.Visibility = Visibility.Visible;
+        if (stackPanel == FinishPanel1)
+            OutDirButton1.Visibility = Visibility.Visible;
+    }
+    
+    /// <summary>
+    /// 控制切换“精细制作”标签页右下角的控件显示内容，增强交互性。
+    /// </summary>
+    /// <param name="dockPanel">需要显示的 Panel 名。</param>
+    private void MultiplePanelUpdate(DockPanel? dockPanel=null)
+    {
+        ProcessingPanel2.Visibility = Visibility.Collapsed;
+        FinishPanel2.Visibility = Visibility.Collapsed;
+        
+        if (dockPanel == null) return;
+        dockPanel.Visibility = Visibility.Visible;
+        if (dockPanel == FinishPanel2)
+            OutDirButton2.Visibility = Visibility.Visible;
     }
 
     /// <summary>
@@ -152,15 +186,62 @@ public partial class MainWindow : Window
     /// </summary>
     private void SingleFileOpenButton_Click(object sender, RoutedEventArgs e)
     {
-        var singleFile = new OpenFileDialog();
-        singleFile.Filter = "字体文件 (*.ttf,*.otf)|*.ttf;*.otf";
+        SingleReplaceTask = null;
+        var singleFile = new OpenFileDialog { Filter = "字体文件 (*.ttf,*.otf)|*.ttf;*.otf" };
         
         if (singleFile.ShowDialog() == false) return;
         var singleFilePath = singleFile.FileName;
         
-        SingleReplaceTask = new SingleReplace(singleFilePath);
-        Run1.IsEnabled = true;
-        Console.WriteLine(Validation.GetCjkCharacterCount(singleFilePath));
+        SingleReplaceTask = new SingleReplace(singleFilePath, SHint);
+        SinglePanelUpdate(PreviewPanel1);
+        Run1.IsEnabled = SingleFilePreview(singleFilePath);
+    }
+    
+    /// <summary>
+    /// 临时注册给定的字体文件
+    /// </summary>
+    /// <param name="fontPath">字体文件绝对路径</param>
+    /// <returns>返回 0 时表示字体注册成功。</returns>
+    [DllImport("gdi32.dll", EntryPoint = "AddFontResourceW", SetLastError = true)]
+    private static extern int AddFontResource(string fontPath);
+    
+    /// <summary>
+    /// 快速替换模式构建预览。
+    /// </summary>
+    /// <param name="fontPath">字体文件绝对路径</param>
+    private bool SingleFilePreview(string fontPath)
+    {
+        if (AddFontResource(fontPath) != 0) return false;
+        
+        var uri = new Uri($"file:///{fontPath}");
+        var fontFamilyName = FontValidation.GetFontFamily(fontPath);
+        if (SingleReplaceTask == null || !SingleReplaceTask.SingleFontCheck(fontFamilyName))
+        {
+            Previewer1.Visibility = Visibility.Collapsed;
+            PreviewFontSizeController.IsEnabled = false;
+            return false;
+        }
+        FontFamily fontFamily = new FontFamily(uri + $"#{fontFamilyName}");
+        PreviewA.FontFamily = fontFamily;
+        Previewer1.Visibility = Visibility.Visible;
+        PreviewFontSizeController.IsEnabled = true;
+        return true;
+    }
+    
+    /// <summary>
+    /// 快速替换模式更改预览窗格文字显示大小。
+    /// </summary>
+    private void SingleChangeFontSize(object sender, RoutedEventArgs e)
+    {
+        switch (((Button)sender).Name)
+        {
+            case "Fm":
+                PreviewA.FontSize -= 1;
+                break;
+            case "Fp":
+                PreviewA.FontSize += 1;
+                break;
+        }
     }
 
     /// <summary>
@@ -171,13 +252,25 @@ public partial class MainWindow : Window
         SinglePanelUpdate(ProcessingPanel1);
         await Application.Current.Dispatcher.InvokeAsync(() => { }, DispatcherPriority.Background);
 
-        if (SingleReplaceTask != null)
+        if (SingleReplaceTask == null) return;
+        
+        try
         {
             await SingleReplaceTask.TaskStartPropRep();
             await SingleReplaceTask.TaskMergeFont();
             SingleReplaceTask.TaskFinishing();
         }
+        catch (Exception ex)
+        {
+            SinglePanelUpdate();
+            MessageBox.Show(ex.Message, "错误",
+                MessageBoxButton.OK, MessageBoxImage.Error);
+            Run1.IsEnabled = false;
+            return;
+        }
+        
         Run1.IsEnabled = false;
+        OutputDirectory = SingleReplaceTask.OutputDirPath;
         SingleReplaceTask = null;
         SinglePanelUpdate(FinishPanel1);
     }
@@ -187,13 +280,13 @@ public partial class MainWindow : Window
     /// </summary>
     private void MultipleFileOpenButton_Click(object sender, RoutedEventArgs e)
     {
-        var multipleFile = new OpenFileDialog();
+        var multipleFile = new OpenFileDialog { Filter = "字体文件 (*.ttf,*.otf)|*.ttf;*.otf" };
         multipleFile.Filter = "字体文件 (*.ttf,*.otf)|*.ttf;*.otf";
         
         if (multipleFile.ShowDialog() == false) return;
         var multipleFilePath = multipleFile.FileName;
         
-        if (MultipleReplaceTask == null) MultipleReplaceTask = new MultipleReplace();
+        MultipleReplaceTask ??= new MultipleReplace();
         var button = (Button)sender;
         var tbName = button.Name + "S";
         var textBlock = FindName(tbName) as TextBlock;
@@ -207,21 +300,35 @@ public partial class MainWindow : Window
     /// </summary>
     private async void MultipleFileRunButton_Click(object sender, RoutedEventArgs e)
     {
+        MultiplePanelUpdate(ProcessingPanel2);
         await Application.Current.Dispatcher.InvokeAsync(() => { }, DispatcherPriority.Background);
 
-        if (MultipleReplaceTask != null)
+        if (MultipleReplaceTask == null) return;
+        if (!MultipleReplaceTask.MultipleFontCheck())
         {
-            if (!MultipleReplaceTask.FontCheck())
-            {
-                Run2.IsEnabled = false;
-                return;
-            }
+            Run2.IsEnabled = false;
+            return;
+        }
+        
+        try
+        {
             await MultipleReplaceTask.TaskStartPropRep();
             await MultipleReplaceTask.TaskMergeFont();
-            MultipleReplaceTask.TaskFinishing();
-            MultipleReplaceTask.InitInterface();
         }
+        catch (Exception ex)
+        {
+            MultiplePanelUpdate();
+            MessageBox.Show(ex.Message, "错误",
+                MessageBoxButton.OK, MessageBoxImage.Error);
+            Run2.IsEnabled = false;
+            return;
+        }
+        
+        MultipleReplaceTask.TaskFinishing();
+        MultipleReplaceTask.InitInterface();
         Run2.IsEnabled = false;
+        OutputDirectory = MultipleReplaceTask.OutputDirPath;
         MultipleReplaceTask = null;
+        MultiplePanelUpdate(FinishPanel2);
     }
 }
