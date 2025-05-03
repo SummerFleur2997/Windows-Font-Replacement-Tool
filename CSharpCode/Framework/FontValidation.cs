@@ -1,7 +1,6 @@
 ﻿using System;
 using System.IO;
 using System.Text;
-using System.Windows.Media;
 using System.Diagnostics;
 
 namespace Windows_Font_Replacement_Tool.Framework;

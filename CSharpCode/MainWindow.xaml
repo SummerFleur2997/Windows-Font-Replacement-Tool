@@ -3,7 +3,6 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:Windows_Font_Replacement_Tool"
         mc:Ignorable="d"
         AllowsTransparency="True"
         Background="Transparent"
@@ -274,8 +273,9 @@
                                 </StackPanel>
                                 
                                 <Button Name="OutDirButton1" Style="{StaticResource BorderlessButton}"
-                                        VerticalAlignment="Bottom" HorizontalAlignment="Right" Visibility="Collapsed"
-                                        Margin="0 0 50 48" Click="OutputDirectoryButton_Click">
+                                        VerticalAlignment="Bottom" HorizontalAlignment="Right" 
+                                        Visibility="Collapsed" Margin="0 0 50 48" 
+                                        Click="OutputDirectoryButton_Click" Tag="Single">
                                     <StackPanel Orientation="Horizontal">
                                         <TextBlock Text="&#xE701;" FontSize="16" VerticalAlignment="Center"/>
                                         <TextBlock Text="打开导出目录" FontSize="13"
@@ -555,8 +555,9 @@
                                        Content="制作完成"/>
                             </DockPanel>
                             <Button Name="OutDirButton2" Style="{StaticResource BorderlessButton}"
-                                    VerticalAlignment="Bottom" HorizontalAlignment="Right" Visibility="Collapsed"
-                                    Margin="0 0 50 48" Click="OutputDirectoryButton_Click">
+                                    VerticalAlignment="Bottom" HorizontalAlignment="Right" 
+                                    Visibility="Collapsed" Margin="0 0 50 48" 
+                                    Click="OutputDirectoryButton_Click" Tag="Multiple">
                                 <StackPanel Orientation="Horizontal">
                                     <TextBlock Text="&#xE701;" FontSize="16" VerticalAlignment="Center"/>
                                     <TextBlock Text="打开导出目录" FontSize="13"
@@ -585,7 +586,7 @@
                     Background="{StaticResource MainBrush}"
                     CornerRadius="0 0 0 10"
                     BorderThickness="0 0">
-                <StackPanel Margin="0 8 0 0" Height="220" VerticalAlignment="Top">
+                <StackPanel Margin="0 8 0 0" VerticalAlignment="Top">
                     <!-- 主页按钮 -->
                     <RadioButton x:Name="WelcomeTab" GroupName="MainTabs"
                                  Style="{StaticResource MyRadioButtonStyle}"

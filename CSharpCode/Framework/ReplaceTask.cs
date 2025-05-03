@@ -9,17 +9,17 @@ namespace Windows_Font_Replacement_Tool.Framework;
 /// <summary>
 /// 类 SingleReplace 与 MultipleReplace 的基类，仅用于存储类属性与类函数，不应当被实例化。
 /// </summary>
-public abstract class ReplaceTask
+public class ReplaceTask
 {
     /// <summary>
     /// 任务的名称，用于命名输出文件夹。
     /// </summary>
-    protected string TaskName { get; set; } = "NULL";
+    protected string TaskName { get; set; } = null!;
 
     /// <summary>
     /// 任务的输出文件夹绝对路径。
     /// </summary>
-    public string OutputDirPath { get; set; } = "NULL";
+    public string OutputDirPath { get; set; } = null!;
     
     /// <summary>
     /// 任务的缓存文件夹绝对路径。
@@ -35,6 +35,11 @@ public abstract class ReplaceTask
     /// 获取当前计算机线程数。
     /// </summary>
     private readonly int _maxDegree = Environment.ProcessorCount;
+
+    /// <summary>
+    /// 假的构造函数。
+    /// </summary>
+    protected ReplaceTask() { }
     
     /// <summary>
     /// 给定任务名称，新建导出文件夹。

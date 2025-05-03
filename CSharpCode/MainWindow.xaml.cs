@@ -18,7 +18,8 @@ public partial class MainWindow : Window
 {
     private SingleReplace?   SingleReplaceTask   { get; set; }
     private MultipleReplace? MultipleReplaceTask { get; set; }
-    private string? OutputDirectory { get; set; }
+    private string? SingleOutputDirectory   { get; set; }
+    private string? MultipleOutputDirectory { get; set; }
     
     public MainWindow()
     {
@@ -105,9 +106,19 @@ public partial class MainWindow : Window
     {
         try
         {
-            var outputDirectory = Directory.Exists(OutputDirectory)
-                ? OutputDirectory
-                : AppDomain.CurrentDomain.BaseDirectory;
+            var outputDirectory = "";
+            switch (((Button)sender).Tag)
+            {
+                case "Single":
+                    outputDirectory = SingleOutputDirectory;
+                    break;
+                case "Multiple":
+                    outputDirectory = MultipleOutputDirectory;
+                    break;
+            }
+            outputDirectory = Directory.Exists(outputDirectory)
+                ? outputDirectory
+                : Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "output");
             Process.Start(new ProcessStartInfo
             {
                 FileName = outputDirectory,
@@ -270,7 +281,7 @@ public partial class MainWindow : Window
         }
         
         Run1.IsEnabled = false;
-        OutputDirectory = SingleReplaceTask.OutputDirPath;
+        SingleOutputDirectory = SingleReplaceTask.OutputDirPath;
         SingleReplaceTask = null;
         SinglePanelUpdate(FinishPanel1);
     }
@@ -280,6 +291,8 @@ public partial class MainWindow : Window
     /// </summary>
     private void MultipleFileOpenButton_Click(object sender, RoutedEventArgs e)
     {
+        if (MultipleReplaceTask == null) MultiplePanelUpdate();
+        
         var multipleFile = new OpenFileDialog { Filter = "字体文件 (*.ttf,*.otf)|*.ttf;*.otf" };
         multipleFile.Filter = "字体文件 (*.ttf,*.otf)|*.ttf;*.otf";
         
@@ -327,7 +340,7 @@ public partial class MainWindow : Window
         MultipleReplaceTask.TaskFinishing();
         MultipleReplaceTask.InitInterface();
         Run2.IsEnabled = false;
-        OutputDirectory = MultipleReplaceTask.OutputDirPath;
+        MultipleOutputDirectory = MultipleReplaceTask.OutputDirPath;
         MultipleReplaceTask = null;
         MultiplePanelUpdate(FinishPanel2);
     }

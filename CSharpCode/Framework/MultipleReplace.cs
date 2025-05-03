@@ -66,7 +66,7 @@ public class MultipleReplace : ReplaceTask
             
         foreach (var replaceThread in ReplaceThreads)
         {
-            if (replaceThread == null)
+            if (replaceThread == null!)
             {
                 returnFlag = false;
                 continue;
