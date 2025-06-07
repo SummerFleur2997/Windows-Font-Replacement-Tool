@@ -18,13 +18,13 @@ public static class FontValidation
         {
             using var stream = new FileStream(fontPath, FileMode.Open, FileAccess.Read);
             
-            byte[] headerBytes = new byte[4];
-            int bytesRead = stream.Read(headerBytes, 0, 4);
+            var headerBytes = new byte[4];
+            var bytesRead = stream.Read(headerBytes, 0, 4);
 
             if (bytesRead < 4)
                 return false;
             
-            string header = Encoding.ASCII.GetString(headerBytes);
+            var header = Encoding.ASCII.GetString(headerBytes);
 
             // 检查字体文件签名
             return header switch
@@ -64,14 +64,13 @@ public static class FontValidation
             process.Start();
             
             var output = process.StandardOutput.ReadToEnd();
-            process.WaitForExit(); 
-            switch (process.ExitCode)
+            process.WaitForExit();
+            var exitCode = process.ExitCode switch
             {
-                case 0:
-                    return int.Parse(output.Trim()); 
-                default:
-                    return -1;
-            }
+                0 => int.Parse(output.Trim()),
+                _ => -1
+            };
+            return exitCode;
         }
         catch
         {
