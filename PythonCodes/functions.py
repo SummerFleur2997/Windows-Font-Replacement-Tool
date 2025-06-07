@@ -8,7 +8,7 @@ from fontTools.ttLib.ttCollection import TTCollection
 path = os.getcwd()
 
 
-def _getFontFamily(ttfont: TTFont, subfamily: bool = True) -> str:
+def _get_font_family(ttfont: TTFont, subfamily: bool = True) -> str:
     """内部函数\n
     输入一个 ttfont 字体，返回其 FontFamily 属性。
     :param ttfont: ttf 字体
@@ -30,7 +30,7 @@ def _getFontFamily(ttfont: TTFont, subfamily: bool = True) -> str:
     return font_family
 
 
-def fontPropertyReplace(args) -> int:
+def font_property_replace(args) -> int:
     """
     将 args.xml 中的 name 表数据转移至 args.font 中，进行字体属性替换。命令行使用样例：
 
@@ -53,7 +53,7 @@ def fontPropertyReplace(args) -> int:
     return 0
 
 
-def mergeTTC(args) -> int:
+def merge_ttc(args) -> int:
     """
     将指定的 ttf 合并为 ttc，并保存至 args.dirname 文件夹内。命令行使用样例：
 
@@ -62,19 +62,19 @@ def mergeTTC(args) -> int:
     将会把 cache 目录下名为 [ttc]01.ttf, [ttc]02.ttf ... 等等文件合并为一个 ttc 字体集，
     然后存储到 [dirname] 目录下，名为 [ttc].ttc
     """
-    TTC = TTCollection()
+    ttc = TTCollection()
     num = 1
     for obj in os.listdir(f"{path}\\output\\cache"):
         if obj[:-6] == args.ttc:
             num += 1
     for suf in range(1, num):
-        TTC.fonts.append(TTFont(f"{path}\\output\\cache\\{args.ttc}{suf:02d}.ttf"))
-    TTC.save(f"{path}\\output\\{args.dirname}\\{args.ttc}.ttc")
+        ttc.fonts.append(TTFont(f"{path}\\output\\cache\\{args.ttc}{suf:02d}.ttf"))
+    ttc.save(f"{path}\\output\\{args.dirname}\\{args.ttc}.ttc")
 
     return 0
 
 
-def splitTTC(args) -> int:
+def split_ttc(args) -> int:
     """
     给定 arg.ttc 字体集文件，将其拆分为 ttf。命令行使用样例：
 
@@ -84,31 +84,31 @@ def splitTTC(args) -> int:
         return 3001
     index = 1
     name = os.path.basename(args.ttc)[:-4]
-    TTC = TTCollection(args.ttc)
+    ttc = TTCollection(args.ttc)
     if not args.path:
-        for ttf in TTC.fonts:
+        for ttf in ttc.fonts:
             ttf.save(f"{path}\\output\\cache\\{name}{index:02d}.ttf")
             index += 1
     else:
-        for ttf in TTC.fonts:
-            fontFamily = _getFontFamily(ttf)
-            ttf.save(f"{path}\\output\\{args.path}\\{index:02d}_{fontFamily}.ttf")
+        for ttf in ttc.fonts:
+            font_family = _get_font_family(ttf)
+            ttf.save(f"{path}\\output\\{args.path}\\{index:02d}_{font_family}.ttf")
             index += 1
 
     return 0
 
 
-def getFontFamily(arg) -> str:
+def get_font_family(arg) -> str:
     """
     _getFontFamily() 函数的命令行调用形式。命令行使用样例：
 
     functions.exe fontFamily [font绝对路径]
     """
     ttfont = TTFont(arg.font)
-    return _getFontFamily(ttfont, False)
+    return _get_font_family(ttfont, False)
 
 
-def convertType(args) -> int:
+def convert_type(args) -> int:
     """
     转化字体文件格式为 ttf 或 otf。命令行使用样例：
 
@@ -126,7 +126,7 @@ def convertType(args) -> int:
     return 5001
 
 
-def getCjkCharacterCount(args) -> str:
+def get_cjk_character_count(args) -> str:
     """
     获取 CJK Unified Ideographs (U+4E00～U+9FFF) 内的字符数量。命令行使用样例：
 
@@ -150,31 +150,31 @@ def main():
     parser_func1.add_argument("font")           # 个性化字体文件，应为绝对路径
     parser_func1.add_argument("xml")            # 带有 msyh 原始数据的文件，应为绝对路径
     parser_func1.add_argument("--path", required=False, default=False, type=str)
-    parser_func1.set_defaults(func=fontPropertyReplace)
+    parser_func1.set_defaults(func=font_property_replace)
 
     parser_func2 = subparsers.add_parser("mergeTTC")
     parser_func2.add_argument("dirname")        # output 文件夹下的输出目录名，应只保留文件夹名称
     parser_func2.add_argument("ttc")            # 需要合并的 ttf 系列，应去除所有后缀
-    parser_func2.set_defaults(func=mergeTTC)
+    parser_func2.set_defaults(func=merge_ttc)
 
     parser_func3 = subparsers.add_parser("splitTTC")
     parser_func3.add_argument("ttc")            # 需要拆分的 ttc 文件，应为绝对路径
     parser_func3.add_argument("--path", required=False, default=False, type=str)
-    parser_func3.set_defaults(func=splitTTC)
+    parser_func3.set_defaults(func=split_ttc)
 
     parser_func4 = subparsers.add_parser("fontFamily")
     parser_func4.add_argument("font")
-    parser_func4.set_defaults(func=getFontFamily)
+    parser_func4.set_defaults(func=get_font_family)
 
     parser_func5 = subparsers.add_parser("convertType")
     parser_func5.add_argument("type")
     parser_func5.add_argument("dirname")
     parser_func5.add_argument("font")
-    parser_func5.set_defaults(func=convertType)
+    parser_func5.set_defaults(func=convert_type)
 
     parser_func6 = subparsers.add_parser("getCjk")
     parser_func6.add_argument("font")
-    parser_func6.set_defaults(func=getCjkCharacterCount)
+    parser_func6.set_defaults(func=get_cjk_character_count)
 
     args = parser.parse_args()
     try:
