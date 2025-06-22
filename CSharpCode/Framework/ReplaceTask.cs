@@ -19,15 +19,36 @@ public class ReplaceTask
     /// <summary>
     /// 任务的输出文件夹绝对路径。
     /// </summary>
-    public string OutputDirPath { get; set; } = null!;
+    public string OutputDirPath { get; private set; } = null!;
     
     /// <summary>
     /// 任务的缓存文件夹绝对路径。
     /// </summary>
-    protected string CacheDirPath  { get; } = CreateCacheDir(false);
+    protected string CacheDirPath => GetCacheDir();
     
     /// <summary>
-    /// 用于存储 19 种字形的处理进程。
+    /// 用于存储 19 种字形的处理进程，索引对应值列表如下：
+    /// <list type="table">
+    ///   <item><term>[0]</term><description>msyh - Regular</description></item>
+    ///   <item><term>[1]</term><description>msyhUI - Regular</description></item>
+    ///   <item><term>[2]</term><description>msyh - Light</description></item>
+    ///   <item><term>[3]</term><description>msyhUI - Light</description></item>
+    ///   <item><term>[4]</term><description>msyh - Bold</description></item>
+    ///   <item><term>[5]</term><description>msyhUI - Bold</description></item>
+    ///   <item><term>[6]</term><description>SegoeUI - Regular</description></item>
+    ///   <item><term>[7]</term><description>SegoeUI - Light</description></item>
+    ///   <item><term>[8]</term><description>SegoeUI - SemiLight</description></item>
+    ///   <item><term>[9]</term><description>SegoeUI - SemiBold</description></item>
+    ///   <item><term>[10]</term><description>SegoeUI - Bold</description></item>
+    ///   <item><term>[11]</term><description>SegoeUI - Black</description></item>
+    ///   <item><term>[12]</term><description>SegoeUI - Italic</description></item>
+    ///   <item><term>[13]</term><description>SegoeUI - Light Italic</description></item>
+    ///   <item><term>[14]</term><description>SegoeUI - SemiLight Italic</description></item>
+    ///   <item><term>[15]</term><description>SegoeUI - SemiBold Italic</description></item>
+    ///   <item><term>[16]</term><description>SegoeUI - Bold Italic</description></item>
+    ///   <item><term>[17]</term><description>SegoeUI - Black Italic</description></item>
+    ///   <item><term>[18]</term><description>Segoe Variable</description></item>
+    /// </list>
     /// </summary>
     protected readonly ReplaceThread[] ReplaceThreads = new ReplaceThread[19];
     
@@ -35,11 +56,6 @@ public class ReplaceTask
     /// 获取当前计算机线程数。
     /// </summary>
     private readonly int _maxDegree = Environment.ProcessorCount;
-
-    /// <summary>
-    /// 假的构造函数。
-    /// </summary>
-    protected ReplaceTask() { }
     
     /// <summary>
     /// 给定任务名称，新建导出文件夹。
@@ -57,13 +73,10 @@ public class ReplaceTask
     /// <summary>
     /// 新建 cache 文件夹。
     /// </summary>
-    /// <param name="create">是否创建文件夹</param>
     /// <returns>cache文件夹绝对路径</returns>
-    private static string CreateCacheDir(bool create=true)
+    private static string GetCacheDir()
     {
-        var cacheDirPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "output", "cache");
-        if (create) Directory.CreateDirectory(cacheDirPath);
-        return cacheDirPath;
+        return Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "output", "cache");
     }
     
     /// <summary>
@@ -71,7 +84,9 @@ public class ReplaceTask
     /// </summary>
     protected static void InitCacheDir(string cacheDirPath)
     {
+        // 正常情况下每次运行任务前 cache 文件夹应该不存在。
         if (!Directory.Exists(cacheDirPath)) return;
+        // 若 cache 文件夹存在，则代表前一次运行出现了问题或被手动停止，需要删除该目录
         Directory.Delete(cacheDirPath, true);
     }
     
@@ -122,7 +137,7 @@ public class ReplaceTask
     public async Task TaskStartPropRep()
     {
         OutputDirPath = CreateOutputDir(TaskName);
-        CreateCacheDir();
+        Directory.CreateDirectory(CacheDirPath);
         var hasError = false;
         
         await Task.Run(() => 
@@ -141,8 +156,7 @@ public class ReplaceTask
                 }
             );
         });
-        if (hasError)
-            throw new Exception("关键依赖文件缺失，请重新下载并安装本工具");
+        if (hasError) throw new Exception("关键依赖文件缺失，请重新下载并安装本工具");
         
         foreach (var sha1 in Sha2File.Keys)
         {
@@ -176,8 +190,7 @@ public class ReplaceTask
                 }
             );
         });
-        if (hasError)
-            throw new Exception("关键依赖文件缺失，请重新下载并安装本工具");
+        if (hasError) throw new Exception("关键依赖文件缺失，请重新下载并安装本工具");
     }
 
     /// <summary>

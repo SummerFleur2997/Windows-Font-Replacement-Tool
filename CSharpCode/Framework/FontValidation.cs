@@ -5,6 +5,9 @@ using System.Diagnostics;
 
 namespace Windows_Font_Replacement_Tool.Framework;
 
+/// <summary>
+/// 用于进行各类验证的静态类。
+/// </summary>
 public static class FontValidation
 {
     /// <summary>
@@ -18,21 +21,20 @@ public static class FontValidation
         {
             using var stream = new FileStream(fontPath, FileMode.Open, FileAccess.Read);
             
+            // 获取字体文件签名
             var headerBytes = new byte[4];
             var bytesRead = stream.Read(headerBytes, 0, 4);
-
-            if (bytesRead < 4)
-                return false;
-            
+            if (bytesRead < 4) return false;
             var header = Encoding.ASCII.GetString(headerBytes);
 
             // 检查字体文件签名
             return header switch
             {
+                // 对应 otf 字体集
                 "OTTO" => true,
+                // 对应 ttf 字体集
                 _ => BitConverter.ToUInt32(headerBytes, 0) == 0x00000100
             };
-            
         }
         catch
         {
@@ -49,6 +51,7 @@ public static class FontValidation
     {
         try
         {
+            // 配置进程启动选项
             var startInfo = new ProcessStartInfo
             {
                 FileName = Path.Combine(HashTab.ResourcePath, "functions.exe"),
@@ -61,16 +64,18 @@ public static class FontValidation
             };
             using var process = new Process();
             process.StartInfo = startInfo;
-            process.Start();
             
+            // 启动进程并接收输出
+            process.Start();
             var output = process.StandardOutput.ReadToEnd();
+            
+            // 等待进程结束并处理结束值
             process.WaitForExit();
-            var exitCode = process.ExitCode switch
-            {
-                0 => int.Parse(output.Trim()),
-                _ => -1
-            };
-            return exitCode;
+            return process.ExitCode == 0
+                // 进程正常结束时，返回字符集数量
+                ? int.Parse(output.Trim())
+                // 未能正常结束时，返回 -1
+                : -1;
         }
         catch
         {
@@ -82,6 +87,7 @@ public static class FontValidation
     {
         try
         {
+            // 配置进程启动选项
             var startInfo = new ProcessStartInfo
             {
                 FileName = Path.Combine(HashTab.ResourcePath, "functions.exe"),
@@ -94,18 +100,18 @@ public static class FontValidation
             };
             using var process = new Process();
             process.StartInfo = startInfo;
+            
+            // 启动进程并接收输出
             process.Start();
-            
             var output = process.StandardOutput.ReadToEnd();
-            process.WaitForExit(); 
             
-            switch (process.ExitCode)
-            {
-                case 0:
-                    return output.Trim(); 
-                default:
-                    return "**Error**";
-            }
+            // 等待进程结束并处理结束值
+            process.WaitForExit();
+            return process.ExitCode == 0
+                // 进程正常结束时，返回字体 FontFamily
+                ? output.Trim()
+                // 未能正常结束时，返回 **Error**
+                : "**Error**";
         }
         catch
         {

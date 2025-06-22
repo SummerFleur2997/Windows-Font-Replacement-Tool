@@ -8,13 +8,16 @@ using ICSharpCode.SharpZipLib.Zip;
 namespace Windows_Font_Replacement_Tool.Framework;
 
 /// <summary>
-/// 用于进行文件解压与校验的类。
+/// 用于进行文件解压与哈希校验的类。
 /// </summary>
 public static class HashTab
 {
     public static readonly string ResourcePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Resources");
     public static readonly string XmlsPath = Path.Combine(ResourcePath, "xmls");
     
+    /// <summary>
+    /// xmlLibs 的 sha1 值
+    /// </summary>
     private const string LibSha = "2f7349a1ec9dc23c1385d91505b67df010505ce4";
 
     /// <summary>
@@ -25,10 +28,7 @@ public static class HashTab
         try
         {
             // xmls 目录不存在的情况下验证 Libs 文件完整性
-            if (!Directory.Exists(XmlsPath))
-            {
-                ValidateLibFiles();     
-            }
+            if (!Directory.Exists(XmlsPath)) ValidateLibFiles();     
             // xmls 目录存在的情况下验证每个 xml 文件完整性
             ValidateXmlFiles();        
         }
@@ -83,7 +83,6 @@ public static class HashTab
                 }
             }
         }
-        
         File.Delete(archivePath);
     }
 
@@ -93,18 +92,16 @@ public static class HashTab
     private static void ValidateXmlFiles()
     {
         var xmlFiles = Directory.GetFiles(XmlsPath);
-
+        // 若 xml 目录内的文件数量为 19，则依次校验文件
         if (xmlFiles.Length == 19)
         {
             foreach (var xmlFile in xmlFiles)
-            {
-                if (ComputeSha1(xmlFile) != Path.GetFileName(xmlFile))
-                    break;
-            }
+                if (ComputeSha1(xmlFile) != Path.GetFileName(xmlFile)) break;
             return;
         }
+        // 若 xml 目录内的文件数量不为 19，则可能存在异常，删除目录并重新解包
         Directory.Delete(XmlsPath, true);
-        DecodeLibs();
+        ValidateLibFiles();
     }
 
     /// <summary>

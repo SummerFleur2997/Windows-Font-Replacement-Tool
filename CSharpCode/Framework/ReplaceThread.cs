@@ -25,9 +25,9 @@ public class ReplaceThread
     private string XmlResource { get; }
     
     /// <summary>
-    /// 精细制作下的提示按钮控件。
+    /// 提示标签，用于反馈字体检验的合法性。
     /// </summary>
-    public TextBlock? HintSign { get; }
+    public TextBlock HintSign { get; }
 
     /// <summary>
     /// Python 程序，替换字体属性。
@@ -65,12 +65,12 @@ public class ReplaceThread
     /// <param name="fontResource">个性化字体文件绝对路径</param>
     /// <param name="sha1">xml 字体文件名</param>
     /// <param name="hintSign">精细制作模式下的提示标志</param>
-    public ReplaceThread(string threadName, string fontResource, string sha1, TextBlock? hintSign = null)
+    public ReplaceThread(string threadName, string fontResource, string sha1, TextBlock hintSign)
     {
         ThreadName = threadName;
         FontResource = fontResource;
         XmlResource = Path.Combine(HashTab.XmlsPath, sha1);
-        if (hintSign == null) return;
+        // if (hintSign == null) return;
         HintSign = hintSign;
     }
 }
