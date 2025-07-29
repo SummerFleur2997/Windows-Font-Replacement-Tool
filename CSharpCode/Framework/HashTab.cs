@@ -12,9 +12,6 @@ namespace Windows_Font_Replacement_Tool.Framework;
 /// </summary>
 public static class HashTab
 {
-    public static readonly string ResourcePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Resources");
-    public static readonly string XmlsPath = Path.Combine(ResourcePath, "xmls");
-    
     /// <summary>
     /// xmlLibs 的 sha1 值
     /// </summary>
@@ -28,9 +25,9 @@ public static class HashTab
         try
         {
             // xmls 目录不存在的情况下验证 Libs 文件完整性
-            if (!Directory.Exists(XmlsPath)) ValidateLibFiles();     
+            if (!Directory.Exists(App.XmlsPath)) ValidateLibFiles();
             // xmls 目录存在的情况下验证每个 xml 文件完整性
-            ValidateXmlFiles();        
+            ValidateXmlFiles();
         }
         catch (Exception ex)
         {
@@ -43,7 +40,7 @@ public static class HashTab
     /// </summary>
     private static void ValidateLibFiles()
     {
-        var dataLibsPath = Path.Combine(ResourcePath, "xmlLibs");
+        var dataLibsPath = Path.Combine(App.ResourcePath, "xmlLibs");
         // 验证失败，报错
         if (!File.Exists(dataLibsPath) || ComputeSha1(dataLibsPath) != LibSha)
             throw new Exception("xmlLibs 文件损坏");
@@ -56,9 +53,9 @@ public static class HashTab
     /// </summary>
     private static void DecodeLibs()
     {
-        var dataLibsPath = Path.Combine(ResourcePath, "xmlLibs");
-        var archivePath = Path.Combine(ResourcePath, "archive");
-        
+        var dataLibsPath = Path.Combine(App.ResourcePath, "xmlLibs");
+        var archivePath = Path.Combine(App.ResourcePath, "archive");
+
         var base64Data = File.ReadAllText(dataLibsPath);
         var zipBytes = Convert.FromBase64String(base64Data);
         File.WriteAllBytes(archivePath, zipBytes);
@@ -68,14 +65,14 @@ public static class HashTab
             ZipEntry entry;
             while ((entry = zipStream.GetNextEntry()) != null)
             {
-                var entryPath = Path.Combine(ResourcePath, entry.Name);
+                var entryPath = Path.Combine(App.ResourcePath, entry.Name);
                 var directoryPath = Path.GetDirectoryName(entryPath);
 
                 if (!Directory.Exists(directoryPath) && directoryPath != null)
                 {
                     Directory.CreateDirectory(directoryPath);
                 }
-                
+
                 if (!entry.IsDirectory)
                 {
                     using var fileStream = File.Create(entryPath);
@@ -83,6 +80,7 @@ public static class HashTab
                 }
             }
         }
+
         File.Delete(archivePath);
     }
 
@@ -91,16 +89,18 @@ public static class HashTab
     /// </summary>
     private static void ValidateXmlFiles()
     {
-        var xmlFiles = Directory.GetFiles(XmlsPath);
+        var xmlFiles = Directory.GetFiles(App.XmlsPath);
         // 若 xml 目录内的文件数量为 19，则依次校验文件
         if (xmlFiles.Length == 19)
         {
             foreach (var xmlFile in xmlFiles)
-                if (ComputeSha1(xmlFile) != Path.GetFileName(xmlFile)) break;
+                if (ComputeSha1(xmlFile) != Path.GetFileName(xmlFile))
+                    break;
             return;
         }
+
         // 若 xml 目录内的文件数量不为 19，则可能存在异常，删除目录并重新解包
-        Directory.Delete(XmlsPath, true);
+        Directory.Delete(App.XmlsPath, true);
         ValidateLibFiles();
     }
 
@@ -128,7 +128,7 @@ public static class HashTab
         warning.AppendLine(message);
         warning.AppendLine("错误信息：" + ex.Message);
 
-        MessageBox.Show(warning.ToString(), "错误", 
+        MessageBox.Show(warning.ToString(), "错误",
             MessageBoxButton.OK, MessageBoxImage.Error);
 
         Application.Current.Shutdown();

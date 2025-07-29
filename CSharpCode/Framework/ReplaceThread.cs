@@ -13,17 +13,17 @@ public class ReplaceThread
     /// 进程名称信息，应为字体的实际文件名。
     /// </summary>
     public string ThreadName { get; }
-    
+
     /// <summary>
     /// 个性化字体资源的绝对路径。
     /// </summary>
     public string FontResource { get; }
-    
+
     /// <summary>
     /// xml 字体资源的绝对路径。
     /// </summary>
     private string XmlResource { get; }
-    
+
     /// <summary>
     /// 提示标签，用于反馈字体检验的合法性。
     /// </summary>
@@ -39,7 +39,7 @@ public class ReplaceThread
         {
             var startInfo = new ProcessStartInfo
             {
-                FileName = Path.Combine(HashTab.ResourcePath, "functions.exe"),
+                FileName = Path.Combine(App.ResourcePath, "functions.exe"),
                 Arguments = $"propertyRep \"{FontResource}\" \"{XmlResource}\"",
                 UseShellExecute = false,
                 RedirectStandardOutput = true,
@@ -49,7 +49,7 @@ public class ReplaceThread
             using var process = new Process();
             process.StartInfo = startInfo;
             process.Start();
-            process.WaitForExit(); 
+            process.WaitForExit();
             return process.ExitCode;
         }
         catch
@@ -69,7 +69,7 @@ public class ReplaceThread
     {
         ThreadName = threadName;
         FontResource = fontResource;
-        XmlResource = Path.Combine(HashTab.XmlsPath, sha1);
+        XmlResource = Path.Combine(App.XmlsPath, sha1);
         // if (hintSign == null) return;
         HintSign = hintSign;
     }

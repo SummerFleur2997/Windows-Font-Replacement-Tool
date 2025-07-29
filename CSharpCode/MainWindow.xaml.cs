@@ -1,13 +1,13 @@
 ﻿using System;
-using System.IO;
-using System.Windows;
-using System.Windows.Media;
-using System.Windows.Controls;
-using System.Windows.Threading;
 using System.Diagnostics;
+using System.IO;
+using System.Runtime.InteropServices;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Media;
+using System.Windows.Threading;
 using Microsoft.Win32;
 using Windows_Font_Replacement_Tool.Framework;
-using System.Runtime.InteropServices;
 
 namespace Windows_Font_Replacement_Tool;
 
@@ -16,15 +16,9 @@ namespace Windows_Font_Replacement_Tool;
 /// </summary>
 public partial class MainWindow : Window
 {
-    private SingleReplace?   SingleReplaceTask   { get; set; }
-    private MultipleReplace? MultipleReplaceTask { get; set; }
-    private string? SingleOutputDirectory   { get; set; }
-    private string? MultipleOutputDirectory { get; set; }
-    
     public MainWindow()
     {
         InitializeComponent();
-        HashTab.Initialize();
     }
 
     /// <summary>
@@ -32,8 +26,6 @@ public partial class MainWindow : Window
     /// </summary>
     private void ExitButton_Click(object sender, RoutedEventArgs e)
     {
-        SingleReplaceTask   = null;
-        MultipleReplaceTask = null;
         Application.Current.Shutdown();
     }
 
@@ -52,7 +44,7 @@ public partial class MainWindow : Window
     {
         DragMove();
     }
-    
+
     /// <summary>
     /// 点按左侧标签按钮切换标签页。
     /// </summary>
@@ -62,7 +54,7 @@ public partial class MainWindow : Window
         Tab1Content.Visibility = Visibility.Collapsed;
         Tab2Content.Visibility = Visibility.Collapsed;
         Tab3Content.Visibility = Visibility.Collapsed;
-        
+
         switch (((RadioButton)sender).Name)
         {
             case "WelcomeTab":
@@ -106,19 +98,16 @@ public partial class MainWindow : Window
     {
         try
         {
-            var outputDirectory = "";
-            switch (((Button)sender).Tag)
+            var outputDirectory = ((Button)sender).Tag switch
             {
-                case "Single":
-                    outputDirectory = SingleOutputDirectory;
-                    break;
-                case "Multiple":
-                    outputDirectory = MultipleOutputDirectory;
-                    break;
-            }
-            outputDirectory = Directory.Exists(outputDirectory)
-                ? outputDirectory
-                : Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "output");
+                "Single" => App.SingleOutputDirectory,
+                "Multiple" => App.MultipleOutputDirectory,
+                _ => null
+            };
+
+            if (!Directory.Exists(outputDirectory))
+                outputDirectory = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "output");
+
             Process.Start(new ProcessStartInfo
             {
                 FileName = outputDirectory,
@@ -140,13 +129,14 @@ public partial class MainWindow : Window
         try
         {
             var pdfPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Resources", "Help.pdf");
-    
+
             if (!File.Exists(pdfPath))
             {
-                MessageBox.Show("你把帮助文档弄哪儿去了？", "嗯哼？", 
+                MessageBox.Show("你把帮助文档弄哪儿去了？", "嗯哼？",
                     MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
+
             Process.Start(new ProcessStartInfo
             {
                 FileName = pdfPath,
@@ -164,32 +154,30 @@ public partial class MainWindow : Window
     /// 控制切换“快速制作”标签页右下角的控件显示内容，增强交互性。
     /// </summary>
     /// <param name="stackPanel">需要显示的 Panel 名。</param>
-    private void SinglePanelUpdate(StackPanel? stackPanel=null)
+    private void SinglePanelUpdate(StackPanel? stackPanel = null)
     {
         PreviewPanel1.Visibility = Visibility.Collapsed;
         ProcessingPanel1.Visibility = Visibility.Collapsed;
         FinishPanel1.Visibility = Visibility.Collapsed;
         OutDirButton1.Visibility = Visibility.Collapsed;
-        
+
         if (stackPanel == null) return;
         stackPanel.Visibility = Visibility.Visible;
-        if (stackPanel == FinishPanel1)
-            OutDirButton1.Visibility = Visibility.Visible;
+        if (stackPanel == FinishPanel1) OutDirButton1.Visibility = Visibility.Visible;
     }
-    
+
     /// <summary>
     /// 控制切换“精细制作”标签页右下角的控件显示内容，增强交互性。
     /// </summary>
     /// <param name="dockPanel">需要显示的 Panel 名。</param>
-    private void MultiplePanelUpdate(DockPanel? dockPanel=null)
+    private void MultiplePanelUpdate(DockPanel? dockPanel = null)
     {
         ProcessingPanel2.Visibility = Visibility.Collapsed;
         FinishPanel2.Visibility = Visibility.Collapsed;
-        
+
         if (dockPanel == null) return;
         dockPanel.Visibility = Visibility.Visible;
-        if (dockPanel == FinishPanel2)
-            OutDirButton2.Visibility = Visibility.Visible;
+        if (dockPanel == FinishPanel2) OutDirButton2.Visibility = Visibility.Visible;
     }
 
     /// <summary>
@@ -197,17 +185,18 @@ public partial class MainWindow : Window
     /// </summary>
     private void SingleFileOpenButton_Click(object sender, RoutedEventArgs e)
     {
-        SingleReplaceTask = null;
+        // 先将快速制作模式任务置空，然后打开个性化字体文件
+        App.SingleReplaceTask = null;
         var singleFile = new OpenFileDialog { Filter = "字体文件 (*.ttf,*.otf)|*.ttf;*.otf" };
-        
+
         if (singleFile.ShowDialog() == false) return;
         var singleFilePath = singleFile.FileName;
-        
-        SingleReplaceTask = new SingleReplace(singleFilePath, SHint);
+
+        App.SingleReplaceTask = new SingleReplace(singleFilePath, SHint);
         SinglePanelUpdate(PreviewPanel1);
         Run1.IsEnabled = SingleFilePreview(singleFilePath);
     }
-    
+
     /// <summary>
     /// 临时注册给定的字体文件
     /// </summary>
@@ -215,30 +204,34 @@ public partial class MainWindow : Window
     /// <returns>返回 0 时表示字体注册成功。</returns>
     [DllImport("gdi32.dll", EntryPoint = "AddFontResourceW", SetLastError = true)]
     private static extern int AddFontResource(string fontPath);
-    
+
     /// <summary>
-    /// 快速替换模式构建预览。
+    /// 用于在快速替换模式下构建预览，同时检验文件并判断是否能将快速替换处理进程切换为就绪状态。
     /// </summary>
     /// <param name="fontPath">字体文件绝对路径</param>
+    /// <returns>检验认为快速替换处理进程具备就绪条件时返回 true，否则返回 false</returns>
     private bool SingleFilePreview(string fontPath)
     {
-        if (AddFontResource(fontPath) != 0) return false;
-        
-        var uri = new Uri($"file:///{fontPath}");
         var fontFamilyName = FontValidation.GetFontFamily(fontPath);
-        if (SingleReplaceTask == null || !SingleReplaceTask.SingleFontCheck(fontFamilyName))
+        // 若快速替换任务为空，或字体检查结果不合法，返回 false，禁用部分控件
+        if (App.SingleReplaceTask == null || !App.SingleReplaceTask.SingleFontCheck(fontFamilyName))
         {
             Previewer1.Visibility = Visibility.Collapsed;
             PreviewFontSizeController.IsEnabled = false;
             return false;
         }
+
+        // 若未能临时注册字体，返回 false（字体可能存在潜在问题导致无法注册）
+        if (AddFontResource(fontPath) != 0) return false;
+        // 正常情况下，使用该字体构建预览，然后返回 true
+        var uri = new Uri($"file:///{fontPath}");
         FontFamily fontFamily = new FontFamily(uri + $"#{fontFamilyName}");
         PreviewA.FontFamily = fontFamily;
         Previewer1.Visibility = Visibility.Visible;
         PreviewFontSizeController.IsEnabled = true;
         return true;
     }
-    
+
     /// <summary>
     /// 快速替换模式更改预览窗格文字显示大小。
     /// </summary>
@@ -263,13 +256,13 @@ public partial class MainWindow : Window
         SinglePanelUpdate(ProcessingPanel1);
         await Application.Current.Dispatcher.InvokeAsync(() => { }, DispatcherPriority.Background);
 
-        if (SingleReplaceTask == null) return;
-        
+        if (App.SingleReplaceTask == null) return;
+
         try
         {
-            await SingleReplaceTask.TaskStartPropRep();
-            await SingleReplaceTask.TaskMergeFont();
-            SingleReplaceTask.TaskFinishing();
+            await App.SingleReplaceTask.TaskStartPropRep();
+            await App.SingleReplaceTask.TaskMergeFont();
+            App.SingleReplaceTask.TaskFinishing();
         }
         catch (Exception ex)
         {
@@ -279,35 +272,35 @@ public partial class MainWindow : Window
             Run1.IsEnabled = false;
             return;
         }
-        
+
         Run1.IsEnabled = false;
-        SingleOutputDirectory = SingleReplaceTask.OutputDirPath;
-        SingleReplaceTask = null;
+        App.SingleOutputDirectory = App.SingleReplaceTask.OutputDirPath;
+        App.SingleReplaceTask = null;
         SinglePanelUpdate(FinishPanel1);
     }
-    
+
     /// <summary>
     /// 精细替换选择单个文件。
     /// </summary>
     private void MultipleFileOpenButton_Click(object sender, RoutedEventArgs e)
     {
-        if (MultipleReplaceTask == null) MultiplePanelUpdate();
-        
+        if (App.MultipleReplaceTask == null) MultiplePanelUpdate();
+
         var multipleFile = new OpenFileDialog { Filter = "字体文件 (*.ttf,*.otf)|*.ttf;*.otf" };
         multipleFile.Filter = "字体文件 (*.ttf,*.otf)|*.ttf;*.otf";
-        
+
         if (multipleFile.ShowDialog() == false) return;
         var multipleFilePath = multipleFile.FileName;
-        
-        MultipleReplaceTask ??= new MultipleReplace();
+
+        App.MultipleReplaceTask ??= new MultipleReplace();
         var button = (Button)sender;
         var tbName = button.Name + "S";
         var textBlock = FindName(tbName) as TextBlock;
-        
+
         if (textBlock == null) return;
-        Run2.IsEnabled = MultipleReplaceTask.AddReplaceThread(multipleFilePath, button, textBlock);
+        Run2.IsEnabled = App.MultipleReplaceTask.AddReplaceThread(multipleFilePath, button, textBlock);
     }
-    
+
     /// <summary>
     /// 精细替换模式开始制作。
     /// </summary>
@@ -316,17 +309,17 @@ public partial class MainWindow : Window
         MultiplePanelUpdate(ProcessingPanel2);
         await Application.Current.Dispatcher.InvokeAsync(() => { }, DispatcherPriority.Background);
 
-        if (MultipleReplaceTask == null) return;
-        if (!MultipleReplaceTask.MultipleFontCheck())
+        if (App.MultipleReplaceTask == null) return;
+        if (!App.MultipleReplaceTask.MultipleFontCheck())
         {
             Run2.IsEnabled = false;
             return;
         }
-        
+
         try
         {
-            await MultipleReplaceTask.TaskStartPropRep();
-            await MultipleReplaceTask.TaskMergeFont();
+            await App.MultipleReplaceTask.TaskStartPropRep();
+            await App.MultipleReplaceTask.TaskMergeFont();
         }
         catch (Exception ex)
         {
@@ -336,12 +329,12 @@ public partial class MainWindow : Window
             Run2.IsEnabled = false;
             return;
         }
-        
-        MultipleReplaceTask.TaskFinishing();
-        MultipleReplaceTask.InitInterface();
+
+        App.MultipleReplaceTask.TaskFinishing();
+        App.MultipleReplaceTask.InitInterface();
         Run2.IsEnabled = false;
-        MultipleOutputDirectory = MultipleReplaceTask.OutputDirPath;
-        MultipleReplaceTask = null;
+        App.MultipleOutputDirectory = App.MultipleReplaceTask.OutputDirPath;
+        App.MultipleReplaceTask = null;
         MultiplePanelUpdate(FinishPanel2);
     }
 }

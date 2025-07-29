@@ -112,7 +112,7 @@
                         </Button>
                     </Grid>
                     <!-- 快速制作页详细内容 -->
-                    <Grid x:Name="Tab1Content" Visibility="Visible">
+                    <Grid x:Name="Tab1Content" Visibility="Collapsed">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="45"/>
                             <RowDefinition Height="150"/>
@@ -568,7 +568,9 @@
                         </Grid>
                     </Grid>
                     <!-- 实用工具页详细内容 -->
-                    <Grid x:Name="Tab3Content" Visibility="Collapsed"></Grid>
+                    <Grid x:Name="Tab3Content" Visibility="Visible">
+                        
+                    </Grid>
                 </Grid>
             </Border>
             
