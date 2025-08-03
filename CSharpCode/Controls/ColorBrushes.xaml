@@ -1,0 +1,20 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <Color x:Key="PrimaryColor">#7c4ca9</Color>
+    <Color x:Key="SurfaceColor">#D3BFDE</Color>
+    <Color x:Key="HoverColor">#EDE4F1</Color>
+    <Color x:Key="MainColor">#FEF7FF</Color>
+    <Color x:Key="OnSurfaceColor">#1D1B20</Color>
+    <Color x:Key="TextColor">#56428F</Color>
+    <Color x:Key="AltTextColor">#9B65B3</Color>
+    <Color x:Key="CommentColor">#8D869E</Color>
+
+    <SolidColorBrush x:Key="PrimaryBrush" Color="{StaticResource PrimaryColor}"/>
+    <SolidColorBrush x:Key="SurfaceBrush" Color="{StaticResource SurfaceColor}"/>
+    <SolidColorBrush x:Key="HoverBrush" Color="{StaticResource HoverColor}"/>
+    <SolidColorBrush x:Key="MainBrush" Color="{StaticResource MainColor}"/>
+    <SolidColorBrush x:Key="OnSurfaceBrush" Color="{StaticResource OnSurfaceColor}"/>
+    <SolidColorBrush x:Key="TextBrush" Color="{StaticResource TextColor}"/>
+    <SolidColorBrush x:Key="AltTextBrush" Color="{StaticResource AltTextColor}"/>
+    <SolidColorBrush x:Key="CommentBrush" Color="{StaticResource CommentColor}"/>
+</ResourceDictionary>

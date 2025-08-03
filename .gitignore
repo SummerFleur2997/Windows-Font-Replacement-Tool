@@ -1,13 +1,33 @@
+# Python 
 __pycache__/
-PythonProject/
-output/
 build/
 dist/
-.idea/
-Resources/
-CSharpCode/bin
-CSharpCode/obj
-Libs/xmls/*.ttf
-test.*
+wheels/
 *.spec
+*.py[oc]
+
+# Build results
+[Dd]ebug/
+[Dd]ebugPublic/
+[Rr]elease/
+[Rr]eleases/
+x64/
+x86/
+bld/
+[Bb]in/
+[Oo]bj/
+[Ll]og/
+_releases/
+
+# IDE
+.idea/
+
+# Other dirs
+Assets/
+output/
+Libs/xmls/
+
+# Other Files
+test.*
 rebuild plan.md
+*.sln.DotSettings.user

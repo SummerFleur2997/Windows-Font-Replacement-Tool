@@ -261,10 +261,10 @@
                                 <StackPanel Name="FinishPanel1" Margin="18 18 38 36"
                                             Style="{StaticResource StackPanelFadeIn}"
                                             VerticalAlignment="Center" Visibility="Collapsed">
-                                    <Label HorizontalAlignment="Center" FontFamily="Resources/#iconfont"
+                                    <Label HorizontalAlignment="Center" FontFamily="Assets/#iconfont"
                                            FontSize="64" Foreground="{StaticResource TextBrush}"
                                            Content="&#xE646;" />
-                                    <Label HorizontalAlignment="Center" FontFamily="Resources/#iconfont"
+                                    <Label HorizontalAlignment="Center" FontFamily="Assets/#iconfont"
                                            FontSize="40" Foreground="{StaticResource TextBrush}"
                                            Margin="0 -60 0 0" Content="&#xE63E;" />
                                     <Label Foreground="{StaticResource TextBrush}"
@@ -544,10 +544,10 @@
                                        Style="{StaticResource DockPanelFadeIn}"
                                        HorizontalAlignment="Right" VerticalAlignment="Bottom"
                                        Width="180" Height="90" Visibility="Collapsed">
-                                <Label VerticalAlignment="Center" FontFamily="Resources/#iconfont"
+                                <Label VerticalAlignment="Center" FontFamily="Assets/#iconfont"
                                        FontSize="64" Foreground="{StaticResource TextBrush}"
                                        Content="&#xE646;" />
-                                <Label VerticalAlignment="Center" FontFamily="Resources/#iconfont"
+                                <Label VerticalAlignment="Center" FontFamily="Assets/#iconfont"
                                        FontSize="40" Foreground="{StaticResource TextBrush}"
                                        Margin="-62 1  0 0" Content="&#xE63E;" />
                                 <Label Foreground="{StaticResource TextBrush}" 
@@ -569,7 +569,51 @@
                     </Grid>
                     <!-- 实用工具页详细内容 -->
                     <Grid x:Name="Tab3Content" Visibility="Visible">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="45"/>
+                            <RowDefinition Height="1*"/>
+                        </Grid.RowDefinitions>
+
+                        <Grid Grid.Row="0">
+                            <Border>
+                                <Button Name="Back3" Style="{StaticResource BorderlessButton}"
+                                        HorizontalAlignment="Left" Margin="24 10 0 0"
+                                        Click="AltTabButton_Click">
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="&#xE61A;" FontSize="19" VerticalAlignment="Center"/>
+                                        <TextBlock Text="返回主页" Margin="8,0,0,0" 
+                                                   VerticalAlignment="Center"/>
+                                    </StackPanel>
+                                </Button>
+                            </Border>
+                        </Grid>
                         
+                        <Grid Grid.Row="1">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="0.5*"/>
+                                <ColumnDefinition Width="0.5*"/>
+                            </Grid.ColumnDefinitions>
+                            
+                            <Grid Grid.Column="0">
+                                <Border Background="{StaticResource MainBrush}"
+                                        CornerRadius="6" Margin="27 4 7 20">
+                                    <Border.Effect>
+                                        <DropShadowEffect BlurRadius="8" ShadowDepth="0" 
+                                                           Direction="270" Color="#90cdb9df"/>
+                                    </Border.Effect>
+                                </Border>
+                            </Grid>
+                            
+                            <Grid Grid.Column="1">
+                                <Border Background="{StaticResource MainBrush}"
+                                        CornerRadius="6" Margin="7 4 27 20">
+                                    <Border.Effect>
+                                        <DropShadowEffect BlurRadius="8" ShadowDepth="0" 
+                                                          Direction="270" Color="#90cdb9df"/>
+                                    </Border.Effect>
+                                </Border>
+                            </Grid>
+                        </Grid>
                     </Grid>
                 </Grid>
             </Border>

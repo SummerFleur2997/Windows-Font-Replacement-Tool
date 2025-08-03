@@ -12,7 +12,7 @@ namespace Windows_Font_Replacement_Tool;
 public partial class App : Application
 {
     /// <inheritdoc cref="Framework.Config"/>
-    public static Config Config { get; set; } = new();
+    public static Config Config { get; private set; } = new();
 
     /// <summary>
     /// 快速制作模式任务
@@ -28,7 +28,7 @@ public partial class App : Application
     internal static string? MultipleOutputDirectory;
 
     internal static readonly string ConfigPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "config.json");
-    internal static readonly string ResourcePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Resources");
+    internal static readonly string ResourcePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Assets");
     internal static readonly string XmlsPath = Path.Combine(ResourcePath, "xmls");
 
     protected override void OnStartup(StartupEventArgs e)

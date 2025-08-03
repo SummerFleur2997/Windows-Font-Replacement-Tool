@@ -1,0 +1,79 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:local="clr-namespace:Windows_Font_Replacement_Tool">
+    <!-- 通过标签 -->
+    <Style x:Key="VerifiedIcon" TargetType="TextBlock">
+        <Setter Property="Text" Value="&#xE6F3;"/>
+        <Setter Property="FontFamily" Value="../Assets/#iconfont"/>
+        <Setter Property="FontSize" Value="16"/>
+        <Setter Property="VerticalAlignment" Value="Center"/>
+        <Setter Property="Foreground" Value="SpringGreen"/>
+        <Setter Property="ToolTipService.InitialShowDelay" Value="200"/>
+    </Style>
+
+    <!-- 缺少文件标签 -->
+    <Style x:Key="OmitIcon" TargetType="TextBlock">
+        <Setter Property="Text" Value="&#xE6AF;"/>
+        <Setter Property="FontFamily" Value="../Assets/#iconfont"/>
+        <Setter Property="FontSize" Value="16"/>
+        <Setter Property="VerticalAlignment" Value="Center"/>
+        <Setter Property="Foreground" Value="Orange"/>
+        <Setter Property="ToolTipService.InitialShowDelay" Value="200"/>
+        <Setter Property="ToolTip">
+            <Setter.Value>
+                <ToolTip>
+                    <TextBlock Text="未能找到字体文件，该文件路径可能不正确。"/>
+                </ToolTip>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- 提示标签 -->
+    <Style x:Key="WarningIcon" TargetType="TextBlock">
+        <Setter Property="Text" Value="&#xE65D;"/>
+        <Setter Property="FontFamily" Value="../Assets/#iconfont"/>
+        <Setter Property="FontSize" Value="16"/>
+        <Setter Property="VerticalAlignment" Value="Center"/>
+        <Setter Property="Foreground" Value="Gold"/>
+        <Setter Property="ToolTipService.InitialShowDelay" Value="200"/>
+    </Style>
+
+    <!-- 错误标签 -->
+    <Style x:Key="ErrorIcon" TargetType="TextBlock">
+        <Setter Property="Text" Value="&#xE65D;"/>
+        <Setter Property="FontFamily" Value="../Assets/#iconfont"/>
+        <Setter Property="FontSize" Value="16"/>
+        <Setter Property="VerticalAlignment" Value="Center"/>
+        <Setter Property="Foreground" Value="Red"/>
+        <Setter Property="ToolTipService.InitialShowDelay" Value="200"/>
+        <Setter Property="ToolTip">
+            <Setter.Value>
+                <ToolTip>
+                    <TextBlock Text="该字体文件不合法！" MaxWidth="200" TextWrapping="Wrap"/>
+                </ToolTip>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- 预览窗格 -->
+    <Style x:Key="Preview1" TargetType="Label">
+        <Setter Property="Foreground" Value="{StaticResource OnSurfaceBrush}"/>
+        <Setter Property="FontFamily" Value="Segoe UI, Microsoft YaHei UI"/>
+        <Setter Property="Margin" Value="8 -8 0 0"/>
+        <Setter Property="Content" Value="落霞与孤鹜齐飞，秋水共长天一色。 0123456789"/>
+    </Style>
+    <Style x:Key="Preview2" TargetType="Label">
+        <Setter Property="Foreground" Value="{StaticResource OnSurfaceBrush}"/>
+        <Setter Property="FontFamily" Value="Segoe UI, Microsoft YaHei UI"/>
+        <Setter Property="Margin" Value="8 -8 0 0"/>
+        <Setter Property="Content" Value="The quick brown fox jumps over the lazy dog."/>
+    </Style>
+    <Style x:Key="PreviewA" TargetType="TextBlock">
+        <Setter Property="Foreground" Value="{StaticResource OnSurfaceBrush}"/>
+        <Setter Property="FontFamily" Value="Segoe UI, Microsoft YaHei UI"/>
+        <Setter Property="Margin" Value="8 8 8 0"/>
+        <Setter Property="TextWrapping" Value="Wrap"/>
+        <Setter Property="LineHeight" Value="19"/>
+        <Setter Property="Text" Value="{Binding Source={x:Static local:App.Config}, Path=PreviewTexts}"/>
+    </Style>
+</ResourceDictionary>

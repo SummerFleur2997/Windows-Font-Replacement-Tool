@@ -36,7 +36,7 @@ public static class HashTab
     }
 
     /// <summary>
-    /// 验证 Resources/xmlLibs文件完整性。
+    /// 验证 Assets/xmlLibs文件完整性。
     /// </summary>
     private static void ValidateLibFiles()
     {

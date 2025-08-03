@@ -128,7 +128,7 @@ public partial class MainWindow : Window
     {
         try
         {
-            var pdfPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Resources", "Help.pdf");
+            var pdfPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Assets", "Help.pdf");
 
             if (!File.Exists(pdfPath))
             {
