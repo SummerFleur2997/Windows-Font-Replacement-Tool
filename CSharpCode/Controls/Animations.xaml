@@ -1,7 +1,7 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     <!-- 标签页动画 -->
-    <Style TargetType="Grid">
+    <Style x:Key="GridFadeIn" TargetType="Grid">
         <Setter Property="Opacity" Value="0"/>
         <Setter Property="RenderTransform">
             <Setter.Value>
@@ -16,13 +16,15 @@
                             <DoubleAnimation
                                 Storyboard.TargetProperty="Opacity"
                                 From="0" To="1"
-                                Duration="0:0:0.3"/>
+                                Duration="0:0:0.3"
+                                AccelerationRatio="0.6"
+                                DecelerationRatio="0.2"/>
                             <DoubleAnimation
                                 Storyboard.TargetProperty="RenderTransform.Y"
-                                From="32" To="0"
+                                From="40" To="0"
                                 Duration="0:0:0.3"
-                                AccelerationRatio="0.2"
-                                DecelerationRatio="0.6"/>
+                                AccelerationRatio="0.4"
+                                DecelerationRatio="0.4"/>
                         </Storyboard>
                     </BeginStoryboard>
                 </Trigger.EnterActions>

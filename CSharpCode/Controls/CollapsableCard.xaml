@@ -1,0 +1,46 @@
+﻿<Grid xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      x:Class="Windows_Font_Replacement_Tool.Controls.CollapsableCard"
+      HorizontalAlignment="Stretch" VerticalAlignment="Top"
+      Margin="0">
+    <Border
+        x:Name="Border" VerticalAlignment="Top" Height="40"
+        Background="{StaticResource MainBrush}"
+        CornerRadius="6" Margin="7 5 7 10">
+        <Border.Effect>
+            <DropShadowEffect BlurRadius="8" ShadowDepth="0" 
+                              Direction="270" Color="#90cdb9df"/>
+        </Border.Effect>
+        <Grid>
+            <StackPanel Orientation="Horizontal" Margin="16 10 0 0">
+                <TextBlock 
+                    x:Name="CardIcon" Margin="-2 0 0 0" 
+                    HorizontalAlignment="Left" VerticalAlignment="Top"
+                    Foreground="{StaticResource TextBrush}"
+                    FontFamily="../Assets/#iconfont"
+                    FontSize="18"/>
+                <TextBlock 
+                    x:Name="CardName" Margin="5 0 0 0" 
+                    HorizontalAlignment="Left" VerticalAlignment="Top"
+                    Foreground="{StaticResource TextBrush}"
+                    FontFamily="Microsoft YaHei UI"
+                    FontSize="14"/>
+            </StackPanel>
+            <Button 
+                Margin="0 4 4 0"
+                HorizontalAlignment="Right" VerticalAlignment="Top" 
+                Style="{StaticResource BorderlessButton}"
+                Width="32" Height="32"
+                Click="OnCollapseButtonClick">
+                <Path x:Name="ExpandIcon"
+                      Data="M2,4 l-2,2 10,10 10,-10 -2,-2 -8,8 -8,-8 z"
+                      Fill="{StaticResource  TextBrush}"
+                      Width="10" Height="10" Stretch="Uniform">
+                    <Path.RenderTransform>
+                        <RotateTransform Angle="180" CenterX="5" CenterY="2.5"/>
+                    </Path.RenderTransform>
+                </Path>
+            </Button>
+        </Grid>
+    </Border>
+</Grid>

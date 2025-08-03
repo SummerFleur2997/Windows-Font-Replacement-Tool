@@ -9,7 +9,7 @@ namespace Windows_Font_Replacement_Tool;
 /// <summary>
 /// Interaction logic for App.xaml
 /// </summary>
-public partial class App : Application
+public partial class App
 {
     /// <inheritdoc cref="Framework.Config"/>
     public static Config Config { get; private set; } = new();

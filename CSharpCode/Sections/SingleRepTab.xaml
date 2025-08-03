@@ -1,0 +1,159 @@
+﻿<Grid xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      x:Class="Windows_Font_Replacement_Tool.Sections.SingleRepTab">
+
+    <Grid.RowDefinitions>
+        <RowDefinition Height="170"/>
+        <RowDefinition Height="1*"/>
+    </Grid.RowDefinitions>
+
+    <Grid Grid.Row="0">
+        <Border Background="{StaticResource MainBrush}"
+                CornerRadius="6" Margin="27 27 27 10">
+            <Border.Effect>
+                <DropShadowEffect BlurRadius="8" ShadowDepth="0"
+                                  Direction="270" Color="#90cdb9df"/>
+            </Border.Effect>
+        </Border>
+        <StackPanel Margin="38 38 0 21" Width="400" HorizontalAlignment="Left">
+            <Label Foreground="{StaticResource TextBrush}"
+                   FontSize="14" Content="快速制作字体："/>
+            <TextBlock Foreground="{StaticResource CommentBrush}"
+                       Margin="10 8 0 0" HorizontalAlignment="Left"
+                       Width="345" TextWrapping="Wrap" TextAlignment="Left"
+                       LineHeight="19">
+                使用单个字体文件制作一整组可以用来替换系统默认字体的
+                &#x0a;个性化字体，方便快捷。缺点是所有制作出来的字体外观都是一
+                &#x0a;致的，没有变体字（例如粗体字、斜体字）。
+            </TextBlock>
+        </StackPanel>
+        <StackPanel Margin="0 32 58 21" Width="220"
+                    HorizontalAlignment="Right" VerticalAlignment="Top">
+            <DockPanel Margin="0 48 0 0" HorizontalAlignment="Center">
+                <Button Name="FileOpen" Width="96" Height="36" Margin="6 0"
+                        Click="SingleFileOpenButton_Click">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="&#xE6FD;" FontSize="19" VerticalAlignment="Center"/>
+                        <TextBlock Text="打开文件" FontSize="14"
+                                   Margin="4,0,0,0"
+                                   VerticalAlignment="Center"/>
+                    </StackPanel>
+                </Button>
+                <Button Name="Run" Width="96" Height="36" Margin="6 0" IsEnabled="False"
+                        Style="{StaticResource ColoredButton}"
+                        Click="SingleFileRunButton_Click">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="&#xE653;" FontSize="19" VerticalAlignment="Center"/>
+                        <TextBlock Text="开始制作" FontSize="14"
+                                   Margin="4,0,0,0"
+                                   VerticalAlignment="Center"/>
+                    </StackPanel>
+                </Button>
+            </DockPanel>
+        </StackPanel>
+    </Grid>
+
+    <Grid Grid.Row="1">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="0.5*"/>
+            <ColumnDefinition Width="0.5*"/>
+        </Grid.ColumnDefinitions>
+
+        <Grid Grid.Column="0">
+            <Border Background="{StaticResource MainBrush}"
+                    CornerRadius="6" Margin="27 4 7 24">
+                <Border.Effect>
+                    <DropShadowEffect BlurRadius="8" ShadowDepth="0"
+                                      Direction="270" Color="#90cdb9df"/>
+                </Border.Effect>
+            </Border>
+            <Label Margin="38 16 18 36"
+                   Foreground="{StaticResource OnSurfaceBrush}"
+                   FontSize="14" Content="当前系统字体预览："/>
+            <StackPanel Margin="38 40 18 36">
+                <Label Margin="0 10 0 5" Content="常规文本："/>
+                <Label Style="{StaticResource Preview1}"/>
+                <Label Style="{StaticResource Preview2}"/>
+
+                <Label Margin="0 10 0 5" Content="粗体文本：" FontWeight="Bold"/>
+                <Label Style="{StaticResource Preview1}" FontWeight="Bold"/>
+                <Label Style="{StaticResource Preview2}" FontWeight="Bold"/>
+
+                <Label Margin="0 10 0 5" Content="细体文本：" FontWeight="Light"/>
+                <Label Style="{StaticResource Preview1}" FontWeight="Light"/>
+                <Label Style="{StaticResource Preview2}" FontWeight="Light"/>
+            </StackPanel>
+        </Grid>
+
+        <Grid Grid.Column="1">
+            <Border Background="{StaticResource MainBrush}"
+                    CornerRadius="6" Margin="7 4 27 24">
+                <Border.Effect>
+                    <DropShadowEffect BlurRadius="8" ShadowDepth="0"
+                                      Direction="270" Color="#90cdb9df"/>
+                </Border.Effect>
+            </Border>
+
+            <StackPanel Name="PreviewPanel" Margin="18 18 38 36"
+                        VerticalAlignment="Top" Visibility="Collapsed">
+                <DockPanel>
+                    <DockPanel HorizontalAlignment="Left">
+                        <Label Margin="0 0 0 2" VerticalAlignment="Center"
+                               Foreground="{StaticResource OnSurfaceBrush}"
+                               FontSize="14" Content="即将制作的字体预览："/>
+                        <TextBlock Name="SHint" Style="{StaticResource VerifiedIcon}"/>
+                    </DockPanel>
+                    <DockPanel Name="PreviewFontSizeController" HorizontalAlignment="Right"
+                               Margin="0 -4 6 0">
+                        <Button Name="Fm" Style="{StaticResource BorderlessButton}"
+                                ToolTip="缩小预览字号" Click="SingleChangeFontSize">
+                            <TextBlock FontSize="19" VerticalAlignment="Center" Text="&#xE688;"/>
+                        </Button>
+                        <Button Name="Fp" Style="{StaticResource BorderlessButton}"
+                                ToolTip="增大预览字号" Click="SingleChangeFontSize">
+                            <TextBlock FontSize="19" VerticalAlignment="Center" Text="&#xE722;"/>
+                        </Button>
+                    </DockPanel>
+                </DockPanel>
+
+                <ScrollViewer Name="Previewer" Height="268"
+                              Style="{StaticResource MyScrollViewer}">
+                    <TextBlock Name="PreviewA" Style="{StaticResource PreviewA}"/>
+                </ScrollViewer>
+            </StackPanel>
+
+            <StackPanel Name="ProcessingPanel" Margin="18 18 38 36"
+                        VerticalAlignment="Center" Visibility="Collapsed">
+                <Label Style="{StaticResource AnimatedHammerStyle}"
+                       Content="&#xE70B;"/>
+                <Label Foreground="{StaticResource TextBrush}"
+                       HorizontalAlignment="Center" FontSize="16" Margin="0 5"
+                       Content="　制作中……"/>
+            </StackPanel>
+
+            <StackPanel Name="FinishPanel" Margin="18 18 38 36"
+                        Style="{StaticResource StackPanelFadeIn}"
+                        VerticalAlignment="Center" Visibility="Collapsed">
+                <Label HorizontalAlignment="Center" FontFamily="../Assets/#iconfont"
+                       FontSize="64" Foreground="{StaticResource TextBrush}"
+                       Content="&#xE63e;"/>
+                <Label Foreground="{StaticResource TextBrush}"
+                       HorizontalAlignment="Center" FontSize="16" Margin="0 5"
+                       Content="　制作完成！"/>
+            </StackPanel>
+
+            <Button Name="OutDirButton" Style="{StaticResource BorderlessButton}"
+                    VerticalAlignment="Bottom" HorizontalAlignment="Right"
+                    Visibility="Collapsed" Margin="0 0 50 48"
+                    Tag="Single">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="&#xE701;" FontSize="16" VerticalAlignment="Center"/>
+                    <TextBlock Text="打开导出目录" FontSize="13"
+                               Margin="4,0,0,0"
+                               VerticalAlignment="Center"/>
+                </StackPanel>
+            </Button>
+        </Grid>
+
+    </Grid>
+</Grid>

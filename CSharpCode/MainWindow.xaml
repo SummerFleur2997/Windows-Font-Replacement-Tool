@@ -3,6 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:sections="clr-namespace:Windows_Font_Replacement_Tool.Sections"
         mc:Ignorable="d"
         AllowsTransparency="True"
         Background="Transparent"
@@ -31,17 +32,17 @@
                         <GradientStop Color="#a350c9" Offset="1"/>
                     </LinearGradientBrush>
                 </Border.Background>
-                <TextBlock Name="TextBlock" Text="字体属性替换工具" 
+                <TextBlock Text="字体属性替换工具" 
                            VerticalAlignment="Center" HorizontalAlignment="Left" Margin="20 0" 
                            FontSize="17" Foreground="White"></TextBlock>
             </Border>
             
-            <Button Name="CloseButton" Height="28" Width="28" 
+            <Button Height="28" Width="28" 
                     HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0 0 12 0"
                     Content="&#xE6EA;" FontSize="18" Foreground="White"
                     Click="ExitButton_Click" Style="{StaticResource CloseButtonStyle}"/>
                 
-            <Button Name="MinimizeButton" Height="28" Width="28" 
+            <Button Height="28" Width="28" 
                     HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0 0 48 0"
                     Content="&#xE687;" FontSize="18" Foreground="White"
                     Click="MinimizeButton_Click" Style="{StaticResource MinimizeButtonStyle}"/>
@@ -61,560 +62,21 @@
                     Margin="-1 0 0 0">
                 <Grid>
                     <!-- 主页详细内容 -->
-                    <Grid x:Name="WelcomeContent" Visibility="Collapsed">
-                        <Border Background="{StaticResource MainBrush}"
-                                CornerRadius="6"
-                                Margin="16">
-                            <Border.Effect>
-                                <DropShadowEffect BlurRadius="8" ShadowDepth="0" 
-                                                  Direction="270" Color="#90cdb9df"/>
-                            </Border.Effect>
-                        </Border>
-                        <StackPanel Width="360" Margin="0 16">
-                            <Label VerticalAlignment="Top" HorizontalAlignment="Center"
-                                   Foreground="{StaticResource TextBrush}"
-                                   FontSize="22" FontWeight="Bold"
-                                   Content="欢迎使用本工具！" 
-                                   Margin="0 66 0 0">
-                            </Label>
-                            <Label VerticalAlignment="Top" HorizontalAlignment="Center"
-                                   Foreground="{StaticResource CommentBrush}"
-                                   Content="请选择您的 DIY 模式：" Margin="0 10 0 0">
-                            </Label>
-                        </StackPanel>
-                        <DockPanel Height="160" Margin="16 0"
-                                   HorizontalAlignment="Center">
-                            <Button Name="Button1" Style="{StaticResource WelcomePageButton}"
-                                    Click="AltTabButton_Click">
-                                <StackPanel Orientation="Vertical">
-                                    <TextBlock Text="&#xE63C;" FontSize="56" Margin="0 -10 0 0"
-                                               HorizontalAlignment="Center" />
-                                    <TextBlock Text="快速制作" Margin="0 16 0 0"/>
-                                </StackPanel>
-                            </Button>
-                            <Button Name="Button2" Style="{StaticResource WelcomePageButton}"
-                                    Click="AltTabButton_Click">
-                                <StackPanel Orientation="Vertical">
-                                    <TextBlock Text="&#xE640;" FontSize="56" Margin="0 -10 0 0"
-                                               HorizontalAlignment="Center" />
-                                    <TextBlock Text="精细制作" Margin="0 16 0 0"/>
-                                </StackPanel>
-                            </Button>
-                        </DockPanel>
-                        <Button Style="{StaticResource BorderlessButton}"
-                                VerticalAlignment="Bottom" Margin="0 0 0 20"
-                                FontSize="12" Width="167">
-                            <StackPanel Orientation="Horizontal">
-                                <TextBlock Text="© 2025 SummerFleur2997" Margin="0" 
-                                           VerticalAlignment="Center"/>
-                                <TextBlock Text="&#xE681;" FontSize="18" Margin="5 0 0 0"/>
-                            </StackPanel>
-                        </Button>
-                    </Grid>
+                    <sections:WelcomeTab
+                        x:Name="WelcomeContent" Visibility="Collapsed"
+                        Style="{StaticResource GridFadeIn}"/>
                     <!-- 快速制作页详细内容 -->
-                    <Grid x:Name="Tab1Content" Visibility="Collapsed">
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="45"/>
-                            <RowDefinition Height="150"/>
-                            <RowDefinition Height="1*"/>
-                        </Grid.RowDefinitions>
-                        
-                        <Grid Grid.Row="0">
-                            <Border>
-                                <Button Name="Back1" Style="{StaticResource BorderlessButton}"
-                                        HorizontalAlignment="Left" Margin="24 10 0 0"
-                                        Click="AltTabButton_Click">
-                                    <StackPanel Orientation="Horizontal">
-                                        <TextBlock Text="&#xE61A;" FontSize="19" VerticalAlignment="Center"/>
-                                        <TextBlock Text="返回主页" Margin="8,0,0,0" 
-                                                   VerticalAlignment="Center"/>
-                                    </StackPanel>
-                                </Button>
-                            </Border>
-                        </Grid>
-                        
-                        <Grid Grid.Row="1">
-                            <Border Background="{StaticResource MainBrush}"
-                                    CornerRadius="6" Margin="27 10">
-                                <Border.Effect>
-                                    <DropShadowEffect BlurRadius="8" ShadowDepth="0" 
-                                                      Direction="270" Color="#90cdb9df"/>
-                                </Border.Effect>
-                            </Border>
-                            <StackPanel Margin="38 21 0 21" Width="400" HorizontalAlignment="Left" >
-                                <Label Foreground="{StaticResource TextBrush}"
-                                       FontSize="14" Content="快速制作字体：" />
-                                <TextBlock Foreground="{StaticResource CommentBrush}"
-                                           Margin="10 8 0 0" HorizontalAlignment="Left"
-                                           Width="345" TextWrapping="Wrap" TextAlignment="Left"
-                                           LineHeight="19">
-                                            　　使用单个字体文件制作一整组可以用来替换系统默认字体的
-                                            &#x0a;个性化字体，方便快捷。缺点是所有制作出来的字体外观都是一
-                                            &#x0a;致的，没有变体字（例如粗体字、斜体字）。
-                                </TextBlock>
-                            </StackPanel>
-                            <StackPanel Margin="0 32 58 21" Width="220" 
-                                        HorizontalAlignment="Right" VerticalAlignment="Top">
-                                <DockPanel Margin="0 48 0 0" HorizontalAlignment="Center">
-                                    <Button Name="FileOpen" Width="96" Height="36"  Margin="6 0"
-                                            Click="SingleFileOpenButton_Click">
-                                        <StackPanel Orientation="Horizontal">
-                                            <TextBlock Text="&#xE6FD;" FontSize="19" VerticalAlignment="Center"/>
-                                            <TextBlock Text="打开文件" FontSize="14"
-                                                       Margin="4,0,0,0" 
-                                                       VerticalAlignment="Center"/>
-                                        </StackPanel>
-                                    </Button>
-                                    <Button Name="Run1" Width="96" Height="36" Margin="6 0" IsEnabled="False"
-                                            Style="{StaticResource ColoredButton}"
-                                            Click="SingleFileRunButton_Click">
-                                        <StackPanel Orientation="Horizontal">
-                                            <TextBlock Text="&#xE647;" FontSize="19" VerticalAlignment="Center"/>
-                                            <TextBlock Text="开始制作" FontSize="14"
-                                                       Margin="4,0,0,0" 
-                                                       VerticalAlignment="Center"/>
-                                        </StackPanel>
-                                    </Button>
-                                </DockPanel>
-                            </StackPanel>
-                        </Grid>
-                        
-                        <Grid Grid.Row="2">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="0.5*"/>
-                                <ColumnDefinition Width="0.5*"/>
-                            </Grid.ColumnDefinitions>
-                            
-                            <Grid Grid.Column="0">
-                                <Border Background="{StaticResource MainBrush}"
-                                        CornerRadius="6" Margin="27 4 7 20">
-                                    <Border.Effect>
-                                        <DropShadowEffect BlurRadius="8" ShadowDepth="0" 
-                                                          Direction="270" Color="#90cdb9df"/>
-                                    </Border.Effect>
-                                </Border>
-                                <Label Margin="38 16 18 36"
-                                       Foreground="{StaticResource OnSurfaceBrush}"
-                                       FontSize="14" Content="当前系统字体预览："/>
-                                <StackPanel Margin="38 40 18 36">
-                                    <Label Margin="0 10 0 5" Content="常规文本："/>
-                                    <Label Style="{StaticResource Preview1}"/>
-                                    <Label Style="{StaticResource Preview2}"/>
-                                        
-                                    <Label Margin="0 10 0 5" Content="粗体文本：" FontWeight="Bold"/>
-                                    <Label Style="{StaticResource Preview1}" FontWeight="Bold"/>
-                                    <Label Style="{StaticResource Preview2}" FontWeight="Bold"/>
-
-                                    <Label Margin="0 10 0 5" Content="细体文本：" FontWeight="Light"/>
-                                    <Label Style="{StaticResource Preview1}" FontWeight="Light"/>
-                                    <Label Style="{StaticResource Preview2}" FontWeight="Light"/>
-                                </StackPanel>
-                            </Grid>
-                            
-                            <Grid Grid.Column="1">
-                                <Border Background="{StaticResource MainBrush}"
-                                        CornerRadius="6" Margin="7 4 27 20">
-                                    <Border.Effect>
-                                        <DropShadowEffect BlurRadius="8" ShadowDepth="0" 
-                                                          Direction="270" Color="#90cdb9df"/>
-                                    </Border.Effect>
-                                </Border>
-                                
-                                <StackPanel Name="PreviewPanel1" Margin="18 18 38 36"
-                                            VerticalAlignment="Top" Visibility="Collapsed">
-                                    <DockPanel>
-                                        <DockPanel HorizontalAlignment="Left">
-                                            <Label Margin="0 0 0 2" VerticalAlignment="Center"
-                                                   Foreground="{StaticResource OnSurfaceBrush}" 
-                                                   FontSize="14" Content="即将制作的字体预览："/>
-                                            <TextBlock Name="SHint" Style="{StaticResource VerifiedIcon}"/>
-                                        </DockPanel>
-                                        <DockPanel Name="PreviewFontSizeController" HorizontalAlignment="Right"
-                                                   Margin="0 -4 6 0">
-                                            <Button Name="Fm" Style="{StaticResource BorderlessButton}"
-                                                    ToolTip="缩小预览字号" Click="SingleChangeFontSize">
-                                                <TextBlock FontSize="19" VerticalAlignment="Center" Text="&#xE688;" />
-                                            </Button>
-                                            <Button Name="Fp" Style="{StaticResource BorderlessButton}" 
-                                                    ToolTip="增大预览字号" Click="SingleChangeFontSize">
-                                                <TextBlock FontSize="19" VerticalAlignment="Center" Text="&#xE722;" />
-                                            </Button>
-                                        </DockPanel>
-                                    </DockPanel>
-
-                                    <ScrollViewer Name="Previewer1" VerticalScrollBarVisibility="Visible" Height="230"
-                                                  Style="{StaticResource MyScrollViewer}">
-                                        <TextBlock Name="PreviewA" Style="{StaticResource PreviewA}"/>
-                                    </ScrollViewer>
-                                    
-                                </StackPanel>
-                                
-                                <StackPanel Name="ProcessingPanel1" Margin="18 18 38 36" 
-                                            VerticalAlignment="Center" Visibility="Collapsed">
-                                    <Label Style="{StaticResource AnimatedHammerStyle}"
-                                           Content="&#xE70B;" />
-                                    <Label Foreground="{StaticResource TextBrush}" 
-                                           HorizontalAlignment="Center" FontSize="16" Margin="0 5"
-                                           Content="　制作中……"/>
-                                </StackPanel>
-                                
-                                <StackPanel Name="FinishPanel1" Margin="18 18 38 36"
-                                            Style="{StaticResource StackPanelFadeIn}"
-                                            VerticalAlignment="Center" Visibility="Collapsed">
-                                    <Label HorizontalAlignment="Center" FontFamily="Assets/#iconfont"
-                                           FontSize="64" Foreground="{StaticResource TextBrush}"
-                                           Content="&#xE646;" />
-                                    <Label HorizontalAlignment="Center" FontFamily="Assets/#iconfont"
-                                           FontSize="40" Foreground="{StaticResource TextBrush}"
-                                           Margin="0 -60 0 0" Content="&#xE63E;" />
-                                    <Label Foreground="{StaticResource TextBrush}"
-                                           HorizontalAlignment="Center" FontSize="16" Margin="0 5"
-                                           Content="　制作完成！"/>
-                                </StackPanel>
-                                
-                                <Button Name="OutDirButton1" Style="{StaticResource BorderlessButton}"
-                                        VerticalAlignment="Bottom" HorizontalAlignment="Right" 
-                                        Visibility="Collapsed" Margin="0 0 50 48" 
-                                        Click="OutputDirectoryButton_Click" Tag="Single">
-                                    <StackPanel Orientation="Horizontal">
-                                        <TextBlock Text="&#xE701;" FontSize="16" VerticalAlignment="Center"/>
-                                        <TextBlock Text="打开导出目录" FontSize="13"
-                                                   Margin="4,0,0,0" 
-                                                   VerticalAlignment="Center"/>
-                                    </StackPanel>
-                                </Button>
-                            </Grid>
-                            
-                        </Grid>
-                    </Grid>
+                    <sections:SingleRepTab
+                        x:Name="Tab1Content" Visibility="Collapsed"
+                        Style="{StaticResource GridFadeIn}"/>
                     <!-- 精细制作页详细内容 -->
-                    <Grid x:Name="Tab2Content" Visibility="Collapsed">
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="45"/>
-                            <RowDefinition Height="1*"/>
-                        </Grid.RowDefinitions>
-                        
-                        <Grid Grid.Row="0">
-                            <Border>
-                                <Button Name="Back2" Style="{StaticResource BorderlessButton}"
-                                        HorizontalAlignment="Left" Margin="24 10 0 0"
-                                        Click="AltTabButton_Click">
-                                    <StackPanel Orientation="Horizontal">
-                                        <TextBlock Text="&#xE61A;" FontSize="19" VerticalAlignment="Center"/>
-                                        <TextBlock Text="返回主页" Margin="8,0,0,0" 
-                                                   VerticalAlignment="Center"/>
-                                    </StackPanel>
-                                </Button>
-                            </Border>
-                        </Grid>
-                        
-                        <Grid Grid.Row="1">
-                            <Border Background="{StaticResource MainBrush}"
-                                    CornerRadius="6" Margin="27 10 27 27">
-                                <Border.Effect>
-                                    <DropShadowEffect BlurRadius="8" ShadowDepth="0" 
-                                                      Direction="270" Color="#90cdb9df"/>
-                                </Border.Effect>
-                            </Border>
-                            <StackPanel Margin="38 21 0 21" Width="400" HorizontalAlignment="Left" >
-                                <Label Foreground="{StaticResource TextBrush}"
-                                       FontSize="14" Content="精细制作字体：" />
-                                <TextBlock Foreground="{StaticResource CommentBrush}"
-                                           Margin="10 8 0 0" HorizontalAlignment="Left"
-                                           Width="345" TextWrapping="Wrap" TextAlignment="Left"
-                                           LineHeight="19">
-                                    　　为每一种变体字体（粗体字、斜体字）选择它们对应的个性
-                                    &#x0a;化字体进行制作。若选用合适的字体系列，能够制作出包含所有
-                                    &#x0a;变体字样式的个性化字体，但也需要相对更繁琐的操作。
-                                </TextBlock>
-                            </StackPanel>
-                            <StackPanel Margin="0 32 58 21" Width="220" 
-                                        HorizontalAlignment="Right" VerticalAlignment="Top">
-                                <DockPanel Margin="0 48 0 0" HorizontalAlignment="Center">
-                                    <Button Name="MakePreview" Width="96" Height="36"  Margin="6 0">
-                                        <StackPanel Orientation="Horizontal">
-                                            <TextBlock Text="&#xE642;" FontSize="19" VerticalAlignment="Center"/>
-                                            <TextBlock Text="构建预览" FontSize="14"
-                                                       Margin="4,0,0,0" 
-                                                       VerticalAlignment="Center"/>
-                                        </StackPanel>
-                                    </Button>
-                                    <Button Name="Run2" Width="96" Height="36" Margin="6 0" IsEnabled="False"
-                                            Style="{StaticResource ColoredButton}"
-                                            Click="MultipleFileRunButton_Click">
-                                        <StackPanel Orientation="Horizontal">
-                                            <TextBlock Text="&#xE647;" FontSize="19" VerticalAlignment="Center"/>
-                                            <TextBlock Text="开始制作" FontSize="14"
-                                                       Margin="4,0,0,0" 
-                                                       VerticalAlignment="Center"/>
-                                        </StackPanel>
-                                    </Button>
-                                </DockPanel>
-                            </StackPanel>
-                            <DockPanel Margin="27 144 27 27" HorizontalAlignment="Left">
-                                <StackPanel Width="216" Margin="10 0 5 0">
-                                    <DockPanel Margin="60 0 0 12" HorizontalAlignment="Left">
-                                        <TextBlock Foreground="{StaticResource TextBrush}"
-                                                   VerticalAlignment="Center" FontSize="14" Text="西文正体"/>
-                                    </DockPanel>
-                                    <DockPanel Margin="20 0 0 0"
-                                               HorizontalAlignment="Left">
-                                        <Label Foreground="{StaticResource TextBrush}"
-                                               FontSize="14" Content="常规字体"/>
-                                        <Button Name="RgRm" Tag="6" Width="64" Click="MultipleFileOpenButton_Click"
-                                                Margin="4  0 0 0" Content="选择字体"/>
-                                        <TextBlock Name="RgRmS" Visibility="Collapsed"
-                                                   Style="{StaticResource VerifiedIcon}"
-                                                   Margin="8  0 0 0" Width="16"/>
-                                    </DockPanel>
-                                    <DockPanel Margin="20 10 0 0"
-                                               HorizontalAlignment="Left">
-                                        <Label Foreground="{StaticResource TextBrush}"
-                                               FontSize="14" Content="细体字体"/>
-                                        <Button Name="LtRm" Tag="7" Width="64" Click="MultipleFileOpenButton_Click"
-                                                Margin="4  0 0 0" Content="选择字体"/>
-                                        <TextBlock Name="LtRmS" Visibility="Collapsed"
-                                                   Style="{StaticResource VerifiedIcon}"
-                                                   Margin="8  0 0 0" Width="16"/>
-                                    </DockPanel>
-                                    <DockPanel Margin="20 10 0 0"
-                                               HorizontalAlignment="Left">
-                                        <Label Foreground="{StaticResource TextBrush}"
-                                               FontSize="14" Content="半细字体"/>
-                                        <Button Name="SlRm" Tag="8" Width="64" Click="MultipleFileOpenButton_Click"
-                                                Margin="4  0 0 0" Content="选择字体"/>
-                                        <TextBlock Name="SlRmS" Visibility="Collapsed"
-                                                   Style="{StaticResource VerifiedIcon}"
-                                                   Margin="8  0 0 0" Width="16"/>
-                                    </DockPanel>
-                                    <DockPanel Margin="20 10 0 0"
-                                               HorizontalAlignment="Left">
-                                        <Label Foreground="{StaticResource TextBrush}"
-                                               FontSize="14" Content="半粗字体"/>
-                                        <Button Name="SbRm" Tag="9" Width="64" Click="MultipleFileOpenButton_Click"
-                                                Margin="4  0 0 0" Content="选择字体"/>
-                                        <TextBlock Name="SbRmS" Visibility="Collapsed"
-                                                   Style="{StaticResource VerifiedIcon}"
-                                                   Margin="8  0 0 0" Width="16"/>
-                                    </DockPanel>
-                                    <DockPanel Margin="20 10 0 0"
-                                               HorizontalAlignment="Left">
-                                        <Label Foreground="{StaticResource TextBrush}"
-                                               FontSize="14" Content="粗体字体"/>
-                                        <Button Name="BdRm" Tag="10" Width="64" Click="MultipleFileOpenButton_Click"
-                                                Margin="4  0 0 0" Content="选择字体"/>
-                                        <TextBlock Name="BdRmS" Visibility="Collapsed"
-                                                   Style="{StaticResource VerifiedIcon}"
-                                                   Margin="8  0 0 0" Width="16"/>
-                                    </DockPanel>
-                                    <DockPanel Margin="20 10 0 0"
-                                               HorizontalAlignment="Left">
-                                        <Label Foreground="{StaticResource TextBrush}"
-                                               FontSize="14" Content="特粗字体"/>
-                                        <Button Name="HvRm" Tag="11" Width="64" Click="MultipleFileOpenButton_Click"
-                                                Margin="4  0 0 0" Content="选择字体"/>
-                                        <TextBlock Name="HvRmS" Visibility="Collapsed"
-                                                   Style="{StaticResource VerifiedIcon}"
-                                                   Margin="8  0 0 0" Width="16"/>
-                                    </DockPanel>
-                                </StackPanel>
-                                <StackPanel Width="216">
-                                    <DockPanel Margin="45 0 0 12" HorizontalAlignment="Left">
-                                        <TextBlock Foreground="{StaticResource TextBrush}"
-                                                   VerticalAlignment="Center" FontSize="14" Text="西文斜体"/>
-                                    </DockPanel>
-                                    <DockPanel Margin="5 0 0 0"
-                                               HorizontalAlignment="Left">
-                                        <Label Foreground="{StaticResource TextBrush}"
-                                               FontSize="14" Content="斜体字体"/>
-                                        <Button Name="RgIt" Tag="12" Width="64" Click="MultipleFileOpenButton_Click"
-                                                Margin="4  0 0 0" Content="选择字体"/>
-                                        <TextBlock Name="RgItS" Visibility="Collapsed"
-                                                   Style="{StaticResource VerifiedIcon}"
-                                                   Margin="8  0 0 0" Width="16"/>
-                                    </DockPanel>
-                                    <DockPanel Margin="5 10 0 0"
-                                               HorizontalAlignment="Left">
-                                        <Label Foreground="{StaticResource TextBrush}"
-                                               FontSize="14" Content="细体斜体"/>
-                                        <Button Name="LtIt" Tag="13" Width="64" Click="MultipleFileOpenButton_Click"
-                                                Margin="4  0 0 0" Content="选择字体"/>
-                                        <TextBlock Name="LtItS" Visibility="Collapsed"
-                                                    Style="{StaticResource VerifiedIcon}"
-                                                    Margin="8  0 0 0" Width="16"/>
-                                    </DockPanel>
-                                    <DockPanel Margin="5 10 0 0"
-                                               HorizontalAlignment="Left">
-                                        <Label Foreground="{StaticResource TextBrush}"
-                                               FontSize="14" Content="半细斜体"/>
-                                        <Button Name="SlIt" Tag="14" Width="64" Click="MultipleFileOpenButton_Click"
-                                                Margin="4  0 0 0" Content="选择字体"/>
-                                        <TextBlock Name="SlItS" Visibility="Collapsed"
-                                                   Style="{StaticResource VerifiedIcon}"
-                                                   Margin="8  0 0 0" Width="16"/>
-                                    </DockPanel>
-                                    <DockPanel Margin="5 10 0 0"
-                                               HorizontalAlignment="Left">
-                                        <Label Foreground="{StaticResource TextBrush}"
-                                               FontSize="14" Content="半粗斜体"/>
-                                        <Button Name="SbIt" Tag="15" Width="64" Click="MultipleFileOpenButton_Click"
-                                                Margin="4  0 0 0" Content="选择字体"/>
-                                        <TextBlock Name="SbItS" Visibility="Collapsed"
-                                                   Style="{StaticResource VerifiedIcon}"
-                                                   Margin="8  0 0 0" Width="16"/>
-                                    </DockPanel>
-                                    <DockPanel Margin="5 10 0 0"
-                                               HorizontalAlignment="Left">
-                                        <Label Foreground="{StaticResource TextBrush}"
-                                               FontSize="14" Content="粗体斜体"/>
-                                        <Button Name="BdIt" Tag="16" Width="64" Click="MultipleFileOpenButton_Click"
-                                                Margin="4  0 0 0" Content="选择字体"/>
-                                        <TextBlock Name="BdItS" Visibility="Collapsed"
-                                                   Style="{StaticResource VerifiedIcon}"
-                                                   Margin="8  0 0 0" Width="16"/>
-                                    </DockPanel>
-                                    <DockPanel Margin="5 10 0 0"
-                                               HorizontalAlignment="Left">
-                                        <Label Foreground="{StaticResource TextBrush}"
-                                               FontSize="14" Content="特粗斜体"/>
-                                        <Button Name="HvIt" Tag="17" Width="64" Click="MultipleFileOpenButton_Click"
-                                                Margin="4  0 0 0" Content="选择字体"/>
-                                        <TextBlock Name="HvItS" Visibility="Collapsed"
-                                                   Style="{StaticResource VerifiedIcon}"
-                                                   Margin="8  0 0 0" Width="16"/>
-                                    </DockPanel>
-                                </StackPanel>
-                                <StackPanel Width="216">
-                                    <DockPanel Margin="45 0 0 12" HorizontalAlignment="Left">
-                                        <TextBlock Foreground="{StaticResource TextBrush}"
-                                                   VerticalAlignment="Center" FontSize="14" Text="中文字体"/>
-                                    </DockPanel>
-                                    <DockPanel Margin="5 0 0 0"
-                                               HorizontalAlignment="Left">
-                                        <Label Foreground="{StaticResource TextBrush}"
-                                               FontSize="14" Content="常规字体"/>
-                                        <Button Name="ZhRg" Tag="0,1" Width="64" Click="MultipleFileOpenButton_Click"
-                                                Margin="4  0 0 0" Content="选择字体"/>
-                                        <TextBlock Name="ZhRgS" Visibility="Collapsed"
-                                                   Style="{StaticResource VerifiedIcon}"
-                                                   Margin="8  0 0 0" Width="16"/>
-                                    </DockPanel>
-                                    <DockPanel Margin="5 10 0 0"
-                                               HorizontalAlignment="Left">
-                                        <Label Foreground="{StaticResource TextBrush}"
-                                               FontSize="14" Content="细体字体"/>
-                                        <Button Name="ZhLt" Tag="2,3" Width="64" Click="MultipleFileOpenButton_Click"
-                                                Margin="4  0 0 0" Content="选择字体"/>
-                                        <TextBlock Name="ZhLtS" Visibility="Collapsed"
-                                                   Style="{StaticResource VerifiedIcon}"
-                                                   Margin="8  0 0 0" Width="16"/>
-                                    </DockPanel>
-                                    <DockPanel Margin="5 10 0 0"
-                                               HorizontalAlignment="Left">
-                                        <Label Foreground="{StaticResource TextBrush}"
-                                               FontSize="14" Content="粗体字体"/>
-                                        <Button Name="ZhBd" Tag="4,5" Width="64" Click="MultipleFileOpenButton_Click"
-                                                Margin="4  0 0 0" Content="选择字体"/>
-                                        <TextBlock Name="ZhBdS" Visibility="Collapsed"
-                                                   Style="{StaticResource VerifiedIcon}"
-                                                   Margin="8  0 0 0" Width="16"/>
-                                    </DockPanel>
-                                    <DockPanel Margin="5 10 0 0"
-                                               HorizontalAlignment="Left">
-                                        <Label Foreground="{StaticResource TextBrush}"
-                                               FontSize="14" Content="可变字体"/>
-                                        <Button Name="Vary" Tag="18" Width="64" Click="MultipleFileOpenButton_Click"
-                                                Margin="4  0 0 0" Content="选择字体"/>
-                                        <TextBlock Name="VaryS" Visibility="Collapsed"
-                                                   Style="{StaticResource VerifiedIcon}"
-                                                   Margin="8  0 0 0" Width="16"/>
-                                    </DockPanel>
-                                </StackPanel>
-                            </DockPanel>
-                            <DockPanel Name="ProcessingPanel2" Margin="0 0 80 64" 
-                                       HorizontalAlignment="Right" VerticalAlignment="Bottom"
-                                       Width="180" Height="90" Visibility="Collapsed">
-                                <Label Style="{StaticResource AnimatedHammerStyle}"
-                                       Content="&#xE70B;" VerticalAlignment="Center"/>
-                                <Label Foreground="{StaticResource TextBrush}" 
-                                       VerticalAlignment="Center" Width="100" FontSize="16"
-                                       Content="制作中……"/>
-                            </DockPanel>
-                            <DockPanel Name="FinishPanel2" Margin="0 0 80 64" 
-                                       Style="{StaticResource DockPanelFadeIn}"
-                                       HorizontalAlignment="Right" VerticalAlignment="Bottom"
-                                       Width="180" Height="90" Visibility="Collapsed">
-                                <Label VerticalAlignment="Center" FontFamily="Assets/#iconfont"
-                                       FontSize="64" Foreground="{StaticResource TextBrush}"
-                                       Content="&#xE646;" />
-                                <Label VerticalAlignment="Center" FontFamily="Assets/#iconfont"
-                                       FontSize="40" Foreground="{StaticResource TextBrush}"
-                                       Margin="-62 1  0 0" Content="&#xE63E;" />
-                                <Label Foreground="{StaticResource TextBrush}" 
-                                       VerticalAlignment="Center" Width="100" FontSize="16"
-                                       Content="制作完成"/>
-                            </DockPanel>
-                            <Button Name="OutDirButton2" Style="{StaticResource BorderlessButton}"
-                                    VerticalAlignment="Bottom" HorizontalAlignment="Right" 
-                                    Visibility="Collapsed" Margin="0 0 50 48" 
-                                    Click="OutputDirectoryButton_Click" Tag="Multiple">
-                                <StackPanel Orientation="Horizontal">
-                                    <TextBlock Text="&#xE701;" FontSize="16" VerticalAlignment="Center"/>
-                                    <TextBlock Text="打开导出目录" FontSize="13"
-                                               Margin="4,0,0,0" 
-                                               VerticalAlignment="Center"/>
-                                </StackPanel>
-                            </Button>
-                        </Grid>
-                    </Grid>
+                    <sections:MultipleRepTab
+                        x:Name="Tab2Content" Visibility="Collapsed"
+                        Style="{StaticResource GridFadeIn}"/>
                     <!-- 实用工具页详细内容 -->
-                    <Grid x:Name="Tab3Content" Visibility="Visible">
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="45"/>
-                            <RowDefinition Height="1*"/>
-                        </Grid.RowDefinitions>
-
-                        <Grid Grid.Row="0">
-                            <Border>
-                                <Button Name="Back3" Style="{StaticResource BorderlessButton}"
-                                        HorizontalAlignment="Left" Margin="24 10 0 0"
-                                        Click="AltTabButton_Click">
-                                    <StackPanel Orientation="Horizontal">
-                                        <TextBlock Text="&#xE61A;" FontSize="19" VerticalAlignment="Center"/>
-                                        <TextBlock Text="返回主页" Margin="8,0,0,0" 
-                                                   VerticalAlignment="Center"/>
-                                    </StackPanel>
-                                </Button>
-                            </Border>
-                        </Grid>
-                        
-                        <Grid Grid.Row="1">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="0.5*"/>
-                                <ColumnDefinition Width="0.5*"/>
-                            </Grid.ColumnDefinitions>
-                            
-                            <Grid Grid.Column="0">
-                                <Border Background="{StaticResource MainBrush}"
-                                        CornerRadius="6" Margin="27 4 7 20">
-                                    <Border.Effect>
-                                        <DropShadowEffect BlurRadius="8" ShadowDepth="0" 
-                                                           Direction="270" Color="#90cdb9df"/>
-                                    </Border.Effect>
-                                </Border>
-                            </Grid>
-                            
-                            <Grid Grid.Column="1">
-                                <Border Background="{StaticResource MainBrush}"
-                                        CornerRadius="6" Margin="7 4 27 20">
-                                    <Border.Effect>
-                                        <DropShadowEffect BlurRadius="8" ShadowDepth="0" 
-                                                          Direction="270" Color="#90cdb9df"/>
-                                    </Border.Effect>
-                                </Border>
-                            </Grid>
-                        </Grid>
-                    </Grid>
+                    <sections:Utilities
+                        x:Name="Tab3Content" Visibility="Visible"
+                        Style="{StaticResource GridFadeIn}"/>
                 </Grid>
             </Border>
             
@@ -632,51 +94,74 @@
                     Background="{StaticResource MainBrush}"
                     CornerRadius="0 0 0 10"
                     BorderThickness="0 0">
-                <StackPanel Margin="0 8 0 0" VerticalAlignment="Top">
-                    <!-- 主页按钮 -->
-                    <RadioButton x:Name="WelcomeTab" GroupName="MainTabs"
-                                 Style="{StaticResource MyRadioButtonStyle}"
-                                 Height="48" IsChecked="True" Checked="TabButton_Checked">
-                        <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="&#xE617;" FontSize="18" Margin="2 0 0 0"
-                                       VerticalAlignment="Center"/>
-                            <TextBlock Text="主页" Margin="8 0 0 0" 
-                                       VerticalAlignment="Center"/>
-                        </StackPanel>
-                    </RadioButton>
-                    <!-- 快速制作按钮 -->
-                    <RadioButton x:Name="Tab1" GroupName="MainTabs"
-                                 Style="{StaticResource MyRadioButtonStyle}"
-                                 Height="48" Checked="TabButton_Checked">
-                        <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="&#xE63C;" FontSize="20" VerticalAlignment="Center"/>
-                            <TextBlock Text="快速制作" Margin="8 0 0 0" 
-                                       VerticalAlignment="Center"/>
-                        </StackPanel>
-                    </RadioButton>
-                    <!-- 精细制作按钮 -->
-                    <RadioButton x:Name="Tab2" GroupName="MainTabs"
-                                 Style="{StaticResource MyRadioButtonStyle}"
-                                 Height="48" Checked="TabButton_Checked">
-                        <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="&#xE640;" FontSize="20" VerticalAlignment="Center"/>
-                            <TextBlock Text="精细制作" Margin="8 0 0 0" 
-                                       VerticalAlignment="Center"/>
-                        </StackPanel>
-                    </RadioButton>
-                    <!-- 实用工具按钮 -->
-                    <RadioButton x:Name="Tab3" GroupName="MainTabs"
-                                 Style="{StaticResource MyRadioButtonStyle}"
-                                 Height="48" Checked="TabButton_Checked">
-                        <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="&#xE75F;" FontSize="20" VerticalAlignment="Center"/>
-                            <TextBlock Text="实用工具" Margin="8 0 0 0" 
-                                       VerticalAlignment="Center"/>
-                        </StackPanel>
-                    </RadioButton>
-                </StackPanel>
+                <Grid>
+                    <StackPanel Margin="0 8 0 0" VerticalAlignment="Top">
+                        <!-- 主页按钮 -->
+                        <RadioButton x:Name="WelcomeTab" GroupName="MainTabs"
+                                     Style="{StaticResource MyRadioButtonStyle}"
+                                     Height="48" IsChecked="True" Checked="TabButton_Checked">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="&#xE617;" FontSize="18" Margin="2 0 0 0"
+                                           VerticalAlignment="Center"/>
+                                <TextBlock Text="主页" Margin="8 0 0 0" 
+                                           VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </RadioButton>
+                        <!-- 快速制作按钮 -->
+                        <RadioButton x:Name="Tab1Button" GroupName="MainTabs"
+                                     Style="{StaticResource MyRadioButtonStyle}"
+                                     Height="48" Checked="TabButton_Checked">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="&#xE63C;" FontSize="20" VerticalAlignment="Center"/>
+                                <TextBlock Text="快速制作" Margin="8 0 0 0" 
+                                           VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </RadioButton>
+                        <!-- 精细制作按钮 -->
+                        <RadioButton x:Name="Tab2Button" GroupName="MainTabs"
+                                     Style="{StaticResource MyRadioButtonStyle}"
+                                     Height="48" Checked="TabButton_Checked">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="&#xE647;" FontSize="20" VerticalAlignment="Center"/>
+                                <TextBlock Text="精细制作" Margin="8 0 0 0" 
+                                           VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </RadioButton>
+                        <!-- 实用工具按钮 -->
+                        <RadioButton x:Name="Tab3Button" GroupName="MainTabs"
+                                     Style="{StaticResource MyRadioButtonStyle}"
+                                     Height="48" Checked="TabButton_Checked">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="&#xE75F;" FontSize="20" VerticalAlignment="Center"/>
+                                <TextBlock Text="实用工具" Margin="8 0 0 0" 
+                                           VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </RadioButton>
+                    </StackPanel>
+                    <StackPanel Margin="0 0 0 20" VerticalAlignment="Bottom">
+                        <!-- 精细制作按钮 -->
+                        <RadioButton x:Name="Tab4Button" GroupName="MainTabs"
+                                     Style="{StaticResource MyRadioButtonStyle}"
+                                     Height="48" Checked="TabButton_Checked">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="&#xE649;" FontSize="20" VerticalAlignment="Center"/>
+                                <TextBlock Text="帮助文档" Margin="8 0 0 0" 
+                                           VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </RadioButton>
+                        <!-- 实用工具按钮 -->
+                        <RadioButton x:Name="Tab5Button" GroupName="MainTabs"
+                                     Style="{StaticResource MyRadioButtonStyle}"
+                                     Height="48" Checked="TabButton_Checked">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="&#xE646;" FontSize="20" VerticalAlignment="Center"/>
+                                <TextBlock Text="设置" Margin="8 0 0 0" 
+                                           VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </RadioButton>
+                    </StackPanel>
+                </Grid>
             </Border>
         </Grid>
     </Grid>
-
 </Window>

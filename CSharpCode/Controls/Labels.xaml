@@ -13,7 +13,7 @@
 
     <!-- 缺少文件标签 -->
     <Style x:Key="OmitIcon" TargetType="TextBlock">
-        <Setter Property="Text" Value="&#xE6AF;"/>
+        <Setter Property="Text" Value="&#xE6B0;"/>
         <Setter Property="FontFamily" Value="../Assets/#iconfont"/>
         <Setter Property="FontSize" Value="16"/>
         <Setter Property="VerticalAlignment" Value="Center"/>
@@ -30,7 +30,7 @@
 
     <!-- 提示标签 -->
     <Style x:Key="WarningIcon" TargetType="TextBlock">
-        <Setter Property="Text" Value="&#xE65D;"/>
+        <Setter Property="Text" Value="&#xE65E;"/>
         <Setter Property="FontFamily" Value="../Assets/#iconfont"/>
         <Setter Property="FontSize" Value="16"/>
         <Setter Property="VerticalAlignment" Value="Center"/>
@@ -40,7 +40,7 @@
 
     <!-- 错误标签 -->
     <Style x:Key="ErrorIcon" TargetType="TextBlock">
-        <Setter Property="Text" Value="&#xE65D;"/>
+        <Setter Property="Text" Value="&#xE65E;"/>
         <Setter Property="FontFamily" Value="../Assets/#iconfont"/>
         <Setter Property="FontSize" Value="16"/>
         <Setter Property="VerticalAlignment" Value="Center"/>
