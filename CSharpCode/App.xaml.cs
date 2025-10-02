@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
+using System.Text.Json;
 using System.Windows;
-using Newtonsoft.Json;
 using Windows_Font_Replacement_Tool.Framework;
 
 namespace Windows_Font_Replacement_Tool;
@@ -31,10 +31,16 @@ public partial class App
     internal static readonly string ResourcePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Assets");
     internal static readonly string XmlsPath = Path.Combine(ResourcePath, "xmls");
 
+    public static readonly JsonSerializerOptions DefaultOptions = new()
+    {
+        Encoder = System.Text.Encodings.Web.JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
+        WriteIndented = true
+    };
+
     protected override void OnStartup(StartupEventArgs e)
     {
         base.OnStartup(e);
-        HashTab.Initialize();
+        ResourceHelper.Initialize();
         LoadConfig();
     }
 
@@ -53,7 +59,7 @@ public partial class App
         var configExists = File.Exists(ConfigPath);
         if (configExists)
         {
-            var config = JsonConvert.DeserializeObject<Config>(File.ReadAllText(ConfigPath));
+            var config = JsonSerializer.Deserialize<Config>(File.ReadAllText(ConfigPath), DefaultOptions);
             Config = config ?? new Config();
         }
 

@@ -10,13 +10,8 @@ namespace Windows_Font_Replacement_Tool.Framework;
 /// <summary>
 /// 用于进行文件解压与哈希校验的类。
 /// </summary>
-public static class HashTab
+internal static class ResourceHelper
 {
-    /// <summary>
-    /// xmlLibs 的 sha1 值
-    /// </summary>
-    private const string LibSha = "2f7349a1ec9dc23c1385d91505b67df010505ce4";
-
     /// <summary>
     /// 在主程序运行前进行初始化校验。
     /// </summary>
@@ -25,7 +20,7 @@ public static class HashTab
         try
         {
             // xmls 目录不存在的情况下验证 Libs 文件完整性
-            if (!Directory.Exists(App.XmlsPath)) ValidateLibFiles();
+            if (!Directory.Exists(App.XmlsPath)) DecodeLibs();
             // xmls 目录存在的情况下验证每个 xml 文件完整性
             ValidateXmlFiles();
         }
@@ -36,29 +31,20 @@ public static class HashTab
     }
 
     /// <summary>
-    /// 验证 Assets/xmlLibs文件完整性。
-    /// </summary>
-    private static void ValidateLibFiles()
-    {
-        var dataLibsPath = Path.Combine(App.ResourcePath, "xmlLibs");
-        // 验证失败，报错
-        if (!File.Exists(dataLibsPath) || ComputeSha1(dataLibsPath) != LibSha)
-            throw new Exception("xmlLibs 文件损坏");
-        // 验证成功，解包
-        DecodeLibs();
-    }
-
-    /// <summary>
-    /// 解包 xmlLibs文件。
+    /// 从嵌入至程序集的数据中读取 xmlData
     /// </summary>
     private static void DecodeLibs()
     {
-        var dataLibsPath = Path.Combine(App.ResourcePath, "xmlLibs");
-        var archivePath = Path.Combine(App.ResourcePath, "archive");
+        var uri = new Uri("pack://application:,,,/Resources/xmlData");
+        var stream = Application.GetResourceStream(uri);
+        if (stream == null) throw new Exception("未能解析 xmlLibs 文件");
 
-        var base64Data = File.ReadAllText(dataLibsPath);
-        var zipBytes = Convert.FromBase64String(base64Data);
-        File.WriteAllBytes(archivePath, zipBytes);
+        var reader = new StreamReader(stream.Stream);
+        var base64 = reader.ReadToEnd();
+        var bytes = Convert.FromBase64String(base64);
+
+        var archivePath = Path.Combine(App.ResourcePath, "archive");
+        File.WriteAllBytes(archivePath, bytes);
 
         using (var zipStream = new ZipInputStream(File.OpenRead(archivePath)))
         {
@@ -73,11 +59,9 @@ public static class HashTab
                     Directory.CreateDirectory(directoryPath);
                 }
 
-                if (!entry.IsDirectory)
-                {
-                    using var fileStream = File.Create(entryPath);
-                    zipStream.CopyTo(fileStream);
-                }
+                if (entry.IsDirectory) continue;
+                using var fileStream = File.Create(entryPath);
+                zipStream.CopyTo(fileStream);
             }
         }
 
@@ -101,7 +85,7 @@ public static class HashTab
 
         // 若 xml 目录内的文件数量不为 19，则可能存在异常，删除目录并重新解包
         Directory.Delete(App.XmlsPath, true);
-        ValidateLibFiles();
+        DecodeLibs();
     }
 
     /// <summary>

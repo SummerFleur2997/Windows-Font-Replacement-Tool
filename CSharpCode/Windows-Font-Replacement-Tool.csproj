@@ -1,20 +1,35 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-
     <PropertyGroup>
+        <Authors>SummerFleur</Authors>
+        <Copyright>Copyright © SummerFleur 2025</Copyright>
+        <RepositoryUrl>https://github.com/SummerFleur2997/Windows-Font-Replacement-Tool</RepositoryUrl>
+        <RepositoryType>git</RepositoryType>
+        <AssemblyTitle>Windows Font Replacement Tool</AssemblyTitle>
+        <AssemblyVersion>2.0</AssemblyVersion>
+        <ProductVersion>2.0</ProductVersion>
+        <FileVersion>2.0</FileVersion>
         <OutputType>WinExe</OutputType>
         <TargetFramework>net6.0-windows</TargetFramework>
         <RootNamespace>Windows_Font_Replacement_Tool</RootNamespace>
         <Nullable>enable</Nullable>
         <UseWPF>true</UseWPF>
+        <Deterministic>true</Deterministic>
+        <GenerateAssemblyInfo>true</GenerateAssemblyInfo>
     </PropertyGroup>
-    
+    <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+        <DebugSymbols>false</DebugSymbols>
+        <DebugType>none</DebugType>
+    </PropertyGroup>
     <ItemGroup>
-        <Resource Include="Assets\iconfont.ttf" />
+        <Resource Include="Resources\xmlData" />
+        <Resource Include="Resources\iconfont.ttf" />
     </ItemGroup>
-
     <ItemGroup>
-        <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+        <Content Include="Assets\**">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+    </ItemGroup>
+    <ItemGroup>
         <PackageReference Include="SharpZipLib" Version="1.4.0" />
     </ItemGroup>
-
 </Project>

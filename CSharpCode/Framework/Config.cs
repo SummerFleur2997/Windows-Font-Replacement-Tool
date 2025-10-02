@@ -1,6 +1,6 @@
 ﻿using System;
 using System.IO;
-using Newtonsoft.Json;
+using System.Text.Json;
 
 namespace Windows_Font_Replacement_Tool.Framework;
 
@@ -11,14 +11,9 @@ namespace Windows_Font_Replacement_Tool.Framework;
 public class Config
 {
     /// <summary>
-    /// 是否使用默认输出目录
+    /// 最大并行线程数
     /// </summary>
-    public bool UseDefaultOutputPath { get; set; }
-
-    /// <summary>
-    /// 使用自定义输出目录的情况下的输出目录
-    /// </summary>
-    public string OutputPath { get; set; } = "";
+    public int MaxThreads { get; set; }
 
     /// <summary>
     /// 预览文本
@@ -37,14 +32,12 @@ The quick brown fox jumps over the lazy dog.
 　　闲云潭影日悠悠，物换星移几度秋。
 　　阁中帝子今何在？槛外长江空自流。";
 
-    public Config() { }
-
     /// <summary>
     /// 将当前配置文件序列化并保存至对应目录。
     /// </summary>
     public void Save()
     {
-        var json = JsonConvert.SerializeObject(this, Formatting.Indented);
+        var json = JsonSerializer.Serialize(this, App.DefaultOptions);
         File.WriteAllText(App.ConfigPath, json);
     }
 }
