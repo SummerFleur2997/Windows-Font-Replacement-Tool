@@ -1,6 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Windows-Font-Replacement-Tool", "Windows-Font-Replacement-Tool.csproj", "{07200783-932A-483C-9A93-7DCB658C5240}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Windows-Font-Replacement-Tool", "Windows-Font-Replacement-Tool\Windows-Font-Replacement-Tool.csproj", "{07200783-932A-483C-9A93-7DCB658C5240}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
