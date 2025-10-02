@@ -104,7 +104,7 @@
 
     <!-- 锤子动画 -->
     <Style x:Key="AnimatedHammerStyle" TargetType="Label">
-        <Setter Property="FontFamily" Value="../Assets/#iconfont"/>
+        <Setter Property="FontFamily" Value="../Resources/#iconfont"/>
         <Setter Property="FontSize" Value="48"/>
         <Setter Property="Foreground" Value="{StaticResource TextBrush}"/>
         <Setter Property="HorizontalAlignment" Value="Center"/>

@@ -1,19 +1,61 @@
 ﻿<Grid xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      mc:Ignorable="d"
       xmlns:controls="clr-namespace:Windows_Font_Replacement_Tool.Controls"
       x:Class="Windows_Font_Replacement_Tool.Sections.Utilities"
-      Margin="20">
+      Margin="20" d:DesignWidth="700">
     <ScrollViewer VerticalAlignment="Stretch"
                   Style="{StaticResource MyScrollViewer}">
         <StackPanel>
+            <!-- 字体格式转换工具 -->
             <controls:CollapsableCard
-                Icon="&#xE64e;" Title="格式转换" ExtraHeight="200">
+                Icon="&#xE64e;" Title="格式转换" IsCollapsed="False">
+                <controls:CollapsableCard.Content>
+                    <Grid>
+                        <StackPanel Width="200" HorizontalAlignment="Left">
+                            <TextBlock 
+                                Foreground="{StaticResource TextBrush}"
+                                FontSize="13" Text="转换选项："/>
+                            <StackPanel Orientation="Horizontal" Margin="0 10 0 0">
+                                <RadioButton 
+                                    Foreground="{StaticResource TextBrush}"
+                                    Margin="10 0" FontSize="12" GroupName="FormatTrans"
+                                    Content=".otf 转为 .ttf" IsChecked="True"/>
+                                <RadioButton 
+                                    Foreground="{StaticResource TextBrush}"
+                                    Margin="10 0" FontSize="12" GroupName="FormatTrans"
+                                    Content=".ttf 转为 .otf"/>
+                            </StackPanel>
+                        </StackPanel>
+                        
+                        <Button
+                            VerticalAlignment="Top" HorizontalAlignment="Right"
+                            Width="100" Height="32" Margin="10 10 10 0"
+                            Content="选择文件"
+                            Style="{StaticResource ColoredButton}"/>
+                    </Grid>
+                </controls:CollapsableCard.Content>
             </controls:CollapsableCard>
             <controls:CollapsableCard
-                Icon="&#xE641;" Title="自定义替换" ExtraHeight="100">
+                Icon="&#xE641;" Title="自定义替换" IsCollapsed="False">
+                <controls:CollapsableCard.Content>
+                    <Grid>
+                        <StackPanel HorizontalAlignment="Left">
+                            <controls:CustomTaskBox Width="500">
+                            </controls:CustomTaskBox>
+                        </StackPanel>
+                        <Button
+                            VerticalAlignment="Top" HorizontalAlignment="Right"
+                            Width="100" Height="32" Margin="10 10 10 0"
+                            Content="开始替换"
+                            Style="{StaticResource ColoredButton}"/>
+                    </Grid>
+                </controls:CollapsableCard.Content>
             </controls:CollapsableCard>
             <controls:CollapsableCard
-                Icon="&#xE63d;" Title="TTC 拆分与合并" ExtraHeight="100">
+                Icon="&#xE63d;" Title="TTC 拆分与合并">
             </controls:CollapsableCard>
         </StackPanel>
     </ScrollViewer>

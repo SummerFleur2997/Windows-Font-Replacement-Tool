@@ -1,0 +1,21 @@
+﻿<Grid xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      x:Class="Windows_Font_Replacement_Tool.Controls.CustomTaskBox"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      mc:Ignorable="d"
+      xmlns:controls="clr-namespace:Windows_Font_Replacement_Tool.Controls"
+      d:DesignHeight="300" d:DesignWidth="500"
+      HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0">
+    <Border
+        x:Name="Border" VerticalAlignment="Top" Height="150"
+        Background="{StaticResource AltSurfaceBrush}"
+        CornerRadius="6" Margin="5">
+        <Grid>
+            <StackPanel Margin="2">
+                <controls:CustomTaskRow IndexNum="1"/>
+                <controls:CustomTaskRow IndexNum="2"/>
+            </StackPanel>
+        </Grid>
+    </Border>
+</Grid>

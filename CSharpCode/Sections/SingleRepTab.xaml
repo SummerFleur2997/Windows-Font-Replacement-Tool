@@ -134,7 +134,7 @@
             <StackPanel Name="FinishPanel" Margin="18 18 38 36"
                         Style="{StaticResource StackPanelFadeIn}"
                         VerticalAlignment="Center" Visibility="Collapsed">
-                <Label HorizontalAlignment="Center" FontFamily="../Assets/#iconfont"
+                <Label HorizontalAlignment="Center" FontFamily="../Resources/#iconfont"
                        FontSize="64" Foreground="{StaticResource TextBrush}"
                        Content="&#xE63e;"/>
                 <Label Foreground="{StaticResource TextBrush}"

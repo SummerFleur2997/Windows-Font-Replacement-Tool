@@ -98,7 +98,7 @@
                     <StackPanel Margin="0 8 0 0" VerticalAlignment="Top">
                         <!-- 主页按钮 -->
                         <RadioButton x:Name="WelcomeTab" GroupName="MainTabs"
-                                     Style="{StaticResource MyRadioButtonStyle}"
+                                     Style="{StaticResource TabRadioButtonStyle}"
                                      Height="48" IsChecked="True" Checked="TabButton_Checked">
                             <StackPanel Orientation="Horizontal">
                                 <TextBlock Text="&#xE617;" FontSize="18" Margin="2 0 0 0"
@@ -109,7 +109,7 @@
                         </RadioButton>
                         <!-- 快速制作按钮 -->
                         <RadioButton x:Name="Tab1Button" GroupName="MainTabs"
-                                     Style="{StaticResource MyRadioButtonStyle}"
+                                     Style="{StaticResource TabRadioButtonStyle}"
                                      Height="48" Checked="TabButton_Checked">
                             <StackPanel Orientation="Horizontal">
                                 <TextBlock Text="&#xE63C;" FontSize="20" VerticalAlignment="Center"/>
@@ -119,7 +119,7 @@
                         </RadioButton>
                         <!-- 精细制作按钮 -->
                         <RadioButton x:Name="Tab2Button" GroupName="MainTabs"
-                                     Style="{StaticResource MyRadioButtonStyle}"
+                                     Style="{StaticResource TabRadioButtonStyle}"
                                      Height="48" Checked="TabButton_Checked">
                             <StackPanel Orientation="Horizontal">
                                 <TextBlock Text="&#xE647;" FontSize="20" VerticalAlignment="Center"/>
@@ -129,7 +129,7 @@
                         </RadioButton>
                         <!-- 实用工具按钮 -->
                         <RadioButton x:Name="Tab3Button" GroupName="MainTabs"
-                                     Style="{StaticResource MyRadioButtonStyle}"
+                                     Style="{StaticResource TabRadioButtonStyle}"
                                      Height="48" Checked="TabButton_Checked">
                             <StackPanel Orientation="Horizontal">
                                 <TextBlock Text="&#xE75F;" FontSize="20" VerticalAlignment="Center"/>
@@ -141,7 +141,7 @@
                     <StackPanel Margin="0 0 0 20" VerticalAlignment="Bottom">
                         <!-- 精细制作按钮 -->
                         <RadioButton x:Name="Tab4Button" GroupName="MainTabs"
-                                     Style="{StaticResource MyRadioButtonStyle}"
+                                     Style="{StaticResource TabRadioButtonStyle}"
                                      Height="48" Checked="TabButton_Checked">
                             <StackPanel Orientation="Horizontal">
                                 <TextBlock Text="&#xE649;" FontSize="20" VerticalAlignment="Center"/>
@@ -151,7 +151,7 @@
                         </RadioButton>
                         <!-- 实用工具按钮 -->
                         <RadioButton x:Name="Tab5Button" GroupName="MainTabs"
-                                     Style="{StaticResource MyRadioButtonStyle}"
+                                     Style="{StaticResource TabRadioButtonStyle}"
                                      Height="48" Checked="TabButton_Checked">
                             <StackPanel Orientation="Horizontal">
                                 <TextBlock Text="&#xE646;" FontSize="20" VerticalAlignment="Center"/>

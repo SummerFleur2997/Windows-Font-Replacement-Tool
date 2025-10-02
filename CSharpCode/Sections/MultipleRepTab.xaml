@@ -238,7 +238,7 @@
                    Style="{StaticResource DockPanelFadeIn}"
                    HorizontalAlignment="Right" VerticalAlignment="Bottom"
                    Width="180" Height="90" Visibility="Collapsed">
-            <Label VerticalAlignment="Center" FontFamily="../Assets/#iconfont"
+            <Label VerticalAlignment="Center" FontFamily="../Resources/#iconfont"
                    FontSize="64" Foreground="{StaticResource TextBrush}"
                    Content="&#xE63e;"/>
             <Label Foreground="{StaticResource TextBrush}"

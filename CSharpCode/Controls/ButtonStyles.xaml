@@ -4,7 +4,7 @@
     <Style x:Key="CloseButtonStyle" TargetType="Button">
         <Setter Property="Background" Value="Transparent"/>
         <Setter Property="BorderBrush" Value="Transparent"/>
-        <Setter Property="FontFamily" Value="../Assets/#iconfont"/>
+        <Setter Property="FontFamily" Value="../Resources/#iconfont"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="Button">
@@ -37,7 +37,7 @@
     <Style x:Key="MinimizeButtonStyle" TargetType="Button">
         <Setter Property="Background" Value="Transparent"/>
         <Setter Property="BorderBrush" Value="Transparent"/>
-        <Setter Property="FontFamily" Value="../Assets/#iconfont"/>
+        <Setter Property="FontFamily" Value="../Resources/#iconfont"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="Button">
@@ -71,7 +71,7 @@
         <Setter Property="Background" Value="{StaticResource MainBrush}"/>
         <Setter Property="BorderBrush" Value="{StaticResource TextBrush}"/>
         <Setter Property="Foreground" Value="{StaticResource TextBrush}"/>
-        <Setter Property="FontFamily" Value="../Assets/#iconfont, Microsoft YaHei UI"/>
+        <Setter Property="FontFamily" Value="../Resources/#iconfont, Microsoft YaHei UI"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="Button">
@@ -117,7 +117,7 @@
     <!-- 填充按钮 -->
     <Style x:Key="ColoredButton" TargetType="Button">
         <Setter Property="Foreground" Value="{StaticResource MainBrush}"/>
-        <Setter Property="FontFamily" Value="../Assets/#iconfont, Microsoft YaHei UI"/>
+        <Setter Property="FontFamily" Value="../Resources/#iconfont, Microsoft YaHei UI"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="Button">
@@ -199,7 +199,7 @@
     <Style x:Key="BorderlessButton" TargetType="Button">
         <Setter Property="Background" Value="Transparent"/>
         <Setter Property="BorderBrush" Value="Transparent"/>
-        <Setter Property="FontFamily" Value="../Assets/#iconfont, Microsoft YaHei UI"/>
+        <Setter Property="FontFamily" Value="../Resources/#iconfont, Microsoft YaHei UI"/>
         <Setter Property="FontSize" Value="16"/>
         <Setter Property="Foreground" Value="{StaticResource TextBrush}"/>
         <Setter Property="ToolTipService.InitialShowDelay" Value="200"/>
@@ -260,7 +260,7 @@
         <Setter Property="Background" Value="{StaticResource MainBrush}"/>
         <Setter Property="BorderBrush" Value="{StaticResource TextBrush}"/>
         <Setter Property="Foreground" Value="{StaticResource TextBrush}"/>
-        <Setter Property="FontFamily" Value="../Assets/#iconfont, Microsoft YaHei UI"/>
+        <Setter Property="FontFamily" Value="../Resources/#iconfont, Microsoft YaHei UI"/>
         <Setter Property="FontSize" Value="16"/>
         <Setter Property="Width" Value="160"/>
         <Setter Property="Margin" Value="32 0"/>
@@ -342,12 +342,70 @@
         </Setter>
     </Style>
 
-    <!-- 导航栏按钮 -->
-    <Style x:Key="MyRadioButtonStyle" TargetType="RadioButton">
+    <Style TargetType="RadioButton">
         <Setter Property="Background" Value="Transparent"/>
         <Setter Property="BorderBrush" Value="Transparent"/>
         <Setter Property="Foreground" Value="{StaticResource OnSurfaceBrush}"/>
-        <Setter Property="FontFamily" Value="../Assets/#iconfont, Microsoft YaHei UI"/>
+        <Setter Property="FontFamily" Value="../Resources/#iconfont, Microsoft YaHei UI"/>
+        <Setter Property="FontSize" Value="14"/>
+        <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+        <Setter Property="VerticalContentAlignment" Value="Stretch"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="RadioButton">
+                    <Border x:Name="RootBorder"
+                            Background="Transparent"
+                            SnapsToDevicePixels="True">
+                        <Grid>
+                            <Border x:Name="SelectionIndicator"
+                                    Width="14" Height="14"
+                                    HorizontalAlignment="Left"
+                                    Background="Transparent"
+                                    BorderBrush="{StaticResource CommentBrush}"
+                                    BorderThickness="1.5"
+                                    CornerRadius="7">
+                                <Ellipse x:Name="SelectionDot"
+                                         Width="7" Height="7"
+                                         Fill="{StaticResource TextBrush}"
+                                         Visibility="Collapsed"/>
+                            </Border>
+                            <ContentPresenter
+                                VerticalAlignment="Center"
+                                HorizontalAlignment="Left"
+                                Margin="20 0 0 0"/>
+                        </Grid>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsChecked" Value="True">
+                            <Setter TargetName="SelectionDot"
+                                    Property="Visibility"
+                                    Value="Visible"/>
+                        </Trigger>
+                        <Trigger Property="IsChecked" Value="False"/>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Trigger.EnterActions>
+                                <BeginStoryboard>
+                                    <Storyboard Duration="0:0:0.2"/>
+                                </BeginStoryboard>
+                            </Trigger.EnterActions>
+                            <Trigger.ExitActions>
+                                <BeginStoryboard>
+                                    <Storyboard Duration="0:0:0.2"/>
+                                </BeginStoryboard>
+                            </Trigger.ExitActions>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- 导航栏按钮 -->
+    <Style x:Key="TabRadioButtonStyle" TargetType="RadioButton">
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="BorderBrush" Value="Transparent"/>
+        <Setter Property="Foreground" Value="{StaticResource OnSurfaceBrush}"/>
+        <Setter Property="FontFamily" Value="../Resources/#iconfont, Microsoft YaHei UI"/>
         <Setter Property="FontSize" Value="14"/>
         <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
         <Setter Property="VerticalContentAlignment" Value="Stretch"/>
