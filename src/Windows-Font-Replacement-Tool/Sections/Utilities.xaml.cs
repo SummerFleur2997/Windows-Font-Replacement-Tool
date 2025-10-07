@@ -2,8 +2,5 @@
 
 public partial class Utilities
 {
-    public Utilities()
-    {
-        InitializeComponent();
-    }
+    public Utilities() => InitializeComponent();
 }

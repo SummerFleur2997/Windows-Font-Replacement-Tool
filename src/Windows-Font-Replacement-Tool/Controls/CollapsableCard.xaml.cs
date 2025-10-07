@@ -2,6 +2,7 @@
 using System.Windows;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
+using System.Windows.Threading;
 
 namespace Windows_Font_Replacement_Tool.Controls;
 
@@ -14,17 +15,17 @@ public partial class CollapsableCard
 
     /// <inheritdoc cref="Icon"/>
     public static readonly DependencyProperty IconProperty =
-        DependencyProperty.Register(nameof(Icon), typeof(string), typeof(CollapsableCard), 
+        DependencyProperty.Register(nameof(Icon), typeof(string), typeof(CollapsableCard),
             new PropertyMetadata("", OnIconChanged));
 
     /// <inheritdoc cref="Title"/>
     public static readonly DependencyProperty TitleProperty =
-        DependencyProperty.Register(nameof(Title), typeof(string), typeof(CollapsableCard), 
+        DependencyProperty.Register(nameof(Title), typeof(string), typeof(CollapsableCard),
             new PropertyMetadata("", OnTitleChanged));
 
     /// <inheritdoc cref="IsCollapsed"/>
     public static readonly DependencyProperty IsCollapsedProperty =
-        DependencyProperty.Register(nameof(IsCollapsed), typeof(bool), typeof(CollapsableCard), 
+        DependencyProperty.Register(nameof(IsCollapsed), typeof(bool), typeof(CollapsableCard),
             new PropertyMetadata(true, OnIsCollapsedChanged));
 
     /// <inheritdoc cref="Content"/>
@@ -72,18 +73,16 @@ public partial class CollapsableCard
     {
         InitializeComponent();
         Dispatcher.BeginInvoke(
-            new Action(() => { UpdateSwapState(IsCollapsed); }), 
-            System.Windows.Threading.DispatcherPriority.Loaded);
+            new Action(() => { UpdateSwapState(IsCollapsed); }),
+            DispatcherPriority.Loaded);
     }
 
     /// <summary>
     /// 当折叠按钮按下时调用
     /// </summary>
-    private void OnCollapseButtonClick(object sender, RoutedEventArgs e)
-    {
+    private void OnCollapseButtonClick(object sender, RoutedEventArgs e) =>
         // 切换折叠状态
         IsCollapsed = !IsCollapsed;
-    }
 
     private static void OnIconChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
     {

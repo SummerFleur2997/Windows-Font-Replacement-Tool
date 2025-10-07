@@ -1,8 +1,8 @@
 ﻿using System;
 using System.IO;
+using System.Security.Cryptography;
 using System.Text;
 using System.Windows;
-using System.Security.Cryptography;
 using ICSharpCode.SharpZipLib.Zip;
 
 namespace Windows_Font_Replacement_Tool.Framework;
@@ -55,9 +55,7 @@ internal static class ResourceHelper
                 var directoryPath = Path.GetDirectoryName(entryPath);
 
                 if (!Directory.Exists(directoryPath) && directoryPath != null)
-                {
                     Directory.CreateDirectory(directoryPath);
-                }
 
                 if (entry.IsDirectory) continue;
                 using var fileStream = File.Create(entryPath);

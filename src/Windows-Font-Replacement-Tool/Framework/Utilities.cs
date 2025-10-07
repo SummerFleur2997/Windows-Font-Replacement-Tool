@@ -32,7 +32,11 @@ public static class Utilities
                 var exitCode = action(item);
                 if (exitCode is 99 or -1)
                 {
-                    lock (lockObj) hasError = true;
+                    lock (lockObj)
+                    {
+                        hasError = true;
+                    }
+
                     state.Stop();
                 }
             }

@@ -2,8 +2,5 @@
 
 public partial class CustomTaskBox
 {
-    public CustomTaskBox()
-    {
-        InitializeComponent();
-    }
+    public CustomTaskBox() => InitializeComponent();
 }

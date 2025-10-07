@@ -1,7 +1,7 @@
 ﻿using System;
-using System.IO;
-using System.Diagnostics;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
 using System.Threading.Tasks;
 
 namespace Windows_Font_Replacement_Tool.Framework;
@@ -71,10 +71,7 @@ public class ReplaceTask
     /// 新建 cache 文件夹。
     /// </summary>
     /// <returns>cache文件夹绝对路径</returns>
-    private static string GetCacheDir()
-    {
-        return Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "output", "cache");
-    }
+    private static string GetCacheDir() => Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "output", "cache");
 
     /// <summary>
     /// 初始化 cache 文件夹。
@@ -92,10 +89,7 @@ public class ReplaceTask
     /// </summary>
     /// <param name="fileName">给定的文件名</param>
     /// <returns>导出文件绝对路径</returns>
-    private string OutputFilePath(string fileName)
-    {
-        return Path.Combine(OutputDirPath, fileName);
-    }
+    private string OutputFilePath(string fileName) => Path.Combine(OutputDirPath, fileName);
 
     /// <summary>
     /// Python 程序，合并两个 ttf 为 ttc。

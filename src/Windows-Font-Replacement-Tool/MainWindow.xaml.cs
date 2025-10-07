@@ -21,26 +21,17 @@ public partial class MainWindow
     /// <summary>
     /// 关闭程序。
     /// </summary>
-    private void ExitButton_Click(object sender, RoutedEventArgs e)
-    {
-        Application.Current.Shutdown();
-    }
+    private void ExitButton_Click(object sender, RoutedEventArgs e) => Application.Current.Shutdown();
 
     /// <summary>
     /// 最小化窗口。
     /// </summary>
-    private void MinimizeButton_Click(object sender, RoutedEventArgs e)
-    {
-        SystemCommands.MinimizeWindow(this);
-    }
+    private void MinimizeButton_Click(object sender, RoutedEventArgs e) => SystemCommands.MinimizeWindow(this);
 
     /// <summary>
     /// 拖动标题栏更改窗口位置。
     /// </summary>
-    private void Border_MouseDown(object sender, RoutedEventArgs e)
-    {
-        DragMove();
-    }
+    private void Border_MouseDown(object sender, RoutedEventArgs e) => DragMove();
 
     /// <summary>
     /// 点按左侧标签按钮切换标签页。

@@ -12,28 +12,22 @@ public partial class CustomTaskRow
 {
     /// <inheritdoc cref="IndexNum"/>
     public static readonly DependencyProperty IndexProperty =
-        DependencyProperty.Register(nameof(IndexNum), typeof(int), typeof(CustomTaskRow), 
+        DependencyProperty.Register(nameof(IndexNum), typeof(int), typeof(CustomTaskRow),
             new PropertyMetadata(0, OnIndexChanged));
 
     /// <inheritdoc cref="FontToRep"/>
     public static readonly DependencyProperty FontToRepProperty =
-        DependencyProperty.Register(nameof(FontToRep), typeof(string), typeof(CustomTaskRow), 
+        DependencyProperty.Register(nameof(FontToRep), typeof(string), typeof(CustomTaskRow),
             new PropertyMetadata("", OnFontToRepChanged));
 
     /// <inheritdoc cref="FontOfCus"/>
     public static readonly DependencyProperty FontOfCusProperty =
-        DependencyProperty.Register(nameof(FontOfCus), typeof(string), typeof(CustomTaskRow), 
+        DependencyProperty.Register(nameof(FontOfCus), typeof(string), typeof(CustomTaskRow),
             new PropertyMetadata("", OnFontOfCusChanged));
 
-    public CustomTaskRow()
-    {
-        InitializeComponent();
-    }
+    public CustomTaskRow() => InitializeComponent();
 
-    public CustomTaskRow(int index) : this()
-    {
-        IndexNum = index;
-    }
+    public CustomTaskRow(int index) : this() => IndexNum = index;
 
     /// <summary>
     /// 自定义任务的索引值

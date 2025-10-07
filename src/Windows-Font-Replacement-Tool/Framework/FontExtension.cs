@@ -14,7 +14,7 @@ public static class FontExtension
     /// <param name="textBlock">用于交互式响应的控件，告诉用户发生了什么。</param>
     public static void HandleFontException(Exception ex, TextBlock textBlock)
     {
-        var(text, style) = ex switch
+        var (text, style) = ex switch
         {
             FileNotFoundException => ("未能找到字体文件！", Application.Current.FindResource("OmitIcon") as Style),
             NotSupportedException => ("字体格式不受支持！", Application.Current.FindResource("ErrorIcon") as Style),

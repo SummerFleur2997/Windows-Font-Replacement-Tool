@@ -45,6 +45,7 @@ public partial class MultipleRepTab
                 App.MultipleReplaceTask = new MultipleReplace();
                 MultiplePanelUpdate();
             }
+
             var multipleFile = new OpenFileDialog { Filter = "字体文件 (*.ttf,*.otf)|*.ttf;*.otf" };
 
             // 尝试创建字体文件实例

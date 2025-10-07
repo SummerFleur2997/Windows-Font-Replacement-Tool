@@ -14,10 +14,7 @@ public class MultipleReplace : ReplaceTask
     /// <summary>
     /// 构造函数，初始化精细制作任务。
     /// </summary>
-    public MultipleReplace()
-    {
-        InitCacheDir(CacheDirPath);
-    }
+    public MultipleReplace() => InitCacheDir(CacheDirPath);
 
     /// <summary>
     /// 初始化主界面选择文件按钮右边的提示标签，将它们全部隐藏。

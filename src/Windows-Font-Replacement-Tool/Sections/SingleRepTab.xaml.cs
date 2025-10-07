@@ -52,11 +52,8 @@ public partial class SingleRepTab
             var font = new Font(singleFilePath);
 
             App.SingleReplaceTask = new SingleReplace(font, SHint);
-            
-            if (SingleFilePreview(font))
-            {
-                Run.IsEnabled = true;
-            }
+
+            Run.IsEnabled = SingleFilePreview(font);
         }
         catch (Exception ex)
         {
@@ -77,7 +74,7 @@ public partial class SingleRepTab
         var task = App.SingleReplaceTask;
 
         // 若快速替换任务为空或未能临时注册字体，返回 false
-        if (task == null || MainWindow.AddFontResource(font.FontPath) != 0) 
+        if (task == null || MainWindow.AddFontResource(font.FontPath) != 0)
             return false;
 
         // 验证 CJK 字符集数量
