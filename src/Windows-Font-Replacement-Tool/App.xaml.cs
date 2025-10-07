@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Text;
 using System.Text.Json;
 using System.Windows;
 using Windows_Font_Replacement_Tool.Framework;
@@ -40,6 +41,7 @@ public partial class App
     protected override void OnStartup(StartupEventArgs e)
     {
         base.OnStartup(e);
+        Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
         ResourceHelper.Initialize();
         LoadConfig();
     }

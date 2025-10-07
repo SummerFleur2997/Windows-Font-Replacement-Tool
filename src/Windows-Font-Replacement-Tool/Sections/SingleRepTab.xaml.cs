@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Threading;
+using FontReader;
 using Microsoft.Win32;
 using Windows_Font_Replacement_Tool.Framework;
 
@@ -37,42 +39,60 @@ public partial class SingleRepTab
     /// </summary>
     private void SingleFileOpenButton_Click(object sender, RoutedEventArgs e)
     {
-        // 先将快速制作模式任务置空，然后打开个性化字体文件
-        App.SingleReplaceTask = null;
-        var singleFile = new OpenFileDialog { Filter = "字体文件 (*.ttf,*.otf)|*.ttf;*.otf" };
+        try
+        {
+            // 先将快速制作模式任务置空，然后打开个性化字体文件
+            App.SingleReplaceTask = null;
+            var singleFile = new OpenFileDialog { Filter = "字体文件 (*.ttf,*.otf)|*.ttf;*.otf" };
 
-        if (singleFile.ShowDialog() == false) return;
-        var singleFilePath = singleFile.FileName;
+            // 尝试创建字体文件实例
+            if (singleFile.ShowDialog() == false) return;
+            var singleFilePath = singleFile.FileName;
+            SinglePanelUpdate(PreviewPanel);
+            var font = new Font(singleFilePath);
 
-        App.SingleReplaceTask = new SingleReplace(singleFilePath, SHint);
-        SinglePanelUpdate(PreviewPanel);
-        Run.IsEnabled = SingleFilePreview(singleFilePath);
+            App.SingleReplaceTask = new SingleReplace(font, SHint);
+            
+            if (SingleFilePreview(font))
+            {
+                Run.IsEnabled = true;
+            }
+        }
+        catch (Exception ex)
+        {
+            FontExtension.HandleFontException(ex, SHint);
+            Previewer.Visibility = Visibility.Collapsed;
+            PreviewFontSizeController.IsEnabled = false;
+        }
     }
 
     /// <summary>
     /// 用于在快速替换模式下构建预览，同时检验文件并判断是否能将快速替换处理进程切换为就绪状态。
     /// </summary>
-    /// <param name="fontPath">字体文件绝对路径</param>
+    /// <param name="font">个性化字体文件</param>
     /// <returns>检验认为快速替换处理进程具备就绪条件时返回 true，否则返回 false</returns>
-    private bool SingleFilePreview(string fontPath)
+    private bool SingleFilePreview(Font font)
     {
-        var fontFamilyName = FontValidation.GetFontFamily(fontPath);
-        // 若快速替换任务为空，或字体检查结果不合法，返回 false，禁用部分控件
-        if (App.SingleReplaceTask == null || !App.SingleReplaceTask.SingleFontCheck(fontFamilyName))
-        {
-            Previewer.Visibility = Visibility.Collapsed;
-            PreviewFontSizeController.IsEnabled = false;
-            return false;
-        }
+        var stopwatch = Stopwatch.StartNew();
+        var task = App.SingleReplaceTask;
 
-        // 若未能临时注册字体，返回 false（字体可能存在潜在问题导致无法注册）
-        if (MainWindow.AddFontResource(fontPath) != 0) return false;
+        // 若快速替换任务为空或未能临时注册字体，返回 false
+        if (task == null || MainWindow.AddFontResource(font.FontPath) != 0) 
+            return false;
+
+        // 验证 CJK 字符集数量
+        task.MainThread.VerifyCjkCharacterCount();
+
         // 正常情况下，使用该字体构建预览，然后返回 true
-        var uri = new Uri($"file:///{fontPath}");
-        var fontFamily = new FontFamily(uri + $"#{fontFamilyName}");
+        var uri = new Uri($"file:///{font.FontPath}");
+        var fontFamily = new FontFamily(uri + $"#{font.FontFamily()}");
         PreviewA.FontFamily = fontFamily;
         Previewer.Visibility = Visibility.Visible;
         PreviewFontSizeController.IsEnabled = true;
+
+        stopwatch.Stop();
+        Console.WriteLine("字体解析完成。");
+        Console.WriteLine($"总耗时: {stopwatch.Elapsed.TotalMilliseconds:F4} 毫秒");
         return true;
     }
 

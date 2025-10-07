@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using FontReader;
 
 namespace Windows_Font_Replacement_Tool.Framework;
 
@@ -30,25 +31,21 @@ public class MultipleReplace : ReplaceTask
     /// <summary>
     /// 向 <see cref="ReplaceTask.ReplaceThreads"/> 中添加字体处理进程。
     /// </summary>
-    /// <param name="customFont">个性化字体文件绝对路径</param>
+    /// <param name="customFont">个性化字体文件</param>
     /// <param name="button">调用该方法时按下的按钮</param>
     /// <param name="textBlock"></param>
     /// <returns>所有进程是否就绪</returns>
-    public bool AddReplaceThread(string customFont, Button button, TextBlock textBlock)
+    public void AddReplaceThread(Font customFont, Button button, TextBlock textBlock)
     {
         // 获取当前字体文件的名称
-        var customFontName = Path.GetFileNameWithoutExtension(customFont);
+        var customFontName = Path.GetFileNameWithoutExtension(customFont.FontPath);
 
         // 每个按钮有一个 Tag 记录着当前进程应该存放到 ReplaceThreads 的哪个索引下，此处为解析该按钮的 Tag 值
         var indexes = button.Tag?.ToString()?.Split(new[] { ',' })
-            .Select(s =>
-            {
-                int.TryParse(s.Trim(), out var result);
-                return result;
-            });
+            .Select(s => int.TryParse(s.Trim(), out var result) ? result : -1);
 
         // 正常情况下应该不会触发
-        if (indexes == null) return false;
+        if (indexes == null) return;
 
         // 遍历按钮的 Tag 值列表，中文字体列表长度为 2，西文字体列表长度为 1
         foreach (var index in indexes)
@@ -63,7 +60,6 @@ public class MultipleReplace : ReplaceTask
 
         // 亮起当前按钮右侧的提示标签
         textBlock.Visibility = Visibility.Visible;
-        return MultipleFontCheck();
     }
 
     /// <summary>
@@ -84,20 +80,20 @@ public class MultipleReplace : ReplaceTask
             }
 
             // 当前进程对应的字体文件不存在（为什么才过了几秒，字体就不存在了呢？你干了啥？）
-            if (!File.Exists(replaceThread.FontResource))
+            if (!File.Exists(replaceThread.FontResource.FontPath))
             {
                 replaceThread.HintSign.Style = Application.Current.FindResource("OmitIcon") as Style;
                 replaceThread.HintSign.ToolTip = new TextBlock { Text = "未能找到字体文件，该文件路径可能不正确。" };
                 returnFlag = false;
+                continue;
             }
-            // 字体文件解析结果为不合法（防止小白改拓展名）
-            else if (!FontValidation.IsValidFontFile(replaceThread.FontResource))
+
+            // 当前进程对应的字体文件是雅黑三件套，检测 CJK 字符集数量
+            if (replaceThread.HintSign.Name.StartsWith("Zh"))
             {
-                replaceThread.HintSign.Style = Application.Current.FindResource("ErrorIcon") as Style;
-                replaceThread.HintSign.ToolTip = new TextBlock { Text = "该字体文件不合法！" };
-                returnFlag = false;
+                replaceThread.VerifyCjkCharacterCount();
             }
-            // 没毛病的情况
+            // 不检测英文字体
             else
             {
                 replaceThread.HintSign.Style = Application.Current.FindResource("VerifiedIcon") as Style;

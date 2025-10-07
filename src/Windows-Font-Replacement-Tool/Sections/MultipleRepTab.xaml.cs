@@ -2,6 +2,7 @@
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Threading;
+using FontReader;
 using Microsoft.Win32;
 using Windows_Font_Replacement_Tool.Framework;
 
@@ -34,21 +35,30 @@ public partial class MultipleRepTab
     /// </summary>
     private void MultipleFileOpenButton_Click(object sender, RoutedEventArgs e)
     {
-        if (App.MultipleReplaceTask == null) MultiplePanelUpdate();
-
-        var multipleFile = new OpenFileDialog { Filter = "字体文件 (*.ttf,*.otf)|*.ttf;*.otf" };
-        multipleFile.Filter = "字体文件 (*.ttf,*.otf)|*.ttf;*.otf";
-
-        if (multipleFile.ShowDialog() == false) return;
-        var multipleFilePath = multipleFile.FileName;
-
-        App.MultipleReplaceTask ??= new MultipleReplace();
         var button = (Button)sender;
-        var tbName = button.Name + "S";
-        var textBlock = FindName(tbName) as TextBlock;
+        var tbName = string.Concat(button.Name, "S");
+        if (FindName(tbName) is not TextBlock textBlock) return;
+        try
+        {
+            if (App.MultipleReplaceTask == null)
+            {
+                App.MultipleReplaceTask = new MultipleReplace();
+                MultiplePanelUpdate();
+            }
+            var multipleFile = new OpenFileDialog { Filter = "字体文件 (*.ttf,*.otf)|*.ttf;*.otf" };
 
-        if (textBlock == null) return;
-        Run.IsEnabled = App.MultipleReplaceTask.AddReplaceThread(multipleFilePath, button, textBlock);
+            // 尝试创建字体文件实例
+            if (multipleFile.ShowDialog() == false) return;
+            var multipleFilePath = multipleFile.FileName;
+            var font = new Font(multipleFilePath);
+            App.MultipleReplaceTask.AddReplaceThread(font, button, textBlock);
+
+            Run.IsEnabled = App.MultipleReplaceTask.MultipleFontCheck();
+        }
+        catch (Exception ex)
+        {
+            FontExtension.HandleFontException(ex, textBlock);
+        }
     }
 
     /// <summary>

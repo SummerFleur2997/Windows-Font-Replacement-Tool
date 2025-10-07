@@ -105,7 +105,7 @@ internal static class ResourceHelper
     /// 用于提示报错信息弹窗。
     /// </summary>
     /// <param name="message">错误提示</param>
-    /// <param name="ex">错误信息</param>
+    /// <param name="ex">错误实例</param>
     private static void HandleError(string message, Exception ex)
     {
         var warning = new StringBuilder();
