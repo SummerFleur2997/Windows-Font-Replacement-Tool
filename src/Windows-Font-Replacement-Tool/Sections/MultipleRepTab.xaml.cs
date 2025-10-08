@@ -85,8 +85,7 @@ public partial class MultipleRepTab
         catch (Exception ex)
         {
             MultiplePanelUpdate();
-            MessageBox.Show(ex.Message, "错误",
-                MessageBoxButton.OK, MessageBoxImage.Error);
+            Framework.Utilities.HandleError("执行文件替换时发生错误", ex);
             Run.IsEnabled = false;
             return;
         }

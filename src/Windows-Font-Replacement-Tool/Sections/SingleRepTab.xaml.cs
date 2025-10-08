@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -70,7 +69,6 @@ public partial class SingleRepTab
     /// <returns>检验认为快速替换处理进程具备就绪条件时返回 true，否则返回 false</returns>
     private bool SingleFilePreview(Font font)
     {
-        var stopwatch = Stopwatch.StartNew();
         var task = App.SingleReplaceTask;
 
         // 若快速替换任务为空或未能临时注册字体，返回 false
@@ -86,10 +84,6 @@ public partial class SingleRepTab
         PreviewA.FontFamily = fontFamily;
         Previewer.Visibility = Visibility.Visible;
         PreviewFontSizeController.IsEnabled = true;
-
-        stopwatch.Stop();
-        Console.WriteLine("字体解析完成。");
-        Console.WriteLine($"总耗时: {stopwatch.Elapsed.TotalMilliseconds:F4} 毫秒");
         return true;
     }
 
@@ -127,8 +121,7 @@ public partial class SingleRepTab
         catch (Exception ex)
         {
             SinglePanelUpdate();
-            MessageBox.Show(ex.Message, "错误",
-                MessageBoxButton.OK, MessageBoxImage.Error);
+            Framework.Utilities.HandleError("执行文件替换时发生错误", ex);
             Run.IsEnabled = false;
             return;
         }

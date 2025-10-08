@@ -21,16 +21,13 @@
         <DebugType>none</DebugType>
     </PropertyGroup>
     <ItemGroup>
-        <Resource Include="Resources\xmlData" />
+        <Resource Include="Resources\.tablemap" />
         <Resource Include="Resources\iconfont.ttf" />
     </ItemGroup>
     <ItemGroup>
         <Content Include="Assets\**">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </Content>
-    </ItemGroup>
-    <ItemGroup>
-        <PackageReference Include="SharpZipLib" Version="1.4.0" />
     </ItemGroup>
     <ItemGroup>
         <ProjectReference Include="..\FontReader\FontReader.csproj" />

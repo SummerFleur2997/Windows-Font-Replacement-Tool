@@ -1,6 +1,10 @@
 ﻿using System;
+using System.Buffers.Binary;
 using System.Collections.Generic;
+using System.IO;
+using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace Windows_Font_Replacement_Tool.Framework;
 
@@ -10,6 +14,24 @@ public static class Utilities
     /// 获取当前计算机线程数。
     /// </summary>
     private static readonly int MaxDegree = Environment.ProcessorCount;
+
+    /// <summary>
+    /// 用于提示报错信息弹窗。
+    /// </summary>
+    /// <param name="message">错误提示</param>
+    /// <param name="ex">错误实例</param>
+    /// <param name="exit">是否应当结束进程</param>
+    public static void HandleError(string message, Exception ex, bool exit = false)
+    {
+        var warning = new StringBuilder();
+        warning.AppendLine(message);
+        warning.AppendLine("错误信息：" + ex.Message);
+
+        MessageBox.Show(warning.ToString(), "错误",
+            MessageBoxButton.OK, MessageBoxImage.Error);
+
+        if (exit) Application.Current.Shutdown();
+    }
 
     /// <summary>
     /// 以并行方式对集合中的每个元素执行指定操作，最大线程数基于处理器线程数。
@@ -42,5 +64,14 @@ public static class Utilities
             }
         );
         return hasError;
+    }
+
+    /// <summary>
+    /// 使用大端序列读取一个 16 位短整型无符号数。
+    /// </summary>
+    public static ushort ReadUInt16BigEndian(this BinaryReader br)
+    {
+        var bytes = br.ReadBytes(2);
+        return BinaryPrimitives.ReadUInt16BigEndian(bytes);
     }
 }

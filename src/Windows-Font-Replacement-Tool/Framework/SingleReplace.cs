@@ -20,13 +20,12 @@ public class SingleReplace : ReplaceTask
     {
         // 将用户选择的字体文件名作为任务的名称，然后初始化
         TaskName = Path.GetFileNameWithoutExtension(customFont.FontPath);
-        InitCacheDir(CacheDirPath);
 
         // 为 ReplaceThreads 的 19 个进程填充相同的值
         var index = 0;
-        foreach (var sha1 in Sha2File.Keys)
+        for (var i = 0; i < 19; i++)
         {
-            ReplaceThreads[index] = new ReplaceThread(TaskName, customFont, sha1, textBlock);
+            ReplaceThreads[index] = new ReplaceThread(TaskName, customFont, i, textBlock);
             index++;
         }
     }

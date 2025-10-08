@@ -4,6 +4,7 @@ using System.IO;
 using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Controls;
+using Windows_Font_Replacement_Tool.Framework;
 
 namespace Windows_Font_Replacement_Tool;
 
@@ -103,8 +104,7 @@ public partial class MainWindow
         }
         catch (Exception ex)
         {
-            MessageBox.Show($"未能打开导出目录：{ex.Message}", "错误",
-                MessageBoxButton.OK, MessageBoxImage.Error);
+            Utilities.HandleError("未能打开导出目录", ex);
         }
     }
 
@@ -118,11 +118,7 @@ public partial class MainWindow
     //         var pdfPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Assets", "Help.pdf");
     //
     //         if (!File.Exists(pdfPath))
-    //         {
-    //             MessageBox.Show("你把帮助文档弄哪儿去了？", "嗯哼？",
-    //                 MessageBoxButton.OK, MessageBoxImage.Error);
-    //             return;
-    //         }
+    //             throw new FileNotFoundException("你把帮助文档弄哪儿去了？？");
     //
     //         Process.Start(new ProcessStartInfo
     //         {
@@ -130,10 +126,13 @@ public partial class MainWindow
     //             UseShellExecute = true
     //         });
     //     }
+    //     catch (FileNotFoundException ex)
+    //     {
+    //         Utilities.HandleError("嗯哼？", ex);
+    //     }
     //     catch (Exception ex)
     //     {
-    //         MessageBox.Show($"未能打开文档：{ex.Message}", "错误",
-    //             MessageBoxButton.OK, MessageBoxImage.Error);
+    //         Utilities.HandleError("未能打开文档", ex);
     //     }
     // }
 

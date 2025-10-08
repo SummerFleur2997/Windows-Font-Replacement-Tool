@@ -14,7 +14,7 @@ public class MultipleReplace : ReplaceTask
     /// <summary>
     /// 构造函数，初始化精细制作任务。
     /// </summary>
-    public MultipleReplace() => InitCacheDir(CacheDirPath);
+    public MultipleReplace() { }
 
     /// <summary>
     /// 初始化主界面选择文件按钮右边的提示标签，将它们全部隐藏。
@@ -47,9 +47,8 @@ public class MultipleReplace : ReplaceTask
         // 遍历按钮的 Tag 值列表，中文字体列表长度为 2，西文字体列表长度为 1
         foreach (var index in indexes)
         {
-            // 从字典中获取该进程需要参考哪个 xml，然后将进程放到对应的索引下
-            var sha1 = Sha2File.Keys.ToList()[index];
-            ReplaceThreads[index] = new ReplaceThread(customFontName, customFont, sha1, textBlock);
+            // 将进程放到对应的索引下
+            ReplaceThreads[index] = new ReplaceThread(customFontName, customFont, index, textBlock);
 
             // 将 index=0 对应的文件名（msyh regular）作为当前任务的名称
             if (index == 0) TaskName = customFontName;

@@ -29,8 +29,9 @@ public partial class App
     internal static string? SingleOutputDirectory;
     internal static string? MultipleOutputDirectory;
 
-    internal static readonly string ConfigPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "config.json");
-    internal static readonly string ResourcePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Assets");
+    private static readonly string BaseDir = AppDomain.CurrentDomain.BaseDirectory;
+    internal static readonly string ConfigPath = Path.Combine(BaseDir, "config.json");
+    internal static readonly string ResourcePath = Path.Combine(BaseDir, "Assets");
     internal static readonly string XmlsPath = Path.Combine(ResourcePath, "xmls");
 
     public static readonly JsonSerializerOptions DefaultOptions = new()
@@ -43,7 +44,6 @@ public partial class App
     {
         base.OnStartup(e);
         Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
-        ResourceHelper.Initialize();
         LoadConfig();
     }
 

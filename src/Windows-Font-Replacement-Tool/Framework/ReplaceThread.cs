@@ -1,5 +1,4 @@
-﻿using System.Diagnostics;
-using System.IO;
+﻿using System.IO;
 using System.Windows;
 using System.Windows.Controls;
 using FontReader;
@@ -22,9 +21,9 @@ public class ReplaceThread
     public Font FontResource { get; }
 
     /// <summary>
-    /// xml 字体资源的绝对路径。
+    /// 字体表的索引值。
     /// </summary>
-    private string XmlResource { get; }
+    private int Index { get; }
 
     /// <summary>
     /// 提示标签，用于反馈字体检验的合法性。
@@ -36,7 +35,8 @@ public class ReplaceThread
     /// </summary>
     public void VerifyCjkCharacterCount()
     {
-        var cjkCharacterCount = FontResource.GetCjkCharacterCount();
+        // 获取 CJK 统一表意字符（0x4E00~0x9FFF）范围内的字符数量。
+        var cjkCharacterCount = FontResource.GetCharacterCountFromTo(0x4E00, 0x9FFF);
         switch (cjkCharacterCount)
         {
             // CJK 字符集数量小于 256，直接认为该字体内不包含 CJK 字符，在 UI 内绘制严重警告标志
@@ -75,29 +75,14 @@ public class ReplaceThread
     /// Python 程序，替换字体属性。
     /// </summary>
     /// <returns>Python程序退出代码</returns>
-    public int RunPropertyRep()
+    public void RunPropertyRep(string saveDir)
     {
-        try
-        {
-            var startInfo = new ProcessStartInfo
-            {
-                FileName = Path.Combine(App.ResourcePath, "functions.exe"),
-                Arguments = $"propertyRep \"{FontResource.FontPath}\" \"{XmlResource}\"",
-                UseShellExecute = false,
-                RedirectStandardOutput = true,
-                RedirectStandardError = true,
-                CreateNoWindow = true
-            };
-            using var process = new Process();
-            process.StartInfo = startInfo;
-            process.Start();
-            process.WaitForExit();
-            return process.ExitCode;
-        }
-        catch
-        {
-            return -1;
-        }
+        var data = ResourceHelper.NameTableData[Index];
+        var savePath = Path.Combine(saveDir, data.FontName + ".ttf");
+
+        FontResource.LoadAllTableData();
+        FontResource.ReplaceNameTable(data.NameTable);
+        FontResource.Save(savePath);
     }
 
     /// <summary>
@@ -105,13 +90,13 @@ public class ReplaceThread
     /// </summary>
     /// <param name="threadName">去除拓展名后的字体文件名</param>
     /// <param name="fontResource">个性化字体文件</param>
-    /// <param name="sha1">xml 字体文件名</param>
+    /// <param name="index">字体表的索引值</param>
     /// <param name="hintSign">精细制作模式下的提示标志</param>
-    public ReplaceThread(string threadName, Font fontResource, string sha1, TextBlock hintSign)
+    public ReplaceThread(string threadName, Font fontResource, int index, TextBlock hintSign)
     {
         ThreadName = threadName;
         FontResource = fontResource;
-        XmlResource = Path.Combine(App.XmlsPath, sha1);
+        Index = index;
         HintSign = hintSign;
     }
 }
