@@ -1,4 +1,4 @@
-﻿namespace FontReader.Framework.CmapTable;
+﻿namespace FontTool.Framework.CmapTable;
 
 public class CmapTable : Table
 {

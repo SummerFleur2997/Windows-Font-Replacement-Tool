@@ -3,11 +3,11 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Threading;
-using FontReader;
+using FontTool;
 using Microsoft.Win32;
-using Windows_Font_Replacement_Tool.Framework;
+using WFRT.Framework;
 
-namespace Windows_Font_Replacement_Tool.Sections;
+namespace WFRT.Sections;
 
 public partial class SingleRepTab
 {

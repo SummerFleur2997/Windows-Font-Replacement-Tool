@@ -1,8 +1,8 @@
 ﻿using System.IO;
 using System.Windows.Controls;
-using FontReader;
+using FontTool;
 
-namespace Windows_Font_Replacement_Tool.Framework;
+namespace WFRT.Framework;
 
 /// <summary>
 /// 快速制作模式任务代码。

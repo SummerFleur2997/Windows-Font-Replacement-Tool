@@ -3,7 +3,7 @@ using System.Windows;
 using System.Windows.Controls;
 using Microsoft.Win32;
 
-namespace Windows_Font_Replacement_Tool.Controls;
+namespace WFRT.Controls;
 
 /// <summary>
 /// 自定义任务盒子中的一行，用于存储并展示一个自定义字体替换任务的相关信息。

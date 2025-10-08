@@ -2,9 +2,9 @@
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      xmlns:controls="clr-namespace:WFRT.Controls"
       mc:Ignorable="d"
-      xmlns:controls="clr-namespace:Windows_Font_Replacement_Tool.Controls"
-      x:Class="Windows_Font_Replacement_Tool.Sections.Utilities"
+      x:Class="WFRT.Sections.Utilities"
       Margin="20" d:DesignWidth="700">
     <ScrollViewer VerticalAlignment="Stretch"
                   Style="{StaticResource MyScrollViewer}">
@@ -43,8 +43,7 @@
                 <controls:CollapsableCard.Content>
                     <Grid>
                         <StackPanel HorizontalAlignment="Left">
-                            <controls:CustomTaskBox Width="500">
-                            </controls:CustomTaskBox>
+                            <controls:CustomTaskBox Width="500"/>
                         </StackPanel>
                         <Button
                             VerticalAlignment="Top" HorizontalAlignment="Right"
@@ -55,8 +54,7 @@
                 </controls:CollapsableCard.Content>
             </controls:CollapsableCard>
             <controls:CollapsableCard
-                Icon="&#xE63d;" Title="TTC 拆分与合并">
-            </controls:CollapsableCard>
+                Icon="&#xE63d;" Title="TTC 拆分与合并"/>
         </StackPanel>
     </ScrollViewer>
 </Grid>

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows;
 
-namespace Windows_Font_Replacement_Tool.Sections;
+namespace WFRT.Sections;
 
 public partial class WelcomeTab
 {

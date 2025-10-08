@@ -4,10 +4,10 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Windows;
-using FontReader.Framework;
-using FontReader.Framework.NameTable;
+using FontTool.Framework;
+using FontTool.Framework.NameTable;
 
-namespace Windows_Font_Replacement_Tool.Framework;
+namespace WFRT.Framework;
 
 /// <summary>
 /// 用于进行文件解压与哈希校验的类。

@@ -4,7 +4,7 @@ using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Threading;
 
-namespace Windows_Font_Replacement_Tool.Controls;
+namespace WFRT.Controls;
 
 public partial class CollapsableCard
 {

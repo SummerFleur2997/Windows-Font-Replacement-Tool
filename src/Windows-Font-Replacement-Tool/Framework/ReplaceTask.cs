@@ -4,7 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Windows_Font_Replacement_Tool.Framework;
+namespace WFRT.Framework;
 
 /// <summary>
 /// 类 SingleReplace 与 MultipleReplace 的基类，仅用于存储类属性与类函数，不应当被实例化。

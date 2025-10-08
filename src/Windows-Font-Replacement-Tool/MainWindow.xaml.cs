@@ -4,9 +4,9 @@ using System.IO;
 using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Controls;
-using Windows_Font_Replacement_Tool.Framework;
+using WFRT.Framework;
 
-namespace Windows_Font_Replacement_Tool;
+namespace WFRT;
 
 /// <summary>
 /// Interaction logic for MainWindow.xaml

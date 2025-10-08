@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
-using FontReader.Framework;
-using FontReader.Framework.CmapTable;
-using FontReader.Framework.NameTable;
+using FontTool.Framework;
+using FontTool.Framework.CmapTable;
+using FontTool.Framework.NameTable;
 
-namespace FontReader;
+namespace FontTool;
 
 /// <summary>
 /// 用于读取字体文件并获取其基础信息（尤其是 name 表信息）的库。

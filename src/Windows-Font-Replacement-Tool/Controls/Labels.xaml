@@ -1,6 +1,6 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:local="clr-namespace:Windows_Font_Replacement_Tool">
+                    xmlns:local="clr-namespace:WFRT">
     <!-- 通过标签 -->
     <Style x:Key="VerifiedIcon" TargetType="TextBlock">
         <Setter Property="Text" Value="&#xE6F3;"/>

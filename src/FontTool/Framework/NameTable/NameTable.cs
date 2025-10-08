@@ -2,7 +2,7 @@
 using System.IO;
 using System.Text;
 
-namespace FontReader.Framework.NameTable;
+namespace FontTool.Framework.NameTable;
 
 /// <summary>
 /// 用于记录字体 name 表的详细信息的类

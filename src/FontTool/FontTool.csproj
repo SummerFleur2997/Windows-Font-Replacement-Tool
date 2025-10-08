@@ -4,10 +4,11 @@
         <Copyright>Copyright © SummerFleur 2025</Copyright>
         <RepositoryUrl>https://github.com/SummerFleur2997/Windows-Font-Replacement-Tool</RepositoryUrl>
         <RepositoryType>git</RepositoryType>
-        <AssemblyTitle>Windows Font Replacement Tool</AssemblyTitle>
-        <AssemblyVersion>2.0</AssemblyVersion>
-        <ProductVersion>2.0</ProductVersion>
-        <FileVersion>2.0</FileVersion>
+        <AssemblyTitle>FontTool</AssemblyTitle>
+        <Version>1.0.0-alpha</Version>
+        <AssemblyVersion>1.0.0</AssemblyVersion>
+        <ProductVersion>1.0.0</ProductVersion>
+        <FileVersion>1.0.0</FileVersion>
         <TargetFramework>net6.0-windows</TargetFramework>
         <Nullable>enable</Nullable>
         <Deterministic>true</Deterministic>

@@ -1,4 +1,4 @@
-﻿namespace FontReader.Framework.NameTable;
+﻿namespace FontTool.Framework.NameTable;
 
 public class NameTableRecord
 {

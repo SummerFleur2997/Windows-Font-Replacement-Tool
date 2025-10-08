@@ -3,9 +3,9 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
-using FontReader.Framework;
+using FontTool.Framework;
 
-namespace FontReader;
+namespace FontTool;
 
 public class FontCollection : IEnumerable<Font>
 {

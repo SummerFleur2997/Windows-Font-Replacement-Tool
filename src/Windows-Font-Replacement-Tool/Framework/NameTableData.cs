@@ -1,6 +1,6 @@
-﻿using FontReader.Framework.NameTable;
+﻿using FontTool.Framework.NameTable;
 
-namespace Windows_Font_Replacement_Tool.Framework;
+namespace WFRT.Framework;
 
 internal struct NameTableData
 {

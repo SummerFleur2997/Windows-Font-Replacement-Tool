@@ -1,6 +1,6 @@
 ﻿<Grid xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-      x:Class="Windows_Font_Replacement_Tool.Sections.WelcomeTab">
+      x:Class="WFRT.Sections.WelcomeTab">
     <Border Background="{StaticResource MainBrush}"
             CornerRadius="6"
             Margin="16">

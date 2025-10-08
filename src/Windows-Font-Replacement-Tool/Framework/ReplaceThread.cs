@@ -1,9 +1,9 @@
 ﻿using System.IO;
 using System.Windows;
 using System.Windows.Controls;
-using FontReader;
+using FontTool;
 
-namespace Windows_Font_Replacement_Tool.Framework;
+namespace WFRT.Framework;
 
 /// <summary>
 /// 一种字形的替换进程，包含 Python 程序的启动函数。

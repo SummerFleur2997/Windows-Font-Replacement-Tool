@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
-namespace FontReader.Framework;
+namespace FontTool.Framework;
 
 /// <summary>
 /// 用于记录字体表的基础信息的类

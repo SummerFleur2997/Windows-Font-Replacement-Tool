@@ -2,7 +2,7 @@
 using System.IO;
 using System.Text.Json;
 
-namespace Windows_Font_Replacement_Tool.Framework;
+namespace WFRT.Framework;
 
 /// <summary>
 /// 程序配置文件

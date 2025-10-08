@@ -5,12 +5,13 @@
         <RepositoryUrl>https://github.com/SummerFleur2997/Windows-Font-Replacement-Tool</RepositoryUrl>
         <RepositoryType>git</RepositoryType>
         <AssemblyTitle>Windows Font Replacement Tool</AssemblyTitle>
-        <AssemblyVersion>2.0</AssemblyVersion>
-        <ProductVersion>2.0</ProductVersion>
-        <FileVersion>2.0</FileVersion>
+        <Version>3.0-alpha</Version>
+        <AssemblyVersion>3.0</AssemblyVersion>
+        <ProductVersion>3.0</ProductVersion>
+        <FileVersion>3.0</FileVersion>
         <OutputType>WinExe</OutputType>
         <TargetFramework>net6.0-windows</TargetFramework>
-        <RootNamespace>Windows_Font_Replacement_Tool</RootNamespace>
+        <RootNamespace>WFRT</RootNamespace>
         <Nullable>enable</Nullable>
         <UseWPF>true</UseWPF>
         <Deterministic>true</Deterministic>
@@ -30,6 +31,6 @@
         </Content>
     </ItemGroup>
     <ItemGroup>
-        <ProjectReference Include="..\FontReader\FontReader.csproj" />
+        <ProjectReference Include="..\FontTool\FontTool.csproj" />
     </ItemGroup>
 </Project>

@@ -2,9 +2,9 @@
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
-using FontReader;
+using FontTool;
 
-namespace Windows_Font_Replacement_Tool.Framework;
+namespace WFRT.Framework;
 
 /// <summary>
 /// 精细制作模式任务代码。

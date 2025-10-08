@@ -1,4 +1,4 @@
-﻿namespace Windows_Font_Replacement_Tool.Controls;
+﻿namespace WFRT.Controls;
 
 public partial class CustomTaskBox
 {

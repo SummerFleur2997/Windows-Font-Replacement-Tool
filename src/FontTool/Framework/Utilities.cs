@@ -3,7 +3,7 @@ using System.Buffers.Binary;
 using System.IO;
 using System.Text;
 
-namespace FontReader.Framework;
+namespace FontTool.Framework;
 
 internal static class Utilities
 {

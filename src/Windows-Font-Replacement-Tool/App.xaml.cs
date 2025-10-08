@@ -4,9 +4,9 @@ using System.Text;
 using System.Text.Encodings.Web;
 using System.Text.Json;
 using System.Windows;
-using Windows_Font_Replacement_Tool.Framework;
+using WFRT.Framework;
 
-namespace Windows_Font_Replacement_Tool;
+namespace WFRT;
 
 /// <summary>
 /// Interaction logic for App.xaml

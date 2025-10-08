@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 
-namespace FontReader.Framework;
+namespace FontTool.Framework;
 
 public interface ITable
 {

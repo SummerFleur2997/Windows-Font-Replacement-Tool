@@ -3,7 +3,7 @@ using System.IO;
 using System.Windows;
 using System.Windows.Controls;
 
-namespace Windows_Font_Replacement_Tool.Framework;
+namespace WFRT.Framework;
 
 public static class FontExtension
 {

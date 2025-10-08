@@ -1,4 +1,4 @@
-﻿<Application x:Class="Windows_Font_Replacement_Tool.App"
+﻿<Application x:Class="WFRT.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              StartupUri="MainWindow.xaml">
