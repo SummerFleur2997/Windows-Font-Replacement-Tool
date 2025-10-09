@@ -6,45 +6,47 @@ namespace FontTool.Framework;
 public interface ITable
 {
     /// <summary>
-    /// 表的名称
+    /// The tag of this font table.
     /// </summary>
     public string Tag { get; }
 
     /// <summary>
-    /// 表的数据校验和
+    /// The checksum of this font table.
     /// </summary>
     public uint CheckSum { get; set; }
 
     /// <summary>
-    /// 表头距离文件头的偏移量
+    /// The offset of the table header from the beginning of the file.
     /// </summary>
     public uint Offset { get; set; }
 
     /// <summary>
-    /// 表的长度（字节）
+    /// The length of this font table in bytes.
     /// </summary>
     public uint Length { get; set; }
 
     /// <summary>
-    /// 表的原始二进制数据
+    /// The raw binary data of this font table.
     /// </summary>
     public List<byte> Bytes { get; }
 
     /// <summary>
-    /// 通过文件流向表中写入二进制数据
+    /// Load binary data to this table via a file stream.
     /// </summary>
     public void LoadBytes(BinaryReader reader);
 
     /// <summary>
-    /// 通过给定数据向表中写入二进制数据
+    /// Load binary data to this table via a byte array.
     /// </summary>
     public void LoadBytes(byte[] bytes);
 
+    /// <summary>
+    /// Update the checksum, offset or length of this table.
+    /// </summary>
     public void UpdateValue(uint? checkSum = null, uint? offset = null, uint? length = null);
 
     /// <summary>
-    /// 计算字节数组的校验和
+    /// Calculate the checksum of this table.
     /// </summary>
-    /// <returns>返回计算得到的校验和值</returns>
     public uint CalculateCheckSum();
 }

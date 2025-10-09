@@ -5,18 +5,22 @@ using System.Text;
 namespace FontTool.Framework.NameTable;
 
 /// <summary>
-/// 用于记录字体 name 表的详细信息的类
+/// A class for storing detailed information about the name table of the font.
 /// </summary>
 public class NameTable : Table
 {
     /// <summary>
-    /// name 表下的各条信息记录
+    /// The records in the name table.
     /// </summary>
     public readonly List<NameTableRecord> Records = new();
 
     public NameTable(uint checkSum, uint offset, uint length)
         : base("name", checkSum, offset, length) { }
 
+    /// <summary>
+    /// Convert the name table as a human-readable representation.
+    /// </summary>
+    /// <param name="reader">The binary reader of this font.</param>
     public void ReadRecords(BinaryReader reader)
     {
         reader.BaseStream.Seek(Offset, SeekOrigin.Begin);
@@ -24,7 +28,7 @@ public class NameTable : Table
         var count = reader.ReadUInt16BigEndian();
         var stringOffset = reader.ReadUInt16BigEndian();
 
-        // 读取 name 表内每条记录的索引
+        // Read each record in the name table
         for (var i = 0; i < count; i++)
             Records.Add(new NameTableRecord
             {
@@ -36,15 +40,15 @@ public class NameTable : Table
                 StringDataOffset = reader.ReadUInt16BigEndian()
             });
 
-        // 读取每一条记录对应的二进制数据
+        // Read the binary data for each record
         foreach (var record in Records)
         {
-            // 计算文字偏移量
+            // Calculate the offset of the string
             var stringPos = Offset + stringOffset + record.StringDataOffset;
             reader.BaseStream.Seek(stringPos, SeekOrigin.Begin);
             var stringBytes = reader.ReadBytes(record.Length);
 
-            // 将二进制数据编解码为文本信息
+            // Decode the binary data into text information
             record.StringData = record.PlatformID switch
             {
                 1 => Encoding.GetEncoding("GBK").GetString(stringBytes),

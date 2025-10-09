@@ -2,11 +2,12 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Security.Cryptography;
 
 namespace FontTool.Framework;
 
 /// <summary>
-/// 用于记录字体表的基础信息的类
+/// A class for storing basic information about a font table.
 /// </summary>
 public class Table : ITable, IDisposable
 {
@@ -33,6 +34,7 @@ public class Table : ITable, IDisposable
         Length = length;
     }
 
+    /// <inheritdoc/>
     public void LoadBytes(BinaryReader reader)
     {
         if (Bytes.Count > 0) return;
@@ -40,8 +42,10 @@ public class Table : ITable, IDisposable
         Bytes = reader.ReadBytes((int)Length).ToList();
     }
 
+    /// <inheritdoc/>
     public void LoadBytes(byte[] bytes) => Bytes = bytes.ToList();
 
+    /// <inheritdoc/>
     public void UpdateValue(uint? checkSum = null, uint? offset = null, uint? length = null)
     {
         CheckSum = checkSum ?? CheckSum;
@@ -49,19 +53,26 @@ public class Table : ITable, IDisposable
         Length = length ?? Length;
     }
 
+    /// <inheritdoc/>
     public uint CalculateCheckSum() => CalculateCheckSum(Bytes);
 
+    /// <summary>
+    /// A static method to calculate the checksum of given bytes.
+    /// </summary>
+    /// <param name="bytes">The array of bytes to calculate the checksum for. </param>
+    /// <returns>The calculated checksum as a 32-bit unsigned integer. </returns>
     public static uint CalculateCheckSum(List<byte> bytes)
     {
-        uint sum = 0; // 初始化校验和为0
-        var chips = (bytes.Count + 3) / 4; // 向上取整到4字节的倍数
+        // Initialize the checksum to 0, then iterate over the bytes in chunks of 4 bytes.
+        uint sum = 0;
+        var chunks = (bytes.Count + 3) / 4;
 
-        for (var i = 0; i < chips; i++)
+        for (var i = 0; i < chunks; i++)
         {
             var offset = i * 4;
             uint value = 0;
 
-            // 处理不足4字节的情况
+            // For each chunk, read 4 bytes and combine them into a 32-bit integer.
             if (offset < bytes.Count)
             {
                 value = (uint)(bytes[offset] << 24);
@@ -79,6 +90,16 @@ public class Table : ITable, IDisposable
         return sum;
     }
 
+    public new string GetHashCode()
+    {
+        var sha1 = SHA1.Create();
+        var hashBytes = sha1.ComputeHash(Bytes.ToArray());
+        return BitConverter.ToString(hashBytes).Replace("-", "").ToLowerInvariant();
+    }
+
+    public override string ToString() => $"{Tag}: {Offset}+{Length} ({CheckSum})";
+
+    /// <inheritdoc/>
     public void Dispose()
     {
         Bytes.Clear();

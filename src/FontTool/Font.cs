@@ -6,78 +6,83 @@ using System.Text;
 using FontTool.Framework;
 using FontTool.Framework.CmapTable;
 using FontTool.Framework.NameTable;
+using JetBrains.Annotations;
 
 namespace FontTool;
 
 /// <summary>
-/// 用于读取字体文件并获取其基础信息（尤其是 name 表信息）的库。
+/// A library for reading true type and open type font files and collecting their
+/// basic information (especially name table information).
 /// </summary>
+[UsedImplicitly(ImplicitUseTargetFlags.Members)]
 public class Font : IDisposable
 {
     /// <summary>
-    /// 字体文件的路径。
+    /// Path to the font file.
     /// </summary>
     public readonly string FontPath;
 
     /// <summary>
-    /// name 表，包含字体名称相关信息。
-    /// </summary>
-    public NameTable? NameTable => FontTables.First(t => t.Tag == "name") as NameTable;
-
-    /// <summary>
-    /// cmap 表。
-    /// </summary>
-    public CmapTable? CmapTable => FontTables.First(t => t.Tag == "cmap") as CmapTable;
-
-    /// <summary>
-    /// 用于存储字体文件各个表的基础信息的列表。
-    /// </summary>
-    public readonly List<Table> FontTables;
-
-    /// <summary>
-    /// 用于读取二进制数据的读取器。
+    /// Reader for reading binary data.
     /// </summary>
     public BinaryReader Reader { get; }
 
     /// <summary>
-    /// 字体签名，长 4 字节。
+    /// Font signature, 4 bytes long.
     /// </summary>
-    public readonly uint Sfnt;
+    public uint Sfnt { get; }
 
     /// <summary>
-    /// 字体头数据，长 6 字节。
+    /// Font header data, 6 bytes long.
     /// </summary>
-    public readonly byte[] Header;
+    public byte[] Header { get; }
 
     /// <summary>
-    /// 读取字体文件，解析其关键信息。
+    /// The name table, which contains font name information.
     /// </summary>
-    /// <exception cref="FileNotFoundException">未能找到字体文件。</exception>
-    /// <exception cref="NotSupportedException">字体格式不受支持。</exception>
-    /// <exception cref="FileLoadException">损坏的字体文件。</exception>
+    public NameTable? NameTable => FontTables.First(t => t.Tag == "name") as NameTable;
+
+    /// <summary>
+    /// The cmap table, which contains font encoding information.
+    /// </summary>
+    public CmapTable? CmapTable => FontTables.First(t => t.Tag == "cmap") as CmapTable;
+
+    /// <summary>
+    /// A list used to store the basic information of each table in the font file.
+    /// </summary>
+    public List<Table> FontTables { get; private set; }
+
+    /// <summary>
+    /// Reads the font file and parses its key information.
+    /// </summary>
+    /// <param name="fontPath">The path to the font file. If using a stream, please use "/@stream". </param>
+    /// <param name="stream">The stream of the font file. </param>
+    /// <exception cref="FileNotFoundException">Cannot find the font file. </exception>
+    /// <exception cref="NotSupportedException">Unsupported font format. </exception>
+    /// <exception cref="FileLoadException">Corrupted font file. </exception>
     public Font(string fontPath, FileStream? stream = null)
     {
         Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
 
-        // 检查文件是否存在，
+        // Check if the file exists
         if (fontPath != "/@stream" && !File.Exists(fontPath))
-            throw new FileNotFoundException("未找到文件！", fontPath);
+            throw new FileNotFoundException("File does not exist.", fontPath);
         FontPath = fontPath;
 
-        // 初始化数据表和二进制流
+        // Initialize binary stream
         stream ??= new FileStream(fontPath, FileMode.Open, FileAccess.Read);
         Reader = new BinaryReader(stream);
 
-        // 读取表目录信息
+        // Read table directory information
         Sfnt = Reader.ReadUInt32BigEndian();
         if (Sfnt is not (0x00010000 or 0x4f54544f))
             throw new NotSupportedException("Unsupported font format!");
 
-        // 准备开始读取字体
+        // Prepare to read the font
         var numTables = Reader.ReadUInt16BigEndian();
         Header = Reader.ReadBytes(6);
 
-        // 初始化所有表信息
+        // Initialize all table information
         FontTables = new List<Table>();
         for (var i = 0; i < numTables; i++)
         {
@@ -95,46 +100,81 @@ public class Font : IDisposable
             FontTables.Add(table);
         }
 
-        // 检测关键表是否存在
+        // Check if the key tables exist
         if (NameTable is null || CmapTable is null)
             throw new FileLoadException("The font file is corrupted!");
 
-        // 向 NameTable 中写入原始二进制数据
-        Reader.BaseStream.Seek(NameTable.Offset, SeekOrigin.Begin);
-        NameTable.LoadBytes(Reader.ReadBytes((int)NameTable.Length));
+        // Write raw binary data to NameTable
+        LoadTableData("name");
 
-        // 解析 name 表的表头
+        // Parse the header of the name table
         NameTable.ReadRecords(Reader);
     }
 
+    /// <summary>
+    /// Get the font family name, with an option to include the subfamily name.
+    /// </summary>
+    /// <param name="showSubfamily">Whether to return the subfamily. By default, it is false. </param>
+    /// <returns>
+    /// The font family name string, if showSubfamily is true, returns the format "familyName-subfamilyName";
+    /// if the NameTable is null, returns "-"
+    /// </returns>
     public string FontFamily(bool showSubfamily = false)
     {
-        var family = NameTable?.Records
+        // A check to make IDE happy
+        if (NameTable == null) return "-";
+
+        var family = NameTable.Records
             .FirstOrDefault(t => t is { NameID: 1, LanguageID: 0x409 })?
             .StringData ?? "";
 
-        var subfamily = NameTable?.Records
+        var subfamily = NameTable.Records
             .FirstOrDefault(t => t is { NameID: 2, LanguageID: 0x409 })?
-            .StringData;
+            .StringData ?? "";
 
         return showSubfamily
             ? string.Concat(family, "-", subfamily)
             : family;
     }
 
-    public void LoadAllTableData()
+    /// <summary>
+    /// Get the body offset to the head of the file.
+    /// </summary>
+    public uint BodyOffset() => (uint)(12 + FontTables.Count * 16);
+
+    /// <summary>
+    /// Write the binary data to <see cref="Table.Bytes"/>.
+    /// </summary>
+    /// <param name="tableNames">
+    /// The names of the tables to be written, if null, load all tables by default.
+    /// </param>
+    public void LoadTableData(IEnumerable<string>? tableNames = null)
     {
-        foreach (var table in FontTables)
+        var tables = tableNames == null
+            ? FontTables
+            : FontTables.Where(t => tableNames.Contains(t.Tag));
+
+        foreach (var table in tables)
             table.LoadBytes(Reader);
     }
 
     /// <summary>
-    /// 获取指定 Unicode 范围内的字符数量
+    /// Write the binary data to <see cref="Table.Bytes"/>.
     /// </summary>
-    /// <param name="start">Unicode 范围的起始值</param>
-    /// <param name="end">Unicode 范围的结束值</param>
-    /// <returns>指定范围内的有效字符数量</returns>
-    /// <exception cref="NotSupportedException">文件不受支持。</exception>
+    /// <param name="tableName">The name of the tables to be written. </param>
+    public void LoadTableData(string tableName)
+    {
+        var table = FontTables.First(t => t.Tag == tableName);
+        table.LoadBytes(Reader);
+    }
+
+    /// <summary>
+    /// Get the number of valid characters in the specified Unicode range.
+    /// </summary>
+    /// <param name="start">The start index of the Unicode range. </param>
+    /// <param name="end">The end index of the Unicode range. </param>
+    /// <returns>The number of valid characters in the specified Unicode range. </returns>
+    /// <exception cref="NotSupportedException">Unsupported font format.</exception>
     public uint GetCharacterCountFromTo(uint start, uint end)
     {
         // 不会触发
@@ -168,13 +208,13 @@ public class Font : IDisposable
         {
             Reader.BaseStream.Seek(CmapTable.Offset + subTable.TableDataOffset, SeekOrigin.Begin);
             var format = Reader.ReadUInt16BigEndian();
-            if (format == 4) goto ReadAndPhase;
+            if (format == 4) goto ReadAndParse;
         }
 
         // 如果没有找到格式4的子表，抛出不支持异常
-        throw new NotSupportedException("不支持的字体文件！");
+        throw new NotSupportedException("Unsupported font format!");
 
-        ReadAndPhase:
+        ReadAndParse:
         // 读取 Format 4 的表头
         Reader.ReadUInt16BigEndian(); // length
         Reader.ReadUInt16BigEndian(); // language
@@ -251,45 +291,55 @@ public class Font : IDisposable
         return glyphCount;
     }
 
-    public void ReplaceNameTable(NameTable newTable)
+    /// <summary>
+    /// Replace the specified table in the font table. When finished, you should call
+    /// <see cref="UpdateTableOffset"/> manually to update the offsets of all tables in the font.
+    /// </summary>
+    /// <param name="newTable">The instance of the new table object to replace the existing table. </param>
+    public void ReplaceTable(Table newTable)
     {
-        // 不会触发
-        if (NameTable == null) return;
+        // Find the target table
+        var targetTable = FontTables.First(t => t.Tag == newTable.Tag);
 
-        // 更新 NameTable 的值
-        newTable.Offset = NameTable.Offset;
-        FontTables[FontTables.IndexOf(NameTable)] = newTable;
-
-        // 重新计算偏移量
-        UpdateTableOffset();
+        // Update the table's data
+        newTable.Offset = targetTable.Offset;
+        FontTables[FontTables.IndexOf(targetTable)] = newTable;
     }
 
     /// <summary>
-    /// 将字体数据保存到指定路径
+    /// Use a new list of tables to replace all the tables. When finished, you should call
+    /// <see cref="UpdateTableOffset"/> manually to update the offsets of all tables in the font.
     /// </summary>
-    /// <param name="path">保存文件的路径</param>
-    /// <returns>保存成功返回true，失败返回false</returns>
+    /// <param name="newTables">A table list to replace the existing tables. </param>
+    public void ReplaceTable(List<Table> newTables) => FontTables = newTables;
+
+    /// <summary>
+    /// Save the font binaries to the specified path.
+    /// </summary>
+    /// <param name="path">The full path to save the font file. </param>
+    /// <returns>True if the font is saved successfully; otherwise, false. </returns>
     public bool Save(string path)
     {
-        var binary = new List<byte>();
         try
         {
+            var binary = new List<byte>();
             var body = new List<byte>();
             var tables = FontTables.OrderBy(t => t.Offset).ToList();
             foreach (var table in tables)
             {
-                // 添加表的实际字节
+                // Add the binary data of the table
                 body.AddRange(table.Bytes);
-                // 更新实际偏移量
+                // Align the table data to 4-byte boundary
                 var padding = (4 - table.Length % 4) % 4;
                 for (var i = 0; i < padding; i++) body.Add(0);
             }
 
-            // 添加 sfnt 头部、字体表数量和字体头部的大端字节表示
+            // Add sfnt header, font table count, and font header in big-endian byte representation
             binary.AddRange(Sfnt.ToBigEndianBytes());
             binary.AddRange(((ushort)FontTables.Count).ToBigEndianBytes());
             binary.AddRange(Header);
 
+            // Add font table directory in big-endian byte representation
             foreach (var table in FontTables)
             {
                 binary.AddRange(table.Tag.ToBigEndianBytes());
@@ -298,29 +348,52 @@ public class Font : IDisposable
                 binary.AddRange(table.Length.ToBigEndianBytes());
             }
 
+            // Add the body of the font, and then save the binary data to the specified path
             binary.AddRange(body);
             File.WriteAllBytes(path, binary.ToArray());
             return true;
         }
         catch (Exception)
         {
-            // 发生异常时返回false
+            // If an exception occurs, return false
             return false;
         }
     }
 
-    public void UpdateTableOffset(uint? bodyOffset = null)
+    /// <summary>
+    /// Update the offsets of all tables in the font.
+    /// </summary>
+    /// <param name="bodyOffset">The body offset of the font.
+    /// If null, the offset of the first table will be used. </param>
+    /// <param name="opMode">The method to update the offset. </param>
+    /// <seealso cref="OpMode"/>
+    public void UpdateTableOffset(uint? bodyOffset = null, OpMode opMode = OpMode.Reorganize)
     {
-        var tables = FontTables.OrderBy(t => t.Offset).ToList();
-        var offset = bodyOffset ?? tables.First().Offset;
-
-        foreach (var table in tables)
+        switch (opMode)
         {
-            FontTables.First(t => t.Tag == table.Tag).UpdateValue(offset: offset);
-            offset += table.Length + (4 - table.Length % 4) % 4;
+            case OpMode.Shift:
+                if (bodyOffset is null)
+                    throw new ArgumentException("The body offset must be specified when using the Shift mode.");
+                foreach (var table in FontTables)
+                    table.Offset += (uint)bodyOffset;
+                return;
+            case OpMode.Reorganize:
+            default:
+                var tables = FontTables.OrderBy(t => t.Offset).ToList();
+                var offset = bodyOffset ?? tables.First().Offset;
+                foreach (var table in tables)
+                {
+                    FontTables.First(t => t.Tag == table.Tag).UpdateValue(offset: offset);
+                    offset += table.Length + (4 - table.Length % 4) % 4;
+                }
+
+                return;
         }
     }
 
+    public override string ToString() => $"{FontFamily(true)} at {FontPath}";
+
+    /// <inheritdoc/>
     public void Dispose()
     {
         foreach (var table in FontTables)
@@ -330,5 +403,19 @@ public class Font : IDisposable
         Reader.Dispose();
 
         GC.SuppressFinalize(this);
+    }
+
+    /// <summary>
+    /// Signify the operation method when update the offset of the table.
+    /// </summary>
+    /// <remarks>
+    /// <para><b>Reorganize</b>: Indicate the start offset of the first table, 
+    /// then calculate the next offset based on the length of the current table.</para>
+    /// <para><b>Shift</b>: Add the specified offset to the current offset.</para>
+    /// </remarks>
+    public enum OpMode
+    {
+        Reorganize,
+        Shift
     }
 }

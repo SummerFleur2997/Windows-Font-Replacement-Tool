@@ -84,8 +84,9 @@ internal class ReplaceThread : IDisposable
         var data = DataList[Index];
         var savePath = Path.Combine(saveDir, data.FontName + ".ttf");
 
-        FontResource.LoadAllTableData();
-        FontResource.ReplaceNameTable(data.NameTable);
+        FontResource.LoadTableData();
+        FontResource.ReplaceTable(data.NameTable);
+        FontResource.UpdateTableOffset();
         FontResource.Save(savePath);
     }
 
