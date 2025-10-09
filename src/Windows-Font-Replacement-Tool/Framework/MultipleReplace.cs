@@ -9,7 +9,7 @@ namespace WFRT.Framework;
 /// <summary>
 /// 精细制作模式任务代码。
 /// </summary>
-public class MultipleReplace : ReplaceTask
+internal class MultipleReplace : ReplaceTask
 {
     /// <summary>
     /// 构造函数，初始化精细制作任务。

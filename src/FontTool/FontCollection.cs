@@ -69,9 +69,16 @@ public class FontCollection : IEnumerable<Font>
         var flag = true;
         foreach (var font in Fonts)
         {
+            // 设置文件名
             var name = string.Concat(fontName, Fonts.IndexOf(font), ".ttf");
             var path = Path.Combine(dirPath, name);
-            if (!font.Save(path, true)) flag = false;
+
+            // 计算偏移量并更新表信息
+            var offset = (uint)(12 + font.FontTables.Count * 16);
+            font.LoadAllTableData();
+            font.UpdateTableOffset(offset);
+
+            if (!font.Save(path)) flag = false;
         }
 
         return flag;

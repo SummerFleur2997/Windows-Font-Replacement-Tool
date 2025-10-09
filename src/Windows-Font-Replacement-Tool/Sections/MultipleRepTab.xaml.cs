@@ -81,20 +81,23 @@ public partial class MultipleRepTab
 
             await App.MultipleReplaceTask.TaskStartPropRep();
             await App.MultipleReplaceTask.TaskMergeFont();
+            App.MultipleReplaceTask.TaskFinishing();
+            App.MultipleReplaceTask.InitInterface();
+
+            Run.IsEnabled = false;
+            App.MultipleOutputDirectory = App.MultipleReplaceTask.OutputDirPath;
+            MultiplePanelUpdate(FinishPanel);
         }
         catch (Exception ex)
         {
             MultiplePanelUpdate();
             Framework.Utilities.HandleError("执行文件替换时发生错误", ex);
             Run.IsEnabled = false;
-            return;
         }
-
-        App.MultipleReplaceTask.TaskFinishing();
-        App.MultipleReplaceTask.InitInterface();
-        Run.IsEnabled = false;
-        App.MultipleOutputDirectory = App.MultipleReplaceTask.OutputDirPath;
-        App.MultipleReplaceTask = null;
-        MultiplePanelUpdate(FinishPanel);
+        finally
+        {
+            App.MultipleReplaceTask?.Dispose();
+            App.MultipleReplaceTask = null;
+        }
     }
 }

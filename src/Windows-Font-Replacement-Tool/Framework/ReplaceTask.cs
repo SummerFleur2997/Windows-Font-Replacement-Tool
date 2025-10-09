@@ -9,7 +9,7 @@ namespace WFRT.Framework;
 /// <summary>
 /// 类 SingleReplace 与 MultipleReplace 的基类，仅用于存储类属性与类函数，不应当被实例化。
 /// </summary>
-public class ReplaceTask
+internal class ReplaceTask : IDisposable
 {
     /// <summary>
     /// 任务的名称，用于命名输出文件夹。
@@ -91,10 +91,6 @@ public class ReplaceTask
             // 执行属性替换
             foreach (var thread in ReplaceThreads)
                 thread.RunPropertyRep(OutputDirPath);
-
-            // 释放字体资源
-            foreach (var thread in ReplaceThreads)
-                thread.FontResource.Dispose();
         });
     }
 
@@ -120,5 +116,13 @@ public class ReplaceTask
             var path = Path.Combine(OutputDirPath, fileName);
             File.Delete(path);
         }
+    }
+
+    public void Dispose()
+    {
+        // 释放字体资源
+        foreach (var thread in ReplaceThreads)
+            thread.Dispose();
+        GC.SuppressFinalize(this);
     }
 }

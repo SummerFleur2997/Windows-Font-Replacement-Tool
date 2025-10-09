@@ -5,7 +5,7 @@ using System.Windows.Controls;
 
 namespace WFRT.Framework;
 
-public static class FontExtension
+internal static class FontExtension
 {
     /// <summary>
     /// 处理创建字体过程中产生的错误。

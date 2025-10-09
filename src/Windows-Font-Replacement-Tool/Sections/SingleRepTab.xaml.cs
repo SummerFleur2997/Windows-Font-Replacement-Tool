@@ -117,18 +117,21 @@ public partial class SingleRepTab
             await App.SingleReplaceTask.TaskStartPropRep();
             await App.SingleReplaceTask.TaskMergeFont();
             App.SingleReplaceTask.TaskFinishing();
+
+            Run.IsEnabled = false;
+            App.SingleOutputDirectory = App.SingleReplaceTask.OutputDirPath;
+            SinglePanelUpdate(FinishPanel);
         }
         catch (Exception ex)
         {
             SinglePanelUpdate();
             Framework.Utilities.HandleError("执行文件替换时发生错误", ex);
             Run.IsEnabled = false;
-            return;
         }
-
-        Run.IsEnabled = false;
-        App.SingleOutputDirectory = App.SingleReplaceTask.OutputDirPath;
-        App.SingleReplaceTask = null;
-        SinglePanelUpdate(FinishPanel);
+        finally
+        {
+            App.SingleReplaceTask?.Dispose();
+            App.SingleReplaceTask = null;
+        }
     }
 }

@@ -15,17 +15,17 @@ namespace FontTool;
 public class Font : IDisposable
 {
     /// <summary>
-    /// 字体文件的路径
+    /// 字体文件的路径。
     /// </summary>
     public readonly string FontPath;
 
     /// <summary>
-    /// name 表，包含字体名称相关信息
+    /// name 表，包含字体名称相关信息。
     /// </summary>
     public NameTable? NameTable => FontTables.First(t => t.Tag == "name") as NameTable;
 
     /// <summary>
-    /// cmap 表
+    /// cmap 表。
     /// </summary>
     public CmapTable? CmapTable => FontTables.First(t => t.Tag == "cmap") as CmapTable;
 
@@ -35,12 +35,18 @@ public class Font : IDisposable
     public readonly List<Table> FontTables;
 
     /// <summary>
-    /// 用于读取二进制数据的读取器
+    /// 用于读取二进制数据的读取器。
     /// </summary>
     public BinaryReader Reader { get; }
 
+    /// <summary>
+    /// 字体签名，长 4 字节。
+    /// </summary>
     public readonly uint Sfnt;
 
+    /// <summary>
+    /// 字体头数据，长 6 字节。
+    /// </summary>
     public readonly byte[] Header;
 
     /// <summary>
@@ -131,8 +137,11 @@ public class Font : IDisposable
     /// <exception cref="NotSupportedException">文件不受支持。</exception>
     public uint GetCharacterCountFromTo(uint start, uint end)
     {
+        // 不会触发
+        if (CmapTable == null) return 0;
+
         // 读取 cmap 表头
-        Reader.BaseStream.Seek(CmapTable!.Offset, SeekOrigin.Begin);
+        Reader.BaseStream.Seek(CmapTable.Offset, SeekOrigin.Begin);
         Reader.ReadUInt16BigEndian(); // version
         var numSubtables = Reader.ReadUInt16BigEndian(); // 获取子表数量
 
@@ -251,31 +260,16 @@ public class Font : IDisposable
         newTable.Offset = NameTable.Offset;
         FontTables[FontTables.IndexOf(NameTable)] = newTable;
 
-        // 获取表副本
-        var tables = FontTables.OrderBy(t => t.Offset).ToList();
-        var nameTableIndex = tables.IndexOf(newTable);
-
-        // 对齐和修正偏移量数据
-        var offset = newTable.Offset;
-        for (var i = nameTableIndex; i < tables.Count; i++)
-        {
-            var currentTable = tables[i];
-            var length = currentTable.Length;
-            if (length % 4 != 0) length += 4 - length % 4;
-
-            FontTables[FontTables.IndexOf(currentTable)].Offset = offset;
-
-            offset += length;
-        }
+        // 重新计算偏移量
+        UpdateTableOffset();
     }
 
     /// <summary>
     /// 将字体数据保存到指定路径
     /// </summary>
     /// <param name="path">保存文件的路径</param>
-    /// <param name="shouldUpdateTableInfo">是否应当更新表信息</param>
     /// <returns>保存成功返回true，失败返回false</returns>
-    public bool Save(string path, bool shouldUpdateTableInfo = false)
+    public bool Save(string path)
     {
         var binary = new List<byte>();
         try
@@ -296,13 +290,6 @@ public class Font : IDisposable
             binary.AddRange(((ushort)FontTables.Count).ToBigEndianBytes());
             binary.AddRange(Header);
 
-            // 对于从 ttc 保存的情况，计算偏移量并更新表信息，然后添加每个表的信息（标签、校验和、偏移量、长度）
-            if (shouldUpdateTableInfo)
-            {
-                long offset = binary.Count + FontTables.Count * 16;
-                UpdateTableInfo(offset);
-            }
-
             foreach (var table in FontTables)
             {
                 binary.AddRange(table.Tag.ToBigEndianBytes());
@@ -322,21 +309,26 @@ public class Font : IDisposable
         }
     }
 
-    private void UpdateTableInfo(long bodyOffset)
+    public void UpdateTableOffset(uint? bodyOffset = null)
     {
-        var offset = (uint)bodyOffset;
-        foreach (var table in FontTables)
+        var tables = FontTables.OrderBy(t => t.Offset).ToList();
+        var offset = bodyOffset ?? tables.First().Offset;
+
+        foreach (var table in tables)
         {
             FontTables.First(t => t.Tag == table.Tag).UpdateValue(offset: offset);
-            var length = table.Length;
-            if (length % 4 != 0) length += 4 - length % 4;
-            offset += length;
+            offset += table.Length + (4 - table.Length % 4) % 4;
         }
     }
 
     public void Dispose()
     {
-        foreach (var table in FontTables) table.Dispose();
+        foreach (var table in FontTables)
+            table.Dispose();
+
+        Reader.Close();
+        Reader.Dispose();
+
         GC.SuppressFinalize(this);
     }
 }

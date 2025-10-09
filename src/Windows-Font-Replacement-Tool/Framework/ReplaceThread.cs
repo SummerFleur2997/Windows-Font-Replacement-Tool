@@ -1,4 +1,6 @@
-﻿using System.IO;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
 using System.Windows;
 using System.Windows.Controls;
 using FontTool;
@@ -8,7 +10,7 @@ namespace WFRT.Framework;
 /// <summary>
 /// 一种字形的替换进程，包含 Python 程序的启动函数。
 /// </summary>
-public class ReplaceThread
+internal class ReplaceThread : IDisposable
 {
     /// <summary>
     /// 进程名称信息，应为字体的实际文件名。
@@ -29,6 +31,8 @@ public class ReplaceThread
     /// 提示标签，用于反馈字体检验的合法性。
     /// </summary>
     public TextBlock HintSign { get; }
+
+    private List<NameTableData> DataList { get; }
 
     /// <summary>
     /// 对于中文字体文件，检测 CJK 字符集数量，防止使用英文字体集创建字体导致的显示不正常。
@@ -77,7 +81,7 @@ public class ReplaceThread
     /// <returns>Python程序退出代码</returns>
     public void RunPropertyRep(string saveDir)
     {
-        var data = ResourceHelper.NameTableData[Index];
+        var data = DataList[Index];
         var savePath = Path.Combine(saveDir, data.FontName + ".ttf");
 
         FontResource.LoadAllTableData();
@@ -98,5 +102,13 @@ public class ReplaceThread
         FontResource = fontResource;
         Index = index;
         HintSign = hintSign;
+        DataList = ResourceHelper.NameTableData();
+    }
+
+    public void Dispose()
+    {
+        FontResource.Dispose();
+        DataList.Clear();
+        GC.SuppressFinalize(this);
     }
 }

@@ -7,7 +7,7 @@ namespace WFRT.Framework;
 /// <summary>
 /// 快速制作模式任务代码。
 /// </summary>
-public class SingleReplace : ReplaceTask
+internal class SingleReplace : ReplaceTask
 {
     public ReplaceThread MainThread => ReplaceThreads[0];
 

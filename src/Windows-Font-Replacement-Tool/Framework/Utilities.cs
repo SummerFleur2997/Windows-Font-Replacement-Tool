@@ -8,7 +8,7 @@ using System.Windows;
 
 namespace WFRT.Framework;
 
-public static class Utilities
+internal static class Utilities
 {
     /// <summary>
     /// 获取当前计算机线程数。

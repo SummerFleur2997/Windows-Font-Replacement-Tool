@@ -35,10 +35,9 @@ internal static class ResourceHelper
     ///   <item><term>[17]</term><description>SegoeUI - Black Italic</description></item>
     ///   <item><term>[18]</term><description>Segoe Variable</description></item>
     /// </list>
-    public static readonly List<NameTableData> NameTableData = new();
-
-    static ResourceHelper()
+    public static List<NameTableData> NameTableData()
     {
+        var data = new List<NameTableData>();
         try
         {
             var uri = new Uri("pack://application:,,,/Resources/.tablemap");
@@ -59,19 +58,21 @@ internal static class ResourceHelper
                 var length = reader.ReadUInt16BigEndian();
 
                 reader.BaseStream.Seek(offset, SeekOrigin.Begin);
-                var data = reader.ReadBytes(length);
-                var checkSum = Table.CalculateCheckSum(data.ToList());
+                var tableData = reader.ReadBytes(length);
+                var checkSum = Table.CalculateCheckSum(tableData.ToList());
 
                 var nameTable = new NameTable(checkSum, offset, length);
                 nameTable.ReadRecords(reader);
-                nameTable.LoadBytes(data);
+                nameTable.LoadBytes(tableData);
 
-                NameTableData.Add(new NameTableData(nameTable, fontName));
+                data.Add(new NameTableData(nameTable, fontName));
             }
         }
         catch (Exception ex)
         {
             Utilities.HandleError("文件校验失败，请尝试重新下载并安装本工具", ex, true);
         }
+
+        return data;
     }
 }

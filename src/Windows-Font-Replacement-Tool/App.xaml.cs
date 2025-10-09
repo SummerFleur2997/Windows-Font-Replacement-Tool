@@ -32,7 +32,6 @@ public partial class App
     private static readonly string BaseDir = AppDomain.CurrentDomain.BaseDirectory;
     internal static readonly string ConfigPath = Path.Combine(BaseDir, "config.json");
     internal static readonly string ResourcePath = Path.Combine(BaseDir, "Assets");
-    internal static readonly string XmlsPath = Path.Combine(ResourcePath, "xmls");
 
     public static readonly JsonSerializerOptions DefaultOptions = new()
     {
