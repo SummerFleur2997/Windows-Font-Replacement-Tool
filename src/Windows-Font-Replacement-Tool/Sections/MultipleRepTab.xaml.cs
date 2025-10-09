@@ -81,7 +81,6 @@ public partial class MultipleRepTab
 
             await App.MultipleReplaceTask.TaskStartPropRep();
             await App.MultipleReplaceTask.TaskMergeFont();
-            App.MultipleReplaceTask.TaskFinishing();
             App.MultipleReplaceTask.InitInterface();
 
             Run.IsEnabled = false;

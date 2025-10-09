@@ -26,11 +26,6 @@
         <Resource Include="Resources\iconfont.ttf" />
     </ItemGroup>
     <ItemGroup>
-        <Content Include="Assets\**">
-            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-        </Content>
-    </ItemGroup>
-    <ItemGroup>
         <ProjectReference Include="..\FontTool\FontTool.csproj" />
     </ItemGroup>
 </Project>

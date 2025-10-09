@@ -116,7 +116,6 @@ public partial class SingleRepTab
             if (App.SingleReplaceTask == null) return;
             await App.SingleReplaceTask.TaskStartPropRep();
             await App.SingleReplaceTask.TaskMergeFont();
-            App.SingleReplaceTask.TaskFinishing();
 
             Run.IsEnabled = false;
             App.SingleOutputDirectory = App.SingleReplaceTask.OutputDirPath;

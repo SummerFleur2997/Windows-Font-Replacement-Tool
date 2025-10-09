@@ -256,8 +256,11 @@ public class FontCollection : IEnumerable<Font>, IDisposable
         foreach (var font in Fonts)
             font.Dispose();
 
-        Reader.Close();
-        Reader.Dispose();
+        if (!FontPath.StartsWith("/@") && _reader != null)
+        {
+            Reader.Close();
+            Reader.Dispose();
+        }
 
         GC.SuppressFinalize(this);
     }

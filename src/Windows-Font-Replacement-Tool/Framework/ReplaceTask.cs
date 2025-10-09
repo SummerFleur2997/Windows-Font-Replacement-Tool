@@ -1,8 +1,9 @@
 ﻿using System;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using FontTool;
+using Path = System.IO.Path;
 
 namespace WFRT.Framework;
 
@@ -48,37 +49,6 @@ internal class ReplaceTask : IDisposable
     }
 
     /// <summary>
-    /// Python 程序，合并两个 ttf 为 ttc。
-    /// </summary>
-    /// <param name="filePrefix">导出的 ttf 文件名前缀</param>
-    /// <returns>Python程序退出代码</returns>
-    private int RunMerge(string filePrefix)
-    {
-        var outputDirName = Path.GetFileName(OutputDirPath);
-        try
-        {
-            var startInfo = new ProcessStartInfo
-            {
-                FileName = Path.Combine(App.ResourcePath, "functions.exe"),
-                Arguments = $"mergeTTC \"{outputDirName}\" \"{filePrefix}\"",
-                UseShellExecute = false,
-                RedirectStandardOutput = true,
-                RedirectStandardError = true,
-                CreateNoWindow = true
-            };
-            using var process = new Process();
-            process.StartInfo = startInfo;
-            process.Start();
-            process.WaitForExit();
-            return process.ExitCode;
-        }
-        catch
-        {
-            return -1;
-        }
-    }
-
-    /// <summary>
     /// 启动属性替换任务
     /// </summary>
     public async Task TaskStartPropRep()
@@ -95,28 +65,24 @@ internal class ReplaceTask : IDisposable
     }
 
     /// <summary>
-    /// 多线程运行 Python程序合并字体为 ttc。
+    /// 合并 msyh 三件套字体为 ttc，然后删除对应 ttf。
     /// </summary>
-    public async Task TaskMergeFont()
-    {
-        // 调用 ParallelRun 方法进行多线程处理
-        var hasError = await Task.Run(() => Utilities.ParallelRun(_msyhThreeMusketeers, RunMerge));
-        if (hasError) throw new Exception("此字体文件不受支持！");
-    }
-
-    /// <summary>
-    /// 将不需要的字体文件删除。。
-    /// </summary>
-    public void TaskFinishing()
-    {
-        foreach (var file in _msyhThreeMusketeers)
-        foreach (var postfix in Enumerable.Range(1, 2))
+    public async Task TaskMergeFont() =>
+        // 使用Task.Run异步执行以下操作
+        await Task.Run(() =>
         {
-            var fileName = string.Concat(file, postfix.ToString("00"), ".ttf");
-            var path = Path.Combine(OutputDirPath, fileName);
-            File.Delete(path);
-        }
-    }
+            // 执行字体合并
+            foreach (var pre in _msyhThreeMusketeers)
+            {
+                var fonts = Enumerable.Range(1, 2)
+                    .Select(postfix => new Font(Path.Combine(OutputDirPath, $"{pre}{postfix:00}.ttf")))
+                    .ToList();
+                var ttc = new FontCollection(fonts);
+                ttc.Save(Path.Combine(OutputDirPath, $"{pre}.ttc"));
+                ttc.Dispose();
+                foreach (var font in fonts) File.Delete(font.FontPath);
+            }
+        });
 
     public void Dispose()
     {
